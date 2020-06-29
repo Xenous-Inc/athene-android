@@ -1,0 +1,101 @@
+{
+  "project_info": {
+    "project_number": "585528626928",
+    "firebase_url": "https://easyenglish-2c5af.firebaseio.com",
+    "project_id": "easyenglish-2c5af",
+    "storage_bucket": "easyenglish-2c5af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585528626928:android:dab136055d4fa3da",
+        "android_client_info": {
+          "package_name": "com.develop.vadim.english"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585528626928-qdjka9mui3eukidfpviscvc1oolqeuov.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.develop.vadim.english",
+            "certificate_hash": "316ecc6b6255e7467e74384a9666f6b9ec309686"
+          }
+        },
+        {
+          "client_id": "585528626928-522k0qm780j2g99gc7a4khcprmcnp0c0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.develop.vadim.english",
+            "certificate_hash": "c00928e94c1079f9507f8c98f17da814db89fae9"
+          }
+        },
+        {
+          "client_id": "585528626928-d9m49pkk18nblkr1pn0d7em0fnpvhfek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK0RnFv9HsPmVk0pm2IQXYCGzTm6v_03Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "585528626928-d9m49pkk18nblkr1pn0d7em0fnpvhfek.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "585528626928-947l4uq5u4iiesrpsd1mk5bm8qq0qt4o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.xenous.athene",
+                "app_store_id": "1508535432"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585528626928:android:2d7659aeaf318d59fabc35",
+        "android_client_info": {
+          "package_name": "com.xenous.athenekotlin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585528626928-d9m49pkk18nblkr1pn0d7em0fnpvhfek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK0RnFv9HsPmVk0pm2IQXYCGzTm6v_03Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "585528626928-d9m49pkk18nblkr1pn0d7em0fnpvhfek.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "585528626928-947l4uq5u4iiesrpsd1mk5bm8qq0qt4o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.xenous.athene",
+                "app_store_id": "1508535432"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
