@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <TextView
+        android:id="@+id/signInTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_in_title_text"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/accent_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline1" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/signInLinearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/verticalGuideline2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/verticalGuideline1"
+        app:layout_constraintTop_toBottomOf="@+id/signInTitleTextView">
+
+        <EditText
+            android:id="@+id/signInEmailEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/white"
+            android:hint="@string/sign_in_email_input_hint_text"
+            android:inputType="textEmailAddress"
+            android:minWidth="@dimen/input_min_width"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/colorTextSecondary"
+            android:textSize="@dimen/primary_text_size" />
+
+        <EditText
+            android:id="@+id/signInPasswordEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/white"
+            android:hint="@string/sign_in_password_input_hint_text"
+            android:inputType="textPassword"
+            android:minWidth="@dimen/input_min_width"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/colorTextSecondary"
+            android:textSize="@dimen/primary_text_size" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/button_margin"
+            android:layout_marginTop="@dimen/button_margin"
+            android:layout_marginEnd="@dimen/button_margin"
+            android:gravity="end"
+            android:text="@string/sign_in_forgot_password_text"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/secondary_text_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/signInLinearLayout"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/signInGoogleImageView"
+        app:layout_constraintEnd_toStartOf="@+id/verticalGuideline2"
+        app:layout_constraintStart_toStartOf="@+id/verticalGuideline1">
+
+        <TextView
+            android:id="@+id/signUpTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_outline_background"
+            android:gravity="center"
+            android:paddingStart="@dimen/textview_padding"
+            android:paddingEnd="@dimen/textview_padding"
+            android:text="@string/sign_in_sign_up_text"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/primary_text_size" />
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/signInImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_outline_background"
+            android:paddingStart="@dimen/button_padding"
+            android:paddingEnd="@dimen/button_padding"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_arrow_small_white" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/signInGoogleImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/button_height"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/google_sign_in_button" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

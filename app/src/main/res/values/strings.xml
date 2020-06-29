@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">AtheneKotlin</string>
+
+    <string name="verification_successfully_sent_verification_letter">Письмо подтверждения было выслно на ваш электронный адрес</string>
+    <string name="verification_failed_to_send_verification_letter">Не удалось отправить письмо подтверждения</string>
+
+<!--    Login Activity  -->
+    <string name="sign_in_title_text">Вход</string>
+    <string name="sign_in_email_input_hint_text">E-mail</string>
+    <string name="sign_in_password_input_hint_text">Пароль</string>
+    <string name="sign_in_sign_up_text">Нет аккаунта?</string>
+    <string name="sign_in_forgot_password_text"><u>Забыли пароль?</u></string>
+
+<!--    Register Activity   -->
+    <string name="sign_up_title_text">Регистрация</string>
+    <string name="sign_up_email_input_hint_text">E-mail</string>
+    <string name="sign_up_password_input_hint_text">Пароль</string>
+    <string name="sign_up_confirm_password_input_hint_text">Подтвердите пароль</string>
+    <string name="sign_up_sign_in_text">Назад</string>
+
+    <string name="sign_up_email_is_invalid">Адрес электронной почты недействителен</string>
+    <string name="sign_up_passwords_do_not_match">Пароли не совпадают</string>
+    <string name="sign_up_successfully_sent_verification_letter">Письмо подтверждения было выслно на ваш электронный адрес</string>
+
+<!--    Verification Activity   -->
+    <string name="verification_waiting_for_confirm">Ожидание подтвержения электронной почты…</string>
+
 </resources>
