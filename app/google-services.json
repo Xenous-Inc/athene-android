@@ -68,6 +68,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "585528626928-1jbcjv4ua7r7k4ndgraojpufdtcbqiud.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xenous.athenekotlin",
+            "certificate_hash": "c00928e94c1079f9507f8c98f17da814db89fae9"
+          }
+        },
+        {
           "client_id": "585528626928-d9m49pkk18nblkr1pn0d7em0fnpvhfek.apps.googleusercontent.com",
           "client_type": 3
         }

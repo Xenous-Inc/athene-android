@@ -96,7 +96,7 @@
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/signUpGoogleImageView"
+        app:layout_constraintBottom_toTopOf="@+id/signUpWithGoogleImageView"
         app:layout_constraintEnd_toStartOf="@+id/verticalGuideline2"
         app:layout_constraintStart_toStartOf="@+id/verticalGuideline1">
 
@@ -122,14 +122,15 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:background="@drawable/button_outline_background"
-            android:paddingStart="@dimen/button_padding"
-            android:paddingEnd="@dimen/button_padding"
-            android:scaleType="centerCrop"
+            android:padding="@dimen/button_primary_padding"
+            android:paddingStart="@dimen/button_secondary_padding"
+            android:paddingEnd="@dimen/button_secondary_padding"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/ic_arrow_small_white" />
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/signUpGoogleImageView"
+        android:id="@+id/signUpWithGoogleImageView"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/button_height"
         android:adjustViewBounds="true"
@@ -144,5 +145,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9" />
+
+    <FrameLayout
+        android:id="@+id/clickBlocker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

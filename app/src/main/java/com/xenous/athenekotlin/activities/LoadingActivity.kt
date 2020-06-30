@@ -2,8 +2,6 @@ package com.xenous.athenekotlin.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -45,28 +43,16 @@ class LoadingActivity : AppCompatActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
-//            User email isn't verified, send verification letter
+//            User email isn't verified, start VerificationActivity
             else {
-                currentUser.sendEmailVerification()
-                    .addOnSuccessListener {
-                        Toast
-                            .makeText(this, getString(R.string.verification_successfully_sent_verification_letter), Toast.LENGTH_LONG)
-                            .show()
-                        val intent = Intent(this, VerificationActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(intent)
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d(RegisterActivity.TAG, "Failed to send verification letter. $exception")
-                        Toast
-                            .makeText(this, getString(R.string.verification_failed_to_send_verification_letter), Toast.LENGTH_LONG)
-                            .show()
-                    }
+                val intent = Intent(this, VerificationActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
             }
         }
 //        User is NULL, start LoginActivity
         else {
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, SignInActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         }
