@@ -22,27 +22,27 @@ public class Storage {
         return instance;
     }
 
-    public static ArrayList<Word> getWordArrayList() {
+    public ArrayList<Word> getWordArrayList() {
         return wordArrayList;
     }
 
-    public static void setWordArrayList(ArrayList<Word> wordArrayList) {
+    public void setWordArrayList(ArrayList<Word> wordArrayList) {
         Storage.wordArrayList = wordArrayList;
     }
 
-    public static ArrayList<Word> getCheckingWordsArrayList() {
+    public ArrayList<Word> getCheckingWordsArrayList() {
         return checkingWordsArrayList;
     }
 
-    public static void setCheckingWordsArrayList(ArrayList<Word> checkingWordsArrayList) {
+    public void setCheckingWordsArrayList(ArrayList<Word> checkingWordsArrayList) {
         Storage.checkingWordsArrayList = checkingWordsArrayList;
     }
 
-    public static ArrayList<Category> getCategoryArrayList() {
+    public ArrayList<Category> getCategoryArrayList() {
         return categoryArrayList;
     }
 
-    public static void setCategoryArrayList(ArrayList<Category> categoryArrayList) {
+    public void setCategoryArrayList(ArrayList<Category> categoryArrayList) {
         Storage.categoryArrayList = categoryArrayList;
     }
 }
