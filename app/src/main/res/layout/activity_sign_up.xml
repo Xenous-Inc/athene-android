@@ -106,8 +106,8 @@
             android:layout_height="match_parent"
             android:background="@drawable/button_outline_background"
             android:gravity="center"
-            android:paddingStart="@dimen/textview_padding"
-            android:paddingEnd="@dimen/textview_padding"
+            android:paddingStart="@dimen/textview_primary_padding"
+            android:paddingEnd="@dimen/textview_primary_padding"
             android:text="@string/sign_up_sign_in_text"
             android:textColor="@android:color/white"
             android:textSize="@dimen/primary_text_size" />
