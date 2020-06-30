@@ -41,4 +41,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx:19.3.1'
 //    SpinKit
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+//    Firebase Realtime Database
+    implementation 'com.google.firebase:firebase-database:19.3.1'
+
 }
