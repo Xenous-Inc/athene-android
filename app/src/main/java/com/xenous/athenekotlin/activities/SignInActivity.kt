@@ -2,11 +2,11 @@ package com.xenous.athenekotlin.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.github.ybq.android.spinkit.style.ThreeBounce
-import com.github.ybq.android.spinkit.style.Wave
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -94,9 +94,36 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun updateUI(currentUser: FirebaseUser) {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(intent)
+        if(currentUser.isEmailVerified) {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
+        else {
+            currentUser.sendEmailVerification()
+                .addOnSuccessListener {
+                    Toast
+                        .makeText(
+                            this,
+                            getString(R.string.verification_successfully_sent_verification_letter),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    val intent = Intent(this, VerificationActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                }
+                .addOnFailureListener { exception ->
+//                    todo: handle error
+                    clickBlocker?.visibility = View.GONE
+                    Log.d(SignUpActivity.TAG, "Failed to send verification letter. $exception")
+                    Toast
+                        .makeText(
+                            this,
+                            getString(R.string.verification_failed_to_send_verification_letter),
+                            Toast.LENGTH_LONG
+                        ).show()
+                }
+        }
     }
 
     //    Google Auth Methods

@@ -126,7 +126,8 @@ class SignUpActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 .addOnFailureListener { exception ->
-//                    clickBlocker.visibility = View.GONE
+//                    todo: handle error
+                    clickBlocker?.visibility = View.GONE
                     Log.d(TAG, "Failed to send verification letter. $exception")
                     Toast
                         .makeText(

@@ -22,7 +22,11 @@
     <string name="sign_up_passwords_do_not_match">Пароли не совпадают</string>
     <string name="sign_up_successfully_sent_verification_letter">Письмо подтверждения было выслно на ваш электронный адрес</string>
 
+<!--    Loading Activity    -->
+    <string name="loading_waiting_for_user">Загрузка…</string>
+
 <!--    Verification Activity   -->
     <string name="verification_waiting_for_confirm">Ожидание подтвержения электронной почты…</string>
+    <string name="verification_send_again">Отправить заново</string>
 
 </resources>

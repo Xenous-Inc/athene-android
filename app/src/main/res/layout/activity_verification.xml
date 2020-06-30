@@ -17,6 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/waitingForConfirmTextView"
         android:layout_width="@dimen/input_min_width"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -27,5 +28,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinKitView" />
+
+    <TextView
+        android:id="@+id/countDownTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_outline_background_secondary"
+        android:paddingStart="@dimen/textview_secondary_padding"
+        android:paddingTop="@dimen/textview_primary_padding"
+        android:paddingEnd="@dimen/textview_secondary_padding"
+        android:paddingBottom="@dimen/textview_primary_padding"
+        android:text="@string/verification_send_again"
+        android:textColor="@color/colorTextSecondary"
+        android:textSize="@dimen/primary_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/waitingForConfirmTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
