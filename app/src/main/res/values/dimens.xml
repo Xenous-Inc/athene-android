@@ -5,13 +5,15 @@
     <dimen name="primary_text_size">22sp</dimen>
     <dimen name="secondary_text_size">18sp</dimen>
 
+<!--    Views paddings and margins    -->
     <dimen name="button_height">40dp</dimen>
-    <dimen name="button_secondary_padding">24dp</dimen>
     <dimen name="button_primary_padding">8dp</dimen>
-    <dimen name="textview_padding">16dp</dimen>
-    <dimen name="button_margin">8dp</dimen>
+    <dimen name="button_secondary_padding">24dp</dimen>
+    <dimen name="textview_primary_padding">16dp</dimen>
+    <dimen name="forgot_password_textview_margin">8dp</dimen>
+    <dimen name="dot_indicator_margin">8dp</dimen>
 
+<!--    Views widths and heights-->
     <dimen name="input_min_width">320dp</dimen>
-
 
 </resources>

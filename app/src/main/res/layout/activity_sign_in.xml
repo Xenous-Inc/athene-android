@@ -77,12 +77,12 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/button_margin"
-            android:layout_marginTop="@dimen/button_margin"
-            android:layout_marginEnd="@dimen/button_margin"
-            android:gravity="end"
+            android:layout_gravity="end"
+            android:layout_marginStart="@dimen/forgot_password_textview_margin"
+            android:layout_marginTop="@dimen/forgot_password_textview_margin"
+            android:layout_marginEnd="@dimen/forgot_password_textview_margin"
             android:text="@string/sign_in_forgot_password_text"
             android:textColor="@color/colorTextSecondary"
             android:textSize="@dimen/secondary_text_size" />
@@ -105,8 +105,8 @@
             android:layout_height="match_parent"
             android:background="@drawable/button_outline_background"
             android:gravity="center"
-            android:paddingStart="@dimen/textview_padding"
-            android:paddingEnd="@dimen/textview_padding"
+            android:paddingStart="@dimen/textview_primary_padding"
+            android:paddingEnd="@dimen/textview_primary_padding"
             android:text="@string/sign_in_sign_up_text"
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/primary_text_size" />
