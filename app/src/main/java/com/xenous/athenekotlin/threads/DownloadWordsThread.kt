@@ -38,7 +38,7 @@ class DownloadWordsThread(
         }
 
         val database = FirebaseDatabase.getInstance()
-        val reference = database.reference.child(USER_REFERENCE).child(firebaseUser.uid)
+        val reference = database.reference.child(USER_REFERENCE).child(firebaseUser.uid).child(WORDS_REFERENCE)
         val categoryReference = reference.child(CATEGORY_REFERENCE)
 
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -50,17 +50,18 @@ class DownloadWordsThread(
 
                 for(wordSnapshot in snapshot.children) {
                     val word = Word(
-                        wordSnapshot.child(NATIVE_WORD_DATABASE_KEY).value as String,
-                        wordSnapshot.child(LEARNING_WORD_DATABASE_KEY).value as String,
-                        wordSnapshot.child(CATEGORY_REFERENCE).value as String,
-                        wordSnapshot.child(WORD_LAST_DATE_DATABASE_KEY).value as Long,
-                        wordSnapshot.child(WORD_LEVEL_DATABASE_KEY).value as Long,
-                        wordSnapshot.key as String
+                        wordSnapshot.child(NATIVE_WORD_DATABASE_KEY).value as String?,
+                        wordSnapshot.child(LEARNING_WORD_DATABASE_KEY).value as String?,
+                        wordSnapshot.child(CATEGORY_REFERENCE).value as String?,
+                        wordSnapshot.child(WORD_LAST_DATE_DATABASE_KEY).value as Long?,
+                        wordSnapshot.child(WORD_LEVEL_DATABASE_KEY).value as Long?,
+                        wordSnapshot.key as String?
                     )
 
                     wordsList.add(word)
                 }
 
+                Log.d(TAG, "Words list size is ${wordsList.size}")
                 Log.d(TAG, "Completely downloaded all words")
                 Log.d(TAG,  "Starting downloading categories")
 
