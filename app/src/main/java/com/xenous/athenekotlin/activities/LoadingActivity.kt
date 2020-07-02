@@ -7,8 +7,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.xenous.athenekotlin.R
-import com.xenous.athenekotlin.data.Category
-import com.xenous.athenekotlin.storage.Storage
 
 class LoadingActivity : AppCompatActivity() {
     companion object {
