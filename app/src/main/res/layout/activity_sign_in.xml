@@ -30,7 +30,7 @@
         android:id="@+id/signInTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sign_in_title_text"
+        android:text="@string/sign_in_title"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/accent_text_size"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/white"
-            android:hint="@string/sign_in_email_input_hint_text"
+            android:hint="@string/sign_in_email_input_hint"
             android:inputType="textEmailAddress"
             android:minWidth="@dimen/input_min_width"
             android:singleLine="true"
@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/white"
-            android:hint="@string/sign_in_password_input_hint_text"
+            android:hint="@string/sign_in_password_input_hint"
             android:inputType="textPassword"
             android:minWidth="@dimen/input_min_width"
             android:singleLine="true"
@@ -82,7 +82,7 @@
             android:layout_marginStart="@dimen/forgot_password_textview_margin"
             android:layout_marginTop="@dimen/forgot_password_textview_margin"
             android:layout_marginEnd="@dimen/forgot_password_textview_margin"
-            android:text="@string/sign_in_forgot_password_text"
+            android:text="@string/sign_in_forgot_password"
             android:textColor="@color/colorTextSecondary"
             android:textSize="@dimen/secondary_text_size" />
     </LinearLayout>
@@ -102,11 +102,11 @@
             android:id="@+id/signUpTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/button_outline_background_primary"
+            android:background="@drawable/background_outline_primary"
             android:gravity="center"
             android:paddingStart="@dimen/textview_secondary_padding"
             android:paddingEnd="@dimen/textview_secondary_padding"
-            android:text="@string/sign_in_sign_up_text"
+            android:text="@string/sign_in_go_to_sign_up"
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/primary_text_size" />
 
@@ -119,7 +119,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:background="@drawable/button_outline_background_primary"
+            android:background="@drawable/background_outline_primary"
             android:padding="@dimen/button_primary_padding"
             android:paddingStart="@dimen/button_secondary_padding"
             android:paddingEnd="@dimen/button_secondary_padding"
@@ -135,7 +135,7 @@
         app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/google_sign_in_button" />
+        app:srcCompat="@drawable/ic_google_sign_in" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontalGuideline2"

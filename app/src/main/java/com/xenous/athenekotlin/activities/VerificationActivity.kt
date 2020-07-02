@@ -98,7 +98,7 @@ class VerificationActivity : AppCompatActivity() {
             if(msg.what == VERIFY_SUCCESS && msg.obj is FirebaseUser) {
                 Log.d(TAG, "Successfully verified mail,")
                 val intent = Intent(this@VerificationActivity, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
 //            Just for logs
@@ -140,13 +140,13 @@ class VerificationActivity : AppCompatActivity() {
                 countdownString += " (${msg.obj})"
                 val color = ContextCompat.getColor(this@VerificationActivity, R.color.colorTextShadowed)
                 countdownTextView.setTextColor(color)
-                countDownTextView.setBackgroundWithoutPaddingBreak(R.drawable.button_outline_background_shadowed)
+                countDownTextView.setBackgroundWithoutPaddingBreak(R.drawable.background_outline_shadowed)
                 countdownTextView.isClickable = false
             }
             else if(msg.what == COUNTDOWN_END) {
                 val color = ContextCompat.getColor(this@VerificationActivity, R.color.colorTextSecondary)
                 countdownTextView.setTextColor(color)
-                countDownTextView.setBackgroundWithoutPaddingBreak(R.drawable.button_outline_background_secondary)
+                countDownTextView.setBackgroundWithoutPaddingBreak(R.drawable.background_outline_secondary)
                 countdownTextView.isClickable = true
             }
 

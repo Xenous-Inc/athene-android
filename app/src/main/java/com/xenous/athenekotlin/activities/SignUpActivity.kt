@@ -107,7 +107,7 @@ class SignUpActivity : AppCompatActivity() {
 //            User email is verified, start MainActivity
         if (currentUser.isEmailVerified) {
             val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         }
 //            User email isn't verified, send verification letter
@@ -122,7 +122,7 @@ class SignUpActivity : AppCompatActivity() {
                         )
                         .show()
                     val intent = Intent(this, VerificationActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                 }
                 .addOnFailureListener { exception ->

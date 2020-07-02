@@ -2,6 +2,8 @@ package com.xenous.athenekotlin.utils
 
 fun isEmailValid(email: String): Boolean =  android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
+const val ANIMATION_DURATION = 550L
+
 const val SUCCESS_CODE = 9000
 const val ERROR_CODE = 9001
 

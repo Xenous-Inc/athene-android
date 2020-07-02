@@ -1,22 +1,26 @@
 <resources>
     <string name="app_name">AtheneKotlin</string>
 
-    <string name="verification_successfully_sent_verification_letter">Письмо подтверждения было выслно на ваш электронный адрес</string>
-    <string name="verification_failed_to_send_verification_letter">Не удалось отправить письмо подтверждения</string>
+<!--    Universal   -->
+    <string name="add">Добавить</string>
+    <string name="no_category">Без категории</string>
+
+<!--    Main Activity   -->
+    <string name="main_ic_sign_out_content_description">Выйти из аккаунта</string>
 
 <!--    Login Activity  -->
-    <string name="sign_in_title_text">Вход</string>
-    <string name="sign_in_email_input_hint_text">E-mail</string>
-    <string name="sign_in_password_input_hint_text">Пароль</string>
-    <string name="sign_in_sign_up_text">Нет аккаунта?</string>
-    <string name="sign_in_forgot_password_text"><u>Забыли пароль?</u></string>
+    <string name="sign_in_title">Вход</string>
+    <string name="sign_in_email_input_hint">E-mail</string>
+    <string name="sign_in_password_input_hint">Пароль</string>
+    <string name="sign_in_go_to_sign_up">Нет аккаунта?</string>
+    <string name="sign_in_forgot_password"><u>Забыли пароль?</u></string>
 
 <!--    Register Activity   -->
-    <string name="sign_up_title_text">Регистрация</string>
-    <string name="sign_up_email_input_hint_text">E-mail</string>
-    <string name="sign_up_password_input_hint_text">Пароль</string>
-    <string name="sign_up_confirm_password_input_hint_text">Подтвердите пароль</string>
-    <string name="sign_up_sign_in_text">Назад</string>
+    <string name="sign_up_title">Регистрация</string>
+    <string name="sign_up_email_input_hint">E-mail</string>
+    <string name="sign_up_password_input_hint">Пароль</string>
+    <string name="sign_up_confirm_password_input_hint">Подтвердите пароль</string>
+    <string name="sign_up_go_to_sign_in">Назад</string>
 
     <string name="sign_up_email_is_invalid">Адрес электронной почты недействителен</string>
     <string name="sign_up_passwords_do_not_match">Пароли не совпадают</string>
@@ -28,5 +32,14 @@
 <!--    Verification Activity   -->
     <string name="verification_waiting_for_confirm">Ожидание подтвержения электронной почты…</string>
     <string name="verification_send_again">Отправить заново</string>
+
+    <string name="verification_successfully_sent_verification_letter">Письмо подтверждения было выслно на ваш электронный адрес</string>
+    <string name="verification_failed_to_send_verification_letter">Не удалось отправить письмо подтверждения</string>
+
+<!--    Add Word Fragment   -->
+    <string name="add_word_title">Добавить слово</string>
+    <string name="add_word_foreign_input_hint">На иностранном</string>
+    <string name="add_word_native_input_hint">На родном</string>
+    <string name="add_word_choose_category_title">Выберите категорию:</string>
 
 </resources>

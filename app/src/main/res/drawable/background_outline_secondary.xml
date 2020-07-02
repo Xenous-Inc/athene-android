@@ -5,13 +5,12 @@
         <shape android:shape="rectangle">
             <stroke android:width="2dp"
                 android:color="@color/colorTextSecondary"/>
-            <corners android:radius="40dp" />
+            <corners android:radius="@dimen/outline_corner_radius" />
             <padding
-                android:left="8dp"
-                android:right="8dp"
-                android:bottom="2dp"
-                android:top="2dp">
-            </padding>
+                android:left="@dimen/outline_primary_padding"
+                android:right="@dimen/outline_primary_padding"
+                android:bottom="@dimen/outline_secondary_padding"
+                android:top="@dimen/outline_secondary_padding" />
         </shape>
     </item>
 </selector>

@@ -7,8 +7,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.xenous.athenekotlin.R
-import com.xenous.athenekotlin.data.Category
-import com.xenous.athenekotlin.storage.Storage
 
 class LoadingActivity : AppCompatActivity() {
     companion object {
@@ -27,7 +25,9 @@ class LoadingActivity : AppCompatActivity() {
                     updateUI(currentUser)
                 }
                 .addOnFailureListener {
+//                    No Internet or
 //                    User doesn't exist
+//                    todo: handle user
                     updateUI(null)
                 }
         }
@@ -42,20 +42,20 @@ class LoadingActivity : AppCompatActivity() {
 //            User email is verified, start MainActivity
             if(currentUser.isEmailVerified) {
                 val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
 //            User email isn't verified, start VerificationActivity
             else {
                 val intent = Intent(this, VerificationActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
         }
 //        User is NULL, start LoginActivity
         else {
             val intent = Intent(this, SignInActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         }
     }

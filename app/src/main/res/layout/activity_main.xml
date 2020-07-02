@@ -17,11 +17,11 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
         android:id="@+id/dotsIndicator"
@@ -57,9 +57,10 @@
         android:layout_marginTop="@dimen/exit_margin_top"
         android:layout_marginEnd="@dimen/exit_margin_right"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/main_ic_sign_out_content_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:srcCompat="@drawable/ic_exit_white" />
+        app:srcCompat="@drawable/ic_sign_out_white" />
 
     <nl.dionsegijn.konfetti.KonfettiView
         android:id="@+id/konfettiView"
