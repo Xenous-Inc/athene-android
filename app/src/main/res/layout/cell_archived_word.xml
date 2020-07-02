@@ -16,7 +16,7 @@
         android:layout_marginRight="10dp"
         android:minHeight="60dp"
         android:tag="animation"
-        app:cardBackgroundColor="@color/WHITE_TRANSPARENT"
+        app:cardBackgroundColor="@color/colorBackgroundTransparent"
         app:cardCornerRadius="30dp"
         app:cardElevation="0dp">
 
@@ -28,7 +28,7 @@
             android:gravity="start|center_vertical"
             android:paddingStart="16dp"
             android:tag="animation3"
-            android:textColor="@color/colorWhite"
+            android:textColor="@android:color/white"
             android:textSize="30sp" />
 
     </androidx.cardview.widget.CardView>

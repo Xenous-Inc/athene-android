@@ -1,4 +1,4 @@
-package com.xenous.athenekotlin.utils
+package com.xenous.athenekotlin.views
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.xenous.athenekotlin.R
+import com.xenous.athenekotlin.utils.*
 
 class OpeningView(val view: View, private val outerView: View) {
     companion object {
@@ -76,7 +77,7 @@ class OpeningView(val view: View, private val outerView: View) {
             categoriesListConstraintLayout.animateAlphaTo(
                 expectingAlpha = 1F,
                 delay = ANIMATION_DURATION,
-                duration = ANIMATION_DURATION/2,
+                duration = ANIMATION_DURATION /2,
                 onAnimationStart = {
                     categoriesListConstraintLayout.visibility = View.VISIBLE
                 },
@@ -104,7 +105,7 @@ class OpeningView(val view: View, private val outerView: View) {
         categoryChosenTextView.animateAlphaTo(
             expectingAlpha = 1F,
             delay = ANIMATION_DURATION,
-            duration = ANIMATION_DURATION/2,
+            duration = ANIMATION_DURATION /2,
             onAnimationEnd = {
                 isExpanded = false
                 outerView.isClickable = isExpanded
