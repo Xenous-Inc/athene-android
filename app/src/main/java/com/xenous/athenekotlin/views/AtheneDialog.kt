@@ -17,10 +17,10 @@ class AtheneDialog(
     private val negativeAnswerTextView: TextView
     private val categoryEditText: EditText
 
-    internal var message= ""
-    internal var hint = ""
-    internal var positiveText = ""
-    internal var negativeText = ""
+    var message = ""
+    var hint = ""
+    var positiveText = ""
+    var negativeText = ""
 
     interface OnAnswersItemClickListener {
         fun onPositiveClick(view: android.view.View)
@@ -62,6 +62,4 @@ class AtheneDialog(
             answersItemClickListener.onNegativeClickListener(it)
         }
     }
-
-
 }

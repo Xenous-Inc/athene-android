@@ -14,7 +14,8 @@ fun isEmailValid(email: String): Boolean =  android.util.Patterns.EMAIL_ADDRESS.
 const val SUCCESS_CODE = 9000
 const val ERROR_CODE = 9001
 
-const val USER_REFERENCE = "users"
+const val USER_REFERENCE = "user"
+const val USERS_REFERENCE = "users"
 const val WORDS_REFERENCE = "words"
 const val CATEGORY_REFERENCE = "categories"
 

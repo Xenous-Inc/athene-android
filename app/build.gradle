@@ -45,11 +45,13 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
 //    Firebase Realtime Database
     implementation 'com.google.firebase:firebase-database:19.3.1'
-
 //    Custom Progressbar SpinKit
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 //    Konfetti View
     implementation 'nl.dionsegijn:konfetti:1.2.0'
 //    ViewPager Dots Indicator
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
+//    Firebase Dynamic Links
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
+
 }

@@ -38,7 +38,7 @@ class DownloadWordsThread(
         }
 
         val database = FirebaseDatabase.getInstance()
-        val reference = database.reference.child(USER_REFERENCE).child(firebaseUser.uid).child(WORDS_REFERENCE)
+        val reference = database.reference.child(USERS_REFERENCE).child(firebaseUser.uid).child(WORDS_REFERENCE)
         val categoryReference = reference.child(CATEGORY_REFERENCE)
 
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
