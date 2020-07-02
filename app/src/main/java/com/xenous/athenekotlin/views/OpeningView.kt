@@ -1,10 +1,10 @@
 package com.xenous.athenekotlin.views
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -19,7 +19,8 @@ class OpeningView(val view: View, private val outerView: View) {
     }
 
     /*  Initial Block   */
-    var isExpanded = false
+    private var isExpanded = false
+    private var isRunning = false
 
     private var collapsedWidth: Int? = null
     private var collapsedHeight: Int? = null
@@ -41,14 +42,10 @@ class OpeningView(val view: View, private val outerView: View) {
         })
 
         outerView.apply {
-            setOnClickListener { if(isExpanded) { collapse() } }
+            setOnClickListener { collapse() }
             isClickable = isExpanded
         }
-        categoryCardView.setOnClickListener {
-            if(!isExpanded) {
-                expand()
-            }
-        }
+        categoryCardView.setOnClickListener { expand() }
     }
 
     /*  Methods Block   */
@@ -68,58 +65,81 @@ class OpeningView(val view: View, private val outerView: View) {
         })
     }
 
-    fun expand() {
-        if(expandedWidth != null && expandedHeight != null) {
-            categoryChosenTextView.animateAlphaTo(expectingAlpha = 0F)
-            categoryCardView.animateWidthTo(expandedWidth!!)
-            categoryCardView.animateHeightTo(expandedHeight!!)
-            categoryCardView.animateCardBackgroundColorTo(Color.WHITE)
-            categoriesListConstraintLayout.animateAlphaTo(
-                expectingAlpha = 1F,
-                delay = ANIMATION_DURATION,
-                duration = ANIMATION_DURATION /2,
-                onAnimationStart = {
-                    categoriesListConstraintLayout.visibility = View.VISIBLE
-                },
-                onAnimationEnd = {
-                    isExpanded = true
-                    outerView.isClickable = isExpanded
-                }
-            )
-        }
-        else {
-            throw Error("Sizes of the expanded view are not indicated")
-        }
-    }
-
-    fun collapse() {
-        categoriesListConstraintLayout.animateAlphaTo(
-            expectingAlpha = 0F,
-            onAnimationEnd = {
-                categoriesListConstraintLayout.visibility = View.GONE
-            }
-        )
-        categoryCardView.animateWidthTo(collapsedWidth!!)
-        categoryCardView.animateHeightTo(collapsedHeight!!)
-        categoryCardView.animateCardBackgroundColorTo(ContextCompat.getColor(view.context, R.color.colorBackgroundTransparent))
-        categoryChosenTextView.animateAlphaTo(
-            expectingAlpha = 1F,
-            delay = ANIMATION_DURATION,
-            duration = ANIMATION_DURATION /2,
-            onAnimationEnd = {
-                isExpanded = false
-                outerView.isClickable = isExpanded
-            }
-        )
-    }
-
     fun setOnClickListener(onClickListener: View.OnClickListener) {
-        categoryCardView.setOnClickListener(onClickListener)
+        categoryCardView.setOnClickListener {
+            expand()
+            onClickListener.onClick(it)
+        }
+    }
+
+    fun applyToView(view: View) {
+        (view as ViewGroup).addView(this.view)
+    }
+
+    private fun expand() {
+        if(!isExpanded && !isRunning) {
+            if(expandedWidth != null && expandedHeight != null) {
+                categoryChosenTextView.animateAlphaTo(expectingAlpha = 0F, onAnimationStart = {
+                    isRunning = true
+                })
+                categoryCardView.animateWidthTo(expandedWidth!!)
+                categoryCardView.animateHeightTo(expandedHeight!!)
+                categoryCardView.animateCardBackgroundColorTo(Color.WHITE)
+                categoriesListConstraintLayout.animateAlphaTo(
+                    expectingAlpha = 1F,
+                    delay = ANIMATION_DURATION/2,
+                    duration = ANIMATION_DURATION /2,
+                    onAnimationStart = {
+                        categoriesListConstraintLayout.visibility = View.VISIBLE
+                    },
+                    onAnimationEnd = {
+                        isRunning = false
+                        isExpanded = true
+                        outerView.isClickable = isExpanded
+                    }
+                )
+            }
+            else {
+                throw Error("Sizes of the expanded view are not indicated")
+            }
+        }
+    }
+
+    private fun collapse() {
+        if(isExpanded && !isRunning) {
+            if(collapsedWidth != null && collapsedHeight != null) {
+                categoriesListConstraintLayout.animateAlphaTo(
+                    expectingAlpha = 0F,
+                    onAnimationStart = {
+                      isRunning = true
+                    },
+                    onAnimationEnd = {
+                        categoriesListConstraintLayout.visibility = View.GONE
+                    }
+                )
+                categoryCardView.animateWidthTo(collapsedWidth!!)
+                categoryCardView.animateHeightTo(collapsedHeight!!)
+                categoryCardView.animateCardBackgroundColorTo(ContextCompat.getColor(view.context, R.color.colorBackgroundTransparent))
+                categoryChosenTextView.animateAlphaTo(
+                    expectingAlpha = 1F,
+                    delay = ANIMATION_DURATION/2,
+                    duration = ANIMATION_DURATION /2,
+                    onAnimationEnd = {
+                        isRunning = false
+                        isExpanded = false
+                        outerView.isClickable = isExpanded
+                    }
+                )
+            }
+            else {
+                throw Error("Sizes of the collapsed view are not indicated")
+            }
+        }
     }
 
     /*  Builder Block   */
     @SuppressLint("InflateParams")
-    class Builder(private val outerView: View, private val context: Context) {
+    class Builder(private val outerView: View) {
         fun build(layoutInflater: LayoutInflater): OpeningView {
             val view = layoutInflater.inflate(R.layout.layout_opening_view, null)
             return OpeningView(view, outerView)

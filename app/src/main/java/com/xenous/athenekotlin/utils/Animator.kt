@@ -7,9 +7,10 @@ import android.view.View
 import androidx.cardview.widget.CardView
 import androidx.core.animation.addListener
 
+const val ANIMATION_DURATION = 350L
+
 const val ANIMATION_END = 9084
 const val DELAY_END = 9085
-
 
 fun View.animateHeightTo(expectingHeight: Int, onAnimationEnd: (() -> Unit)? = null, duration: Long = ANIMATION_DURATION) {
     val view = this

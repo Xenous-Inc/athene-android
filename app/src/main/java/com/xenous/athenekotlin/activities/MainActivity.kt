@@ -1,17 +1,17 @@
 package com.xenous.athenekotlin.activities
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.github.ybq.android.spinkit.SpinKitView
-import com.xenous.athenekotlin.R
-import com.xenous.athenekotlin.fragments.FragmentsViewPagerAdapter
-import android.view.View
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.data.DownloadWordsResult
+import com.xenous.athenekotlin.fragments.FragmentsViewPagerAdapter
 import com.xenous.athenekotlin.storage.categoryArrayList
 import com.xenous.athenekotlin.storage.wordArrayList
 import com.xenous.athenekotlin.threads.DownloadWordsThread
@@ -36,13 +36,13 @@ class MainActivity : AppCompatActivity() {
         viewPager.currentItem = 1
 
 //      Connect
-        dotsIndicator = findViewById<DotsIndicator>(R.id.dotsIndicator)
+        dotsIndicator = findViewById(R.id.dotsIndicator)
         dotsIndicator.setViewPager(viewPager)
 
         DownloadWordsThread(getDownloadWordsHandler()).start()
     }
 
-    private fun getDownloadWordsHandler() = @SuppressLint("HandlerLeak") object : Handler() {
+        private fun getDownloadWordsHandler() = @SuppressLint("HandlerLeak") object : Handler() {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
 
