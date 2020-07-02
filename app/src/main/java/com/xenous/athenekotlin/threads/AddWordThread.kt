@@ -5,7 +5,6 @@ import android.os.Message
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.utils.*
 
@@ -37,8 +36,8 @@ class AddWordThread(
         }
 
         val database = FirebaseDatabase.getInstance()
-        val wordsReference = database.reference.child(USER_REFERENCE).child(firebaseUser.uid).child(WORDS_REFERENCE)
-        val categoryReference = database.reference.child(USER_REFERENCE).child(firebaseUser.uid).child(CATEGORY_REFERENCE)
+        val wordsReference = database.reference.child(USERS_REFERENCE).child(firebaseUser.uid).child(WORDS_REFERENCE)
+        val categoryReference = database.reference.child(USERS_REFERENCE).child(firebaseUser.uid).child(CATEGORY_REFERENCE)
 
         val sendingWord = Word(
             word.nativeWord,
