@@ -18,9 +18,7 @@
         android:tag="animation"
         app:cardBackgroundColor="@color/WHITE_TRANSPARENT"
         app:cardCornerRadius="30dp"
-        app:cardElevation="0dp"
-        app:strokeColor="@color/colorWhite"
-        app:strokeWidth="3dp">
+        app:cardElevation="0dp">
 
         <TextView
             android:id="@+id/archiveWordTextView"
