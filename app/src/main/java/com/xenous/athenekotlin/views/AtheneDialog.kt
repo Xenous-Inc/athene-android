@@ -2,8 +2,11 @@ package com.xenous.athenekotlin.views
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.widget.EditText
 import android.widget.TextView
+import android.view.View
 
 import com.xenous.athenekotlin.R
 
@@ -15,7 +18,7 @@ class AtheneDialog(
     private val messageTextView: TextView
     private val positiveAnswerTextView: TextView
     private val negativeAnswerTextView: TextView
-    private val categoryEditText: EditText
+    val categoryEditText: EditText
 
     var message = ""
     var hint = ""
@@ -38,12 +41,17 @@ class AtheneDialog(
     }
 
     fun build(): AtheneDialog {
+        this.dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
         this.messageTextView.text = this.message
         if(hint.isNotEmpty()) {
-            this.categoryEditText.visibility = android.view.View.VISIBLE
+            this.categoryEditText.visibility = View.VISIBLE
             this.categoryEditText.hint = this.hint
         }
-        this.negativeAnswerTextView.text = this.negativeText
+        if(negativeText.isNotEmpty()) {
+            this.negativeAnswerTextView.visibility = View.VISIBLE
+            this.negativeAnswerTextView.text = this.negativeText
+        }
         this.positiveAnswerTextView.text = this.positiveText
 
         return this
@@ -51,6 +59,10 @@ class AtheneDialog(
 
     fun show() {
         this.dialog.show()
+    }
+
+    fun dismiss() {
+        this.dialog.dismiss()
     }
 
     fun setOnAnswersItemClickListener(answersItemClickListener: OnAnswersItemClickListener) {

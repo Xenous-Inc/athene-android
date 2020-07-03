@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.xenous.athenekotlin.broadcasts.NotificationBroadcastReceiver
+import java.util.*
 
 
 fun isEmailValid(email: String): Boolean =  android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -25,6 +26,8 @@ const val WORD_CATEGORY_DATABASE_KEY = "category"
 const val WORD_LAST_DATE_DATABASE_KEY = "date"
 const val WORD_LEVEL_DATABASE_KEY = "level"
 
+val forbiddenSymbols = listOf('@', '.', ',', '_', ';', ':', '*', '%', '#', '"', '[', ']')
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 fun createNotificationChannel(c: Context) {
     val name: CharSequence = "AtheneReminderChannel"
@@ -41,4 +44,14 @@ fun createNotificationChannel(c: Context) {
         c.getSystemService(NotificationManager::class.java)!!
 
     notificationManager.createNotificationChannel(channel)
+}
+
+fun getCurrentDateTimeInMills(): Long {
+    val calendar = Calendar.getInstance()
+    calendar.set(Calendar.HOUR_OF_DAY, 0)
+    calendar.set(Calendar.MINUTE, 0)
+    calendar.set(Calendar.SECOND, 0)
+    calendar.set(Calendar.MILLISECOND, 0)
+
+    return calendar.timeInMillis
 }

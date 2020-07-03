@@ -39,7 +39,7 @@ class DownloadWordsThread(
 
         val database = FirebaseDatabase.getInstance()
         val reference = database.reference.child(USERS_REFERENCE).child(firebaseUser.uid).child(WORDS_REFERENCE)
-        val categoryReference = reference.child(CATEGORY_REFERENCE)
+        val categoryReference = FirebaseDatabase.getInstance().reference.child(firebaseUser.uid).child(CATEGORY_REFERENCE)
 
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -69,14 +69,15 @@ class DownloadWordsThread(
                     override fun onDataChange(snapshot: DataSnapshot) {
                         for(categorySnapshot in snapshot.children) {
                             val category = Category(
-                                categorySnapshot.key as String,
-                                categorySnapshot.value as String
+                                categorySnapshot.value as String,
+                                categorySnapshot.key as String
                             )
 
                             categoriesList.add(category)
                         }
 
                         Log.d(TAG, "All categories downloaded completely")
+                        Log.d(TAG, categoriesList.size.toString())
 
                         val downloadWordsResult = DownloadWordsResult(
                             wordsList,

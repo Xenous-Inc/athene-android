@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.utils.*
 
@@ -17,6 +18,15 @@ class OpeningView(val view: View, private val outerView: View) {
     companion object {
         const val TAG = "OpeningView"
     }
+
+    /*  Interfaces */
+    interface OnStateChangeListener {
+        fun onExpand()
+
+        fun onCollapse()
+    }
+
+    var onStateChangeListener : OnStateChangeListener? = null
 
     /*  Initial Block   */
     private var isExpanded = false
@@ -28,8 +38,10 @@ class OpeningView(val view: View, private val outerView: View) {
     private var expandedHeight: Int? = null
 
     private val categoryCardView = view.findViewById<CardView>(R.id.addWordCategoryCardView)
-    private val categoryChosenTextView = view.findViewById<TextView>(R.id.addWordCategoryChosenTextView)
+    val categoryChosenTextView = view.findViewById<TextView>(R.id.addWordCategoryChosenTextView)
     private val categoriesListConstraintLayout = view.findViewById<ConstraintLayout>(R.id.addWordCategoriesListConstraintLayout)
+    val categoriesListRecyclerView = view.findViewById<RecyclerView>(R.id.addWordCategoriesListRecyclerView)
+    val addWordAddCategoryTextView = view.findViewById<TextView>(R.id.addWordAddCategoryTextView)
 
     init {
         view.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -76,7 +88,7 @@ class OpeningView(val view: View, private val outerView: View) {
         (view as ViewGroup).addView(this.view)
     }
 
-    private fun expand() {
+    fun expand() {
         if(!isExpanded && !isRunning) {
             if(expandedWidth != null && expandedHeight != null) {
                 categoryChosenTextView.animateAlphaTo(expectingAlpha = 0F, onAnimationStart = {
@@ -96,6 +108,7 @@ class OpeningView(val view: View, private val outerView: View) {
                         isRunning = false
                         isExpanded = true
                         outerView.isClickable = isExpanded
+                        onStateChangeListener?.onExpand()
                     }
                 )
             }
@@ -105,7 +118,7 @@ class OpeningView(val view: View, private val outerView: View) {
         }
     }
 
-    private fun collapse() {
+    fun collapse() {
         if(isExpanded && !isRunning) {
             if(collapsedWidth != null && collapsedHeight != null) {
                 categoriesListConstraintLayout.animateAlphaTo(
@@ -128,6 +141,7 @@ class OpeningView(val view: View, private val outerView: View) {
                         isRunning = false
                         isExpanded = false
                         outerView.isClickable = isExpanded
+                        onStateChangeListener?.onCollapse()
                     }
                 )
             }

@@ -10,17 +10,14 @@ import com.xenous.athenekotlin.utils.*
 
 class AddWordThread(
     private val handler: Handler,
-    private val word: Word,
-    private val isNeedToAddNewCategory: Boolean
-) : Thread() {
+    private val word: Word
+) {
 
     private companion object {
         const val TAG = "AddWordThread"
     }
 
-    override fun run() {
-        super.run()
-
+    fun run() {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
 
         if(firebaseUser == null) {
@@ -58,41 +55,10 @@ class AddWordThread(
             if(it.isSuccessful) {
                 Log.d(TAG, "Word has been completely added")
 
-                if(!isNeedToAddNewCategory) {
-                    Log.d(TAG, "Category is contained in categories list, skipping adding category")
-
-                    message.apply {
-                        what = SUCCESS_CODE
-                    }
-                    handler.sendMessage(message)
+                message.apply {
+                    what = SUCCESS_CODE
                 }
-                else {
-                    val categoryKey = categoryReference.push().key
-                    if(categoryKey == null) {
-                        Log.d(TAG, "Error while pushing category")
-
-                        return@addOnCompleteListener
-                    }
-
-                    categoryReference.child(categoryKey).setValue(word.category).addOnCompleteListener {state ->
-                        if(state.isSuccessful) {
-                            Log.d(TAG, "Category has been successfully added to database")
-
-                            message.apply {
-                                what = SUCCESS_CODE
-                            }
-                            handler.sendMessage(message)
-                        }
-                        else {
-                            Log.d(TAG, "Error while adding new category to database")
-
-                            message.apply {
-                                what = ERROR_CODE
-                            }
-                            handler.sendMessage(message)
-                        }
-                    }
-                }
+                handler.sendMessage(message)
             }
             else {
                 Log.d(TAG, "Error while adding new word to database")

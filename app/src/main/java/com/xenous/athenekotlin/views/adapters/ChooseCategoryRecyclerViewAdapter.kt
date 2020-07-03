@@ -27,7 +27,7 @@ class ChooseCategoryRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ChooseCategoryRecyclerViewHolder, position: Int) {
         holder.categoryNameTextView.text = categoriesList[position].category
         holder.categoryCardView.setOnClickListener { view ->
-            onItemClickListener.onClick(view)
+            onItemClickListener.onClick(view, categoriesList[position])
         }
     }
 

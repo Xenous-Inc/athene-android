@@ -1,6 +1,7 @@
 package com.xenous.athenekotlin.data
 
 import com.google.firebase.database.Exclude
+import com.xenous.athenekotlin.utils.forbiddenSymbols
 
 data class Word(
     var nativeWord: String?,
@@ -27,6 +28,11 @@ data class Word(
             LEVEL_HALF to 15552000000L,
             LEVEL_YEAR to 31104000000L
         )
+
+        const val WORD_IS_NULL = -1
+        const val WORD_IS_OK = 0
+        const val WORD_CONTAINS_FORBIDDEN_SYMBOLS = 1
+        const val WORD_IS_TO_LONG = 2
     }
 
     @Exclude
@@ -38,5 +44,29 @@ data class Word(
             "date" to lastDateCheck,
             "level" to level
         )
+    }
+
+    fun filter(): Int {
+        if(nativeWord == null && learningWord == null) {
+            return WORD_IS_NULL
+        }
+
+        val equawalent = listOf(nativeWord, learningWord)
+
+
+
+        for(element in equawalent) {
+            if(element!!.length >= 35) {
+                return WORD_IS_TO_LONG
+            }
+
+            for(forbiddenSymbol in forbiddenSymbols) {
+                if(element.contains(forbiddenSymbol)) {
+                    return WORD_CONTAINS_FORBIDDEN_SYMBOLS
+                }
+            }
+        }
+
+        return WORD_IS_OK
     }
 }
