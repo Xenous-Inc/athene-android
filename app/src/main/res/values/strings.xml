@@ -41,5 +41,13 @@
     <string name="add_word_foreign_input_hint">На иностранном</string>
     <string name="add_word_native_input_hint">На родном</string>
     <string name="add_word_choose_category_title">Выберите категорию:</string>
+    <string name="add_new_category_message">Добавить новую категорию</string>
+    <string name="category_hint">Категория</string>
+    <string name="unknown_error_message">Произошла неизвестная ошибка, проверьте ваше подключение к сети Интернет и повторите попытку</string>
+    <string name="word_sending_error_message">"Произошла ошибка при добавлении слова. Проверьте подключение к сети Интеренет и повторите попытку  "</string>
+    <string name="word_is_too_long_message">Слово очень длинное</string>
+    <string name="word_contains_forbidden_symbols">Слово содержит запрещенные символы</string>
+    <string name="fill_all_fields_message">Заполните поля</string>
+    <string name="category_contains_forbidden_symbols">Категория содержит запретные символы</string>
 
 </resources>
