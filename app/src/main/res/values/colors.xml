@@ -9,6 +9,8 @@
     <color name="colorTextSecondary">#AAFFFFFF</color>
     <color name="colorTextShadowed">#50FFFFFF</color>
 
-
     <color name="colorBackgroundTransparent">#70FFFFFF</color>
+
+    <color name="colorIncorrect">#F84291</color>
+    <color name="colorCorrect">#3BFFB6</color>
 </resources>

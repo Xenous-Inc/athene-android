@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <!--    Common Text Size    -->
-    <dimen name="accent_text_size">30sp</dimen>
-    <dimen name="primary_text_size">22sp</dimen>
-    <dimen name="secondary_text_size">18sp</dimen>
+    <dimen name="accent_text_size">28sp</dimen>
+    <dimen name="primary_text_size">24sp</dimen>
+    <dimen name="secondary_text_size">16sp</dimen>
 
 <!--    Views paddings and margins    -->
-    <dimen name="button_height">36dp</dimen>
     <dimen name="button_primary_padding">8dp</dimen>
     <dimen name="button_secondary_padding">24dp</dimen>
-    <dimen name="button_accent_padding">52dp</dimen>
+    <dimen name="button_accent_padding">60dp</dimen>
 
     <dimen name="textview_primary_padding">4dp</dimen>
-    <dimen name="textview_secondary_padding">24dp</dimen>
+    <dimen name="textview_secondary_padding">16dp</dimen>
+    <dimen name="textview_accent_padding">24dp</dimen>
 
     <dimen name="cardview_primary_padding">12dp</dimen>
     <dimen name="cardview_secondary_padding">16dp</dimen>
@@ -26,8 +26,12 @@
     <dimen name="exit_margin_right">8dp</dimen>
 
 <!--    Views widths and heights-->
+    <dimen name="button_height">36dp</dimen>
+
     <dimen name="recyclerview_width">320dp</dimen>
     <dimen name="recyclerview_height">400dp</dimen>
+
+    <dimen name="imageview_size">40dp</dimen>
     <dimen name="input_min_width">320dp</dimen>
     <dimen name="exit_height">32dp</dimen>
 

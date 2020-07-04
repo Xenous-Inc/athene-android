@@ -87,8 +87,8 @@ class OpeningView(val view: View, private val outerView: View) {
                 categoryCardView.animateCardBackgroundColorTo(Color.WHITE)
                 categoriesListConstraintLayout.animateAlphaTo(
                     expectingAlpha = 1F,
-                    delay = ANIMATION_DURATION/2,
-                    duration = ANIMATION_DURATION /2,
+                    delay = ANIMATION_DURATION_HALF,
+                    duration = ANIMATION_DURATION_HALF,
                     onAnimationStart = {
                         categoriesListConstraintLayout.visibility = View.VISIBLE
                     },
@@ -122,8 +122,8 @@ class OpeningView(val view: View, private val outerView: View) {
                 categoryCardView.animateCardBackgroundColorTo(ContextCompat.getColor(view.context, R.color.colorBackgroundTransparent))
                 categoryChosenTextView.animateAlphaTo(
                     expectingAlpha = 1F,
-                    delay = ANIMATION_DURATION/2,
-                    duration = ANIMATION_DURATION /2,
+                    delay = ANIMATION_DURATION_HALF,
+                    duration = ANIMATION_DURATION_HALF,
                     onAnimationEnd = {
                         isRunning = false
                         isExpanded = false

@@ -106,8 +106,8 @@
             android:layout_height="match_parent"
             android:background="@drawable/background_outline_primary"
             android:gravity="center"
-            android:paddingStart="@dimen/textview_secondary_padding"
-            android:paddingEnd="@dimen/textview_secondary_padding"
+            android:paddingStart="@dimen/textview_accent_padding"
+            android:paddingEnd="@dimen/textview_accent_padding"
             android:text="@string/sign_up_go_to_sign_in"
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/primary_text_size" />
