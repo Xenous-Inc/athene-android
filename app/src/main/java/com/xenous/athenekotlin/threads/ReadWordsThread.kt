@@ -1,38 +1,40 @@
 package com.xenous.athenekotlin.threads
 
-import android.os.Handler
-import android.os.Message
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.xenous.athenekotlin.data.Category
-import com.xenous.athenekotlin.data.DownloadWordsResult
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.utils.*
+import java.lang.Exception
 
 
-class DownloadWordsThread(
-    private val handler: Handler
-) : Thread() {
+class ReadWordsThread {
 
     private companion object {
-        const val TAG = "DownloadWordsThread"
+        const val TAG = "ReadWordsThread"
     }
 
-    override fun run() {
-        super.run()
+    interface ReadWordsResultListener {
+        fun onSuccess(wordsList: MutableList<Word>, categoriesList: MutableList<Category>)
 
+        fun onFailure(exception: Exception) {}
+
+        fun onCanceled(error: DatabaseError)
+    }
+
+    private var downloadWordsResultListener: ReadWordsResultListener? = null
+
+    fun setDownloadWordResultListener(downloadWordsResultListener: ReadWordsResultListener) {
+        this.downloadWordsResultListener = downloadWordsResultListener
+    }
+
+    fun run() {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
 
         if(firebaseUser == null) {
-            Log.d(TAG, "Firebase User is null. Stopping downloading process...")
-
-            val msg = Message.obtain()
-            msg.apply {
-                what = SUCCESS_CODE
-                obj = null
-            }
-            handler.sendMessage(msg)
+            Log.d(TAG, "Firebase User is null")
+            this.downloadWordsResultListener?.onFailure(Exception("Firebase User is null"))
 
             return
         }
@@ -55,7 +57,7 @@ class DownloadWordsThread(
                         wordSnapshot.child(WORD_CATEGORY_DATABASE_KEY).value as String?,
                         wordSnapshot.child(WORD_LAST_DATE_DATABASE_KEY).value as Long?,
                         wordSnapshot.child(WORD_LEVEL_DATABASE_KEY).value as Long?,
-                        wordSnapshot.key as String?
+                        wordSnapshot.key
                     )
 
                     wordsList.add(word)
@@ -79,29 +81,13 @@ class DownloadWordsThread(
                         Log.d(TAG, "All categories downloaded completely")
                         Log.d(TAG, categoriesList.size.toString())
 
-                        val downloadWordsResult = DownloadWordsResult(
-                            wordsList,
-                            categoriesList
-                        )
-
-                        val msg = Message.obtain()
-                        msg.apply {
-                            what = SUCCESS_CODE
-                            obj = downloadWordsResult
-                        }
-
-                        handler.sendMessage(msg);
+                       downloadWordsResultListener?.onSuccess(wordsList, categoriesList)
                     }
 
                     override fun onCancelled(error: DatabaseError) {
                         Log.d(TAG, "Error while downloading categories, aborting... Error is ${error.message}")
 
-                        val msg = Message.obtain()
-                        msg.apply {
-                            what = SUCCESS_CODE
-                            obj = null
-                        }
-                        handler.sendMessage(msg)
+                        downloadWordsResultListener?.onCanceled(error)
                     }
                 })
             }
@@ -109,12 +95,7 @@ class DownloadWordsThread(
             override fun onCancelled(error: DatabaseError) {
                 Log.d(TAG, "Error while downloading words, aborting... Error is ${error.message}")
 
-                val msg = Message.obtain()
-                msg.apply {
-                    what = SUCCESS_CODE
-                    obj = null
-                }
-                handler.sendMessage(msg)
+               downloadWordsResultListener?.onCanceled(error)
             }
         })
     }

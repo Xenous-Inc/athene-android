@@ -11,6 +11,7 @@ import com.xenous.athenekotlin.utils.ERROR_CODE
 import com.xenous.athenekotlin.utils.SUCCESS_CODE
 import com.xenous.athenekotlin.utils.USER_REFERENCE
 import com.xenous.athenekotlin.utils.WORD_CATEGORY_DATABASE_KEY
+import java.lang.Exception
 import java.net.URI
 import java.net.URISyntaxException
 
@@ -21,6 +22,14 @@ class GenerateDynamicLinksThread(
 
     private companion object {
         const val TAG = "GenerateDynamicLink"
+    }
+
+    interface GenerateDynamicLinkResultListener {
+        fun onSuccess(shortLink: String?)
+
+        fun onFailure(exception: Exception)
+
+        fun onCanceled() {}
     }
 
     fun generate() {

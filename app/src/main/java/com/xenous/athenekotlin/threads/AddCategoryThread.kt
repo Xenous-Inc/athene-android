@@ -1,21 +1,31 @@
 package com.xenous.athenekotlin.threads
 
-import android.os.Handler
-import android.os.Message
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.utils.CATEGORY_REFERENCE
-import com.xenous.athenekotlin.utils.ERROR_CODE
-import com.xenous.athenekotlin.utils.SUCCESS_CODE
+import java.lang.Exception
 
 class AddCategoryThread(
-    private val handler: Handler,
     private val category: Category
 ) {
     private companion object {
         const val TAG = "AddCategoryThread"
+    }
+
+    interface AddCategoryResultListener {
+        fun onSuccess()
+
+        fun onFailure(exception: Exception)
+
+        fun onCanceled() {}
+    }
+
+    private var addCategoryResultListener: AddCategoryResultListener? = null
+
+    fun setAddCategoryResultListener(addCategoryResultListener: AddCategoryResultListener) {
+        this.addCategoryResultListener = addCategoryResultListener
     }
 
     fun run() {
@@ -39,44 +49,26 @@ class AddCategoryThread(
         }
 
         val category = Category(
-            this.category.category,
+            this.category.title,
             key
         )
 
-        reference.child(category.uid!!).setValue(category.category)
+        reference.child(category.uid!!).setValue(category.title)
             .addOnSuccessListener {
                 Log.d(TAG, "Category has been successfully added to database")
 
-                sendSuccessMessage(category)
+                this.addCategoryResultListener?.onSuccess()
             }
             .addOnFailureListener {
                 Log.d(TAG, "Error while adding category to database")
 
-                sendErrorMessage()
+                this.addCategoryResultListener?.onFailure(it)
             }
             .addOnCanceledListener {
                 Log.d(TAG, "Transaction has been")
+
+                this.addCategoryResultListener?.onCanceled()
             }
 
-    }
-
-    private fun sendSuccessMessage(category: Category) {
-        val message = Message.obtain()
-        message.apply {
-            what = SUCCESS_CODE
-            obj = category
-        }
-
-        handler.sendMessage(message)
-    }
-
-    private fun sendErrorMessage() {
-        val message = Message.obtain()
-        message.apply {
-            what = ERROR_CODE
-            obj = null
-        }
-
-        handler.sendMessage(message)
     }
 }

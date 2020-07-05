@@ -54,8 +54,8 @@ class WordsCheckFragmentTest(val word: Word, val handler: Handler): Fragment() {
 
 //        Slide in
         translationsLinearLayout.slideInFromRight(onAnimationStart = {
-            foreignTextView.text = word.learningWord
-            nativeCorrectAnswerTextView.text = word.nativeWord
+            foreignTextView.text = word.foreign
+            nativeCorrectAnswerTextView.text = word.native
         })
         continueActionsLinearLayout.slideInFromRight()
 
@@ -74,7 +74,7 @@ class WordsCheckFragmentTest(val word: Word, val handler: Handler): Fragment() {
         continueLinearLayout.setOnClickListener {
             if(
                 nativeUserAnswerEditText.text.toString().trim().toLowerCase(Locale.ROOT) ==
-                word.nativeWord?.trim()?.toLowerCase(Locale.ROOT)
+                word.native?.trim()?.toLowerCase(Locale.ROOT)
             ) {
                 this@prepareFragmentForNewWord.animateCorrectAnswer(
                     onAnimationStart = {
