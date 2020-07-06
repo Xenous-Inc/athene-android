@@ -55,6 +55,9 @@
     <string name="word_contains_forbidden_symbols">Слово содержит запрещенные символы</string>
     <string name="fill_all_fields_message">Заполните поля</string>
     <string name="category_contains_forbidden_symbols">Категория содержит запретные символы</string>
+    <string name="add_new_category_error_message">Произошла ошибка при добавлении категории, проверьте подключение к сети Интернет и повторите попытку</string>
+    <string name="yes">Ок</string>
+    <string name="add_new_word_error_message">Произошла неизвестная ошибка при попытке добавить слово. Проверьте подключение к сети Интернет и повторите попытку</string>
 
 <!--    Words Check Fragment    -->
     <string name="words_check_title">Проверить</string>

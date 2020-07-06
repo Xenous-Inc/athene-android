@@ -2,7 +2,6 @@ package com.xenous.athenekotlin.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -13,11 +12,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Word
@@ -33,7 +29,7 @@ import com.xenous.athenekotlin.views.AtheneDialog
 import com.xenous.athenekotlin.views.OpeningView
 import com.xenous.athenekotlin.views.adapters.ChooseCategoryRecyclerViewAdapter
 import com.xenous.athenekotlin.views.adapters.OnItemClickListener
-import java.text.FieldPosition
+import java.lang.Exception
 import java.util.*
 
 class AddWordFragment: Fragment() {
@@ -103,13 +99,27 @@ class AddWordFragment: Fragment() {
                         categoryText
                     )
                     categoryArrayList.add(category)
-                    openingView.categoryChosenTextView.text = category.category
+                    openingView.categoryChosenTextView.text = category.title
 
                     if(categoryArrayList.contains(category)) {
-                        AddCategoryThread(
-                            getAddCategoryHandler(categoryArrayList.size - 1),
-                            category
-                        ).run()
+                        val addCategoryThread = AddCategoryThread(category)
+                        addCategoryThread.setAddCategoryResultListener(object : AddCategoryThread.AddCategoryResultListener {
+                            override fun onSuccess() { }
+
+                            override fun onFailure(exception: Exception) {
+                                val atheneDialog = AtheneDialog(context!!)
+                                atheneDialog.message = getString(R.string.add_new_category_error_message)
+                                atheneDialog.positiveText = getString(R.string.yes)
+                                atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
+                                    override fun onPositiveClick(view: View) {
+                                        atheneDialog.dismiss()
+                                    }
+
+                                    override fun onNegativeClickListener(view: View) {}
+                                })
+                                atheneDialog.build().show()
+                            }
+                        })
                     }
                 }
 
@@ -154,7 +164,18 @@ class AddWordFragment: Fragment() {
                 Word.WORD_IS_NULL ->  return@setOnClickListener
             }
 
-            AddWordThread(getAddWordHandler(openingView), word).run()
+            val addWordThread = AddWordThread(word)
+            addWordThread.setAddWordResultListener(object : AddWordThread.AddWordResultListener {
+                override fun onSuccess() {}
+
+                override fun onFailure(exception: Exception) {
+                    val atheneDialog = AtheneDialog(context!!)
+                    atheneDialog.message = getString(R.string.add_new_word_error_message)
+                    //ToDo: Fix athene dialog click listeners
+                    atheneDialog.positiveText = getString(R.string.yes)
+                    atheneDialog.build().show()
+                }
+            })
             addWordContinueImageView.isClickable = false
         }
 
@@ -184,7 +205,7 @@ class AddWordFragment: Fragment() {
             override fun onClick(view: View, category: Category) {
 
                  openingView.collapse()
-                 openingView.categoryChosenTextView.text = category.category
+                 openingView.categoryChosenTextView.text = category.title
             }
         }
     )

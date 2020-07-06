@@ -20,6 +20,13 @@ const val USERS_REFERENCE = "users"
 const val WORDS_REFERENCE = "words"
 const val CATEGORY_REFERENCE = "categories"
 
+const val TEACHER_REFERENCE = "teachers"
+const val TEACHER_NAME_DATABASE_KEY = "name"
+const val CLASSROOMS_DATABASE_KEY = "classes"
+const val CLASSROOM_NAME_DATABASE_KEY = "name"
+
+const val CLASSROOM_CATEGORY_NAME_DATABASE_KEY = "name"
+
 const val NATIVE_WORD_DATABASE_KEY = "English"
 const val LEARNING_WORD_DATABASE_KEY = "Russian"
 const val WORD_CATEGORY_DATABASE_KEY = "category"

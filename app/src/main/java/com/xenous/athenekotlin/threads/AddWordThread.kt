@@ -1,20 +1,32 @@
 package com.xenous.athenekotlin.threads
 
-import android.os.Handler
-import android.os.Message
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.utils.*
+import java.lang.Exception
 
 class AddWordThread(
-    private val handler: Handler,
     private val word: Word
 ) {
 
     private companion object {
         const val TAG = "AddWordThread"
+    }
+
+    interface AddWordResultListener {
+        fun onSuccess()
+
+        fun onFailure(exception: Exception)
+
+        fun onCanceled() {}
+    }
+
+    private var addWordResultListener: AddWordResultListener? = null
+
+    fun setAddWordResultListener(addWordResultListener: AddWordResultListener) {
+        this.addWordResultListener
     }
 
     fun run() {
@@ -23,51 +35,46 @@ class AddWordThread(
         if(firebaseUser == null) {
             Log.d(TAG, "Firebase User is null")
 
-            val msg = Message.obtain()
-            msg.apply {
-                what = ERROR_CODE
-            }
-            handler.sendMessage(msg)
+            this.addWordResultListener?.onFailure(Exception("Firebase User is null"))
 
             return
         }
 
         val database = FirebaseDatabase.getInstance()
         val wordsReference = database.reference.child(USERS_REFERENCE).child(firebaseUser.uid).child(WORDS_REFERENCE)
-        val categoryReference = database.reference.child(USERS_REFERENCE).child(firebaseUser.uid).child(CATEGORY_REFERENCE)
 
-        val sendingWord = Word(
-            word.nativeWord,
-            word.learningWord,
-            word.category,
-            word.lastDateCheck,
-            word.level,
-            wordsReference.push().key
-        )
+        val key = wordsReference.push().key
 
-        if(sendingWord.uid == null) {
-            Log.d(TAG, "Error while pushing word")
+        if(key == null) {
+            this.addWordResultListener?.onFailure(Exception("Error while pushing the word"))
+
             return
         }
 
-        wordsReference.child(sendingWord.uid).setValue(sendingWord.toMap()).addOnCompleteListener {
-            val message = Message.obtain()
-            if(it.isSuccessful) {
-                Log.d(TAG, "Word has been completely added")
+        val sendingWord = Word(
+            word.native,
+            word.foreign,
+            word.category,
+            word.lastDateCheck,
+            word.level,
+            key
+        )
 
-                message.apply {
-                    what = SUCCESS_CODE
-                }
-                handler.sendMessage(message)
-            }
-            else {
-                Log.d(TAG, "Error while adding new word to database")
+        wordsReference.child(key).setValue(sendingWord.toMap())
+            .addOnSuccessListener {
+                Log.d(TAG, "Success while adding word to database")
 
-                message.apply {
-                    what = ERROR_CODE
-                }
-                handler.sendMessage(message)
+                this.addWordResultListener?.onSuccess()
             }
-        }
+            .addOnFailureListener {
+                Log.d(TAG, "Error while adding word to database. The error is ${it.message}")
+
+                this.addWordResultListener?.onFailure(it)
+            }
+            .addOnCanceledListener {
+                Log.d(TAG, "Transaction has been canceled")
+
+                this.addWordResultListener?.onCanceled()
+            }
     }
 }

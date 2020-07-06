@@ -9,28 +9,40 @@ import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.utils.ERROR_CODE
 import com.xenous.athenekotlin.utils.SUCCESS_CODE
 import com.xenous.athenekotlin.utils.USER_REFERENCE
+import java.lang.Exception
 
 class DeleteWordThread(
-    private val handler: Handler,
     private val word: Word?
-) : Thread() {
+) {
 
     companion object {
         const val TAG = "DeleteWordThread"
     }
 
-    override fun run() {
-        super.run()
+    interface DeleteWordResultListener {
+        fun onSuccess()
 
+        fun onFailure(exception: Exception)
+
+        fun onCanceled() {}
+    }
+
+    private var deleteWordResultListener: DeleteWordResultListener? = null
+
+    fun setDeleteWordResultListener(deleteWordResultListener: DeleteWordResultListener) {
+        this.deleteWordResultListener = deleteWordResultListener
+    }
+
+    fun run() {
         if(word == null) {
             Log.d(TAG, "Word is null")
-            sendErrorMessage()
+            this.deleteWordResultListener?.onFailure(Exception("Word is null"))
 
             return
         }
         if(word.uid == null) {
             Log.d(TAG, "Word's UID is null")
-            sendErrorMessage()
+            this.deleteWordResultListener?.onFailure(Exception("Word's UID is null"))
 
             return
         }
@@ -39,7 +51,7 @@ class DeleteWordThread(
 
         if(user == null) {
             Log.d(TAG, "User is null")
-            sendErrorMessage()
+            this.deleteWordResultListener?.onFailure(Exception("User is null"))
 
             return
         }
@@ -55,35 +67,17 @@ class DeleteWordThread(
             .addOnSuccessListener {
                 Log.d(TAG, "Word has been deleted completely")
 
-                sendSuccessMessage()
+                this.deleteWordResultListener?.onSuccess()
             }
             .addOnFailureListener {
                 Log.d(TAG, "Error while deleting word. The error is $it")
 
-                sendErrorMessage()
+                this.deleteWordResultListener?.onFailure(it)
             }
             .addOnCanceledListener {
                 Log.d(TAG, "Transaction has been canceled")
 
-                sendErrorMessage()
+                this.deleteWordResultListener?.onCanceled()
             }
-    }
-
-    private fun sendErrorMessage() {
-        val message = Message.obtain()
-        message.apply {
-            what = ERROR_CODE
-        }
-
-        handler.sendMessage(message)
-    }
-
-    private fun sendSuccessMessage() {
-        val message = Message.obtain()
-        message.apply {
-            what = SUCCESS_CODE
-        }
-
-        handler.sendMessage(message)
     }
 }

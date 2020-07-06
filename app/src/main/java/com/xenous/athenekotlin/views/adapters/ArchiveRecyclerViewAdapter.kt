@@ -23,15 +23,15 @@ class ArchiveRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ArchiveRecyclerViewHolder, position: Int) {
         if(
-            archivedWordList[position].nativeWord != null &&
-            archivedWordList[position].learningWord != null
+            archivedWordList[position].native != null &&
+            archivedWordList[position].foreign != null
         ) {
             return
         }
 
         val stringBuilder = StringBuilder()
         stringBuilder
-            .append(archivedWordList[position].nativeWord)
+            .append(archivedWordList[position].native)
             .append("-")
             .append(archivedWordList[position])
 

@@ -4,8 +4,8 @@ import com.google.firebase.database.Exclude
 import com.xenous.athenekotlin.utils.forbiddenSymbols
 
 data class Word(
-    var nativeWord: String?,
-    var learningWord: String?,
+    var native: String?,
+    var foreign: String?,
     var category: String? = null,
     var lastDateCheck: Long? = 0,
     var level: Long? = 0,
@@ -38,8 +38,8 @@ data class Word(
     @Exclude
     fun toMap(): Map<String, Any?> {
         return mapOf(
-            "Russian" to nativeWord,
-            "English" to learningWord,
+            "Russian" to native,
+            "English" to foreign,
             "category" to category,
             "date" to lastDateCheck,
             "level" to level
@@ -47,13 +47,11 @@ data class Word(
     }
 
     fun filter(): Int {
-        if(nativeWord == null && learningWord == null) {
+        if(native == null && foreign == null) {
             return WORD_IS_NULL
         }
 
-        val equawalent = listOf(nativeWord, learningWord)
-
-
+        val equawalent = listOf(native, foreign)
 
         for(element in equawalent) {
             if(element!!.length >= 35) {
