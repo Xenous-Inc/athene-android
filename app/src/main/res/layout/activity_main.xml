@@ -52,7 +52,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/exitImageView"
+        android:id="@+id/signOutImageView"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/exit_height"
         android:layout_marginTop="@dimen/exit_margin_top"

@@ -110,7 +110,7 @@
             android:id="@+id/editWordContinueTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add"
+            android:text="@string/save"
             android:textColor="@color/colorTextSecondary"
             android:textSize="@dimen/secondary_text_size" />
 

@@ -29,7 +29,6 @@ import com.xenous.athenekotlin.views.AtheneDialog
 import com.xenous.athenekotlin.views.OpeningView
 import com.xenous.athenekotlin.views.adapters.ChooseCategoryRecyclerViewAdapter
 import com.xenous.athenekotlin.views.adapters.OnItemClickListener
-import java.lang.Exception
 import java.util.*
 
 class AddWordFragment: Fragment() {
@@ -51,8 +50,8 @@ class AddWordFragment: Fragment() {
 
         findViewsById(view)
 
-        val outerFrameLayout = view.findViewById<FrameLayout>(R.id.addWordCategoryOuterFrameLayout)
-        val categoryFrameLayout = view.findViewById<FrameLayout>(R.id.addWordCategoryFrameLayout)
+        val outerFrameLayout = view.findViewById<FrameLayout>(R.id.editWordCategoryOuterFrameLayout)
+        val categoryFrameLayout = view.findViewById<FrameLayout>(R.id.editWordCategoryFrameLayout)
 
         val openingView = OpeningView.Builder(outerFrameLayout).build(layoutInflater)
 
@@ -195,9 +194,9 @@ class AddWordFragment: Fragment() {
     }
 
     private fun findViewsById(view: View) {
-        this.addWordForeignEditText = view.findViewById(R.id.addWordForeignEditText)
-        this.addWordNativeEditText = view.findViewById(R.id.addWordNativeEditText)
-        this.addWordContinueImageView = view.findViewById(R.id.addWordContinueImageView)
+        this.addWordForeignEditText = view.findViewById(R.id.editWordForeignEditText)
+        this.addWordNativeEditText = view.findViewById(R.id.editWordNativeEditText)
+        this.addWordContinueImageView = view.findViewById(R.id.editWordContinueImageView)
     }
 
     private fun getCategoriesRecyclerViewAdapter(openingView: OpeningView) = ChooseCategoryRecyclerViewAdapter(

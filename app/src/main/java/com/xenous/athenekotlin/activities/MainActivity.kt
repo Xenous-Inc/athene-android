@@ -4,14 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.github.ybq.android.spinkit.SpinKitView
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.ktx.Firebase
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.data.Category
@@ -23,9 +23,9 @@ import com.xenous.athenekotlin.storage.categoriesArrayList
 import com.xenous.athenekotlin.storage.getCategoriesArrayListWithDefault
 import com.xenous.athenekotlin.storage.wordsArrayList
 import com.xenous.athenekotlin.threads.*
-import com.xenous.athenekotlin.utils.*
+import com.xenous.athenekotlin.utils.USER_REFERENCE
+import com.xenous.athenekotlin.utils.WORD_CATEGORY_DATABASE_KEY
 import com.xenous.athenekotlin.views.AtheneDialog
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager
@@ -41,6 +41,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val signOutImageView = findViewById<ImageView>(R.id.signOutImageView)
+        signOutImageView.setOnClickListener {
+            Firebase.auth.signOut()
+            val intent = Intent(this, SignInActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
 
         spinKitView = findViewById(R.id.spinKitView)
 

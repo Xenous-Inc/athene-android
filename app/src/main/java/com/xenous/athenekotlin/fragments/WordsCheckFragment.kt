@@ -75,14 +75,14 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
 
 //        Slide in
         translationsLinearLayout.slideInFromRight(onAnimationStart = {
-            nativeTextView.text = word.nativeWord
-            foreignCorrectAnswerTextView.text = word.learningWord
+            nativeTextView.text = word.native
+            foreignCorrectAnswerTextView.text = word.foreign
         })
         continueActionsLinearLayout.slideInFromRight()
 
 //        Set onClick and onTouch listeners
         wordActionEditLinearLayout.setOnClickListener {
-            Toast.makeText(context, "EDIT", Toast.LENGTH_LONG).show()
+//            todo: start edit word activity
         }
         wordActionDeleteLinearLayout.setOnClickListener {
             Toast.makeText(context, "DELETE", Toast.LENGTH_LONG).show()
@@ -95,7 +95,7 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
         continueLinearLayout.setOnClickListener {
             if(
                 foreignUserAnswerEditText.text.toString().trim().toLowerCase(Locale.ROOT) ==
-                word.learningWord?.trim()?.toLowerCase(Locale.ROOT)
+                word.foreign?.trim()?.toLowerCase(Locale.ROOT)
             ) {
                 this@prepareFragmentForNewWord.animateCorrectAnswer(
                     onAnimationStart = {
