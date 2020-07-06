@@ -31,7 +31,7 @@
     <dimen name="recyclerview_width">320dp</dimen>
     <dimen name="recyclerview_height">400dp</dimen>
 
-    <dimen name="imageview_size">40dp</dimen>
+    <dimen name="imageview_size">36dp</dimen>
     <dimen name="input_min_width">320dp</dimen>
     <dimen name="exit_height">32dp</dimen>
 

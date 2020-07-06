@@ -86,7 +86,7 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
 
 //        Set onClick and onTouch listeners
         wordActionEditLinearLayout.setOnClickListener {
-            Toast.makeText(context, "EDIT", Toast.LENGTH_LONG).show()
+//            todo: start edit word activity
         }
         wordActionDeleteLinearLayout.setOnClickListener {
             Toast.makeText(context, "DELETE", Toast.LENGTH_LONG).show()
