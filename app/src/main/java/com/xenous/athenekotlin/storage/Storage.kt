@@ -4,7 +4,7 @@ import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Word
 
 var wordsArrayList = mutableListOf<Word>()
-val checkingWordsArrayList = mutableListOf<Word>()
+var checkingWordsArrayList = mutableListOf<Word>()
 
 var categoriesArrayList = mutableListOf<Category>()
 

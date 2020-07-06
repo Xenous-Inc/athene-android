@@ -20,6 +20,10 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
     interface OnWordCheckStateChangeListener {
         fun onWordChecked()
 
+        fun onRightAnswer(word: Word)
+
+        fun onWordMistake(word: Word)
+
         fun onWordsEnd()
     }
 
@@ -75,8 +79,8 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
 
 //        Slide in
         translationsLinearLayout.slideInFromRight(onAnimationStart = {
-            nativeTextView.text = word.nativeWord
-            foreignCorrectAnswerTextView.text = word.learningWord
+            nativeTextView.text = word.native
+            foreignCorrectAnswerTextView.text = word.foreign
         })
         continueActionsLinearLayout.slideInFromRight()
 
@@ -95,7 +99,7 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
         continueLinearLayout.setOnClickListener {
             if(
                 foreignUserAnswerEditText.text.toString().trim().toLowerCase(Locale.ROOT) ==
-                word.learningWord?.trim()?.toLowerCase(Locale.ROOT)
+                word.foreign?.trim()?.toLowerCase(Locale.ROOT)
             ) {
                 this@prepareFragmentForNewWord.animateCorrectAnswer(
                     onAnimationStart = {
@@ -103,6 +107,8 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
                     },
                     onAnimationEnd = {
                         clickBlocker.visibility = View.GONE
+
+                        onWordCheckStateChangeListener?.onRightAnswer(word.apply { increaseLevel() })
                     }
                 )
             }
@@ -114,6 +120,8 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
                     },
                     onAnimationEnd = {
                         clickBlocker.visibility = View.GONE
+
+                        onWordCheckStateChangeListener?.onWordMistake(word.apply { resetProgress() })
                     }
                 )
             }
@@ -126,6 +134,8 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
                 },
                 onAnimationEnd = {
                     clickBlocker.visibility = View.GONE
+
+                    onWordCheckStateChangeListener?.onWordMistake(word.apply { resetProgress() })
                 }
             )
         }

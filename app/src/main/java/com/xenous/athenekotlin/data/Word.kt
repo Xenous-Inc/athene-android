@@ -2,13 +2,14 @@ package com.xenous.athenekotlin.data
 
 import com.google.firebase.database.Exclude
 import com.xenous.athenekotlin.utils.forbiddenSymbols
+import com.xenous.athenekotlin.utils.getCurrentDateTimeInMills
 
 data class Word(
     var native: String?,
     var foreign: String?,
     var category: String? = null,
-    var lastDateCheck: Long? = 0,
-    var level: Long? = 0,
+    var lastDateCheck: Long = 0,
+    var level: Long = 0,
     val uid: String? = null
 ) {
     companion object {
@@ -66,6 +67,27 @@ data class Word(
         }
 
         return WORD_IS_OK
+    }
+
+    fun increaseLevel() {
+        if(level == LEVEL_ARCHIVED.toLong()) {
+            return
+        }
+
+        level += 1
+        setNextDate()
+    }
+
+    fun resetProgress() {
+        level = 0
+        setNextDate()
+    }
+
+    private fun setNextDate() {
+        if(level == LEVEL_ARCHIVED.toLong()) {
+            return
+        }
+        lastDateCheck = getCurrentDateTimeInMills() + CHECK_INTERVAL[level.toInt()]!!
     }
 
     override fun equals(other: Any?): Boolean {

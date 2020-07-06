@@ -1,16 +1,14 @@
 package com.xenous.athenekotlin.activities
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.github.ybq.android.spinkit.SpinKitView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import com.xenous.athenekotlin.R
@@ -20,12 +18,18 @@ import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.exceptions.UserExistInClassroomException
 import com.xenous.athenekotlin.fragments.FragmentsViewPagerAdapter
 import com.xenous.athenekotlin.storage.categoriesArrayList
+import com.xenous.athenekotlin.storage.checkingWordsArrayList
 import com.xenous.athenekotlin.storage.getCategoriesArrayListWithDefault
 import com.xenous.athenekotlin.storage.wordsArrayList
 import com.xenous.athenekotlin.threads.*
-import com.xenous.athenekotlin.utils.*
+import com.xenous.athenekotlin.utils.USER_REFERENCE
+import com.xenous.athenekotlin.utils.WORD_CATEGORY_DATABASE_KEY
+import com.xenous.athenekotlin.utils.getCurrentDateTimeInMills
 import com.xenous.athenekotlin.views.AtheneDialog
-import java.lang.Exception
+import nl.dionsegijn.konfetti.KonfettiView
+import nl.dionsegijn.konfetti.models.Shape.Companion.CIRCLE
+import nl.dionsegijn.konfetti.models.Shape.Companion.RECT
+import nl.dionsegijn.konfetti.models.Size
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager
@@ -43,16 +47,9 @@ class MainActivity : AppCompatActivity() {
 
 
         spinKitView = findViewById(R.id.spinKitView)
-
-//      Optimize View Pager
         viewPager = findViewById(R.id.viewPager)
-        viewPager.adapter = FragmentsViewPagerAdapter(supportFragmentManager, 0)
-        viewPager.offscreenPageLimit = 4
-        viewPager.currentItem = 1
 
-//      Connect
-        dotsIndicator = findViewById(R.id.dotsIndicator)
-        dotsIndicator.setViewPager(viewPager)
+
 
 //      Read Word Thread
         val readWordsThread = ReadWordsThread()
@@ -66,6 +63,18 @@ class MainActivity : AppCompatActivity() {
 
                 wordsArrayList = wordsList.toMutableList()
                 categoriesArrayList = categoriesList.toMutableList()
+                checkingWordsArrayList = initWordsToCheck(wordsList)
+
+//              Optimize View Pager
+                viewPager.adapter = FragmentsViewPagerAdapter(supportFragmentManager, 0)
+                viewPager.offscreenPageLimit = 4
+                viewPager.currentItem = 1
+
+//              Connect
+                dotsIndicator = findViewById(R.id.dotsIndicator)
+                dotsIndicator.setViewPager(viewPager)
+
+                spinKitView.visibility = View.INVISIBLE
 
                 parseDynamicLink(intent)
             }
@@ -75,8 +84,47 @@ class MainActivity : AppCompatActivity() {
             }
         })
         readWordsThread.run()
+    }
 
+    fun callConfetti() {
+        val konfettiView = findViewById<KonfettiView>(R.id.konfettiView)
+        konfettiView.build()
+            .addColors(
+                Color.MAGENTA,
+                Color.YELLOW,
+                resources.getColor(R.color.colorCorrect),
+                resources.getColor(R.color.colorIncorrect)
+            )
+            .setDirection(0.0, 359.0)
+            .setSpeed(1f, 5f)
+            .setFadeOutEnabled(true)
+            .setTimeToLive(2000L)
+            .addShapes(CIRCLE, RECT)
+            .addSizes(Size(10, 5f))
+            .setPosition(-50f, konfettiView.width + 50f, -50f, -50f)
+            .streamFor(300, 1500L)
+    }
 
+    private fun initWordsToCheck(words : List<Word>): MutableList<Word> {
+        val checkingWordsList = mutableListOf<Word>()
+
+        for(word in words) {
+            if(word.level == Word.LEVEL_ARCHIVED.toLong() || word.level == Word.LEVEL_ADDED.toLong()) {
+                continue
+            }
+
+            val currentTime = getCurrentDateTimeInMills()
+            if(currentTime > word.lastDateCheck) {
+                if(word.lastDateCheck == Word.LEVEL_DAY.toLong() || word.lastDateCheck == Word.LEVEL_WEEK.toLong()) {
+                    if(currentTime - word.lastDateCheck > Word.CHECK_INTERVAL[Word.LEVEL_DAY]!! * 3) {
+                        word.level = Word.LEVEL_DAY.toLong()
+                    }
+                }
+                checkingWordsList.add(word)
+            }
+        }
+
+        return checkingWordsList
     }
 
     private fun parseDynamicLink(intent: Intent?) {

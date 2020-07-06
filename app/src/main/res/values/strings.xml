@@ -72,5 +72,6 @@
     <string name="words_check_foreign_input_hint">Перевод</string>
     <string name="words_check_recall_translation">Вспомнить перевод:</string>
     <string name="words_check_fine">Отлично!</string>
+    <string name="error_while_updating_message">Промзошла ошибка при обновлении слова. Проверьте подключение к сеи Интернет и повторите попытку</string>
 
 </resources>

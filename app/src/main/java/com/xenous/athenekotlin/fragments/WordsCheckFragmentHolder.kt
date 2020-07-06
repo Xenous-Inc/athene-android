@@ -7,7 +7,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.xenous.athenekotlin.R
+import com.xenous.athenekotlin.activities.MainActivity
 import com.xenous.athenekotlin.data.Word
+import com.xenous.athenekotlin.storage.checkingWordsArrayList
+import com.xenous.athenekotlin.threads.UpdateWordThread
+import com.xenous.athenekotlin.views.AtheneDialog
+import java.lang.Exception
 
 class WordsCheckFragmentHolder : Fragment() {
 
@@ -22,37 +27,11 @@ class WordsCheckFragmentHolder : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val words = arrayListOf(
-            Word(
-                "Здоровенное яблоко",
-                "Huge apple",
-                null,
-                null,
-                null,
-                null
-            ),
-            Word(
-                "Червяк",
-                "Worm",
-                null,
-                null,
-                null,
-                null
-            ),
-            Word(
-                "Больной на голову",
-                "Sick",
-                null,
-                null,
-                null,
-                null
-            )
-        )
-        startWordsCheck(words)
+        startWordsCheck(checkingWordsArrayList)
     }
 
     private fun startWordsCheck(
-        words: ArrayList<Word>,
+        words: MutableList<Word>,
         index: Int = 0
     ) {
         val word = if(index < words.size) words[index] else null
@@ -64,11 +43,19 @@ class WordsCheckFragmentHolder : Fragment() {
                 }
             }
 
+            override fun onRightAnswer(word: Word) {
+                updateLevel(word)
+            }
+
+            override fun onWordMistake(word: Word) {
+                updateLevel(word)
+            }
+
             override fun onWordsEnd() {
 //                If there is no more words and array is not empty
                 if(words.isNotEmpty()) {
-                    Toast.makeText(context, "CONFETTI", Toast.LENGTH_LONG).show()
-//                todo: call confetti view
+                    val mainActivity = activity as MainActivity
+                    mainActivity.callConfetti()
                 }
             }
         }
@@ -81,5 +68,23 @@ class WordsCheckFragmentHolder : Fragment() {
             fragmentTransaction?.replace(R.id.wordsCheckHolderFrameLayout, wordsCheckFragment)
         }
         fragmentTransaction?.commit()
+    }
+
+    private fun updateLevel(word: Word) {
+        val updateWordThread = UpdateWordThread(word)
+        updateWordThread.setUpdateWordThreadListener(object : UpdateWordThread.UpdateWordThreadListener {
+            override fun onSuccess() { }
+
+            override fun onFailure(exception: Exception) {
+                val atheneDialog = AtheneDialog(context!!)
+                atheneDialog.apply {
+                    message = getString(R.string.error_while_updating_message)
+                    positiveText = getString(R.string.yes)
+                    build()
+                }
+                atheneDialog.show()
+            }
+        })
+        updateWordThread.run()
     }
 }
