@@ -1,6 +1,8 @@
 package com.xenous.athenekotlin.fragments
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.xenous.athenekotlin.R
+import com.xenous.athenekotlin.activities.EditWordActivity
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.utils.animateStrikeThroughText
 import com.xenous.athenekotlin.utils.animateTextColorTo
@@ -61,7 +64,7 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
     }
 
     private fun View.prepareFragmentForNewWord(word: Word) {
-//        Variables Initial Block
+//      Variables Initial Block
         val clickBlocker = findViewById<FrameLayout>(R.id.clickBlocker)
 
         val translationsLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckTranslationsLinearLayout)
@@ -86,7 +89,16 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
 
 //        Set onClick and onTouch listeners
         wordActionEditLinearLayout.setOnClickListener {
-//            todo: start edit word activity
+            Log.d("BOB", word.uid)
+            startActivity(
+                Intent(
+                    activity!!,
+                    EditWordActivity::class.java
+                ).putExtra(
+                    getString(R.string.word_extra),
+                    word
+                )
+            )
         }
         wordActionDeleteLinearLayout.setOnClickListener {
             Toast.makeText(context, "DELETE", Toast.LENGTH_LONG).show()

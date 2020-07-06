@@ -74,5 +74,8 @@
     <string name="words_check_recall_translation">Вспомнить перевод:</string>
     <string name="words_check_fine">Отлично!</string>
     <string name="error_while_updating_message">Промзошла ошибка при обновлении слова. Проверьте подключение к сеи Интернет и повторите попытку</string>
+    <string name="edit_word_title">Изменить слово</string>
+    <string name="update_word_error_message">Произошла ошибка при попытке сохранить изменения. Проверьте подлкючение к сети Интернет и повторите попытку</string>
+    <string name="word_extra">WORD</string>
 
 </resources>

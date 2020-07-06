@@ -8,6 +8,7 @@ import com.google.firebase.database.ValueEventListener
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.storage.wordsArrayList
 import com.xenous.athenekotlin.utils.*
+import java.lang.Exception
 
 class ReadSharingCategoryThread(
     private val sharingUserUid: String,
@@ -22,7 +23,7 @@ class ReadSharingCategoryThread(
 
         fun onError(error: DatabaseError)
 
-        fun onFailure() {}
+        fun onFailure(exception: Exception) {}
     }
 
     private var readSharingCategoryListener: ReadSharingCategoryListener? = null
@@ -44,45 +45,43 @@ class ReadSharingCategoryThread(
 
                 for(wordSnapshot in wordsSnapshot.children) {
                     val categoryTitle = wordSnapshot.child(WORD_CATEGORY_DATABASE_KEY).value
-                    if(categoryTitle != null) {
-                        if(categoryTitle is String) {
-                            val native = wordSnapshot.child(NATIVE_WORD_DATABASE_KEY).value
-                            val foreign = wordSnapshot.child(LEARNING_WORD_DATABASE_KEY).value
-                            if(native != null && foreign != null) {
-                                if(native is String && foreign is String) {
-                                    val word = Word(
-                                        native,
-                                        foreign,
-                                        categoryTitle,
-                                        0,
-                                        Word.LEVEL_ADDED.toLong()
-                                    )
+                    if(categoryTitle is String) {
+                        val native = wordSnapshot.child(NATIVE_WORD_DATABASE_KEY).value
+                        val foreign = wordSnapshot.child(LEARNING_WORD_DATABASE_KEY).value
+                        if(native is String && foreign is String) {
+                            val word = Word(
+                                native,
+                                foreign,
+                                categoryTitle,
+                                0,
+                                Word.LEVEL_ADDED.toLong()
+                            )
 
-                                    var isNew = false
-                                    for(w in wordsArrayList) {
-                                        if(w == word) {
-                                            isNew = true
-                                            break
-                                        }
-                                    }
-                                    if(isNew) {
-                                        sharingWordsList.add(word)
-                                    }
-                                }
-                                else {
-                                    //ToDo: Add Logging
+                            var isNew = false
+                            for(w in wordsArrayList) {
+                                if (w == word) {
+                                    isNew = true
+                                    break
                                 }
                             }
-                            else {
-                                //ToDo: Add Logging
+                            if(isNew) {
+                                sharingWordsList.add(word)
                             }
                         }
                         else {
-                            //ToDo: Add Logging
+                            Log.d(TAG, "Native Word or Foreign are not String")
+
+                            readSharingCategoryListener?.onFailure(TypeCastException(
+                                "Native Word or Foreign are not String")
+                            )
                         }
                     }
                     else {
-                        //ToDo: Add Logging
+                        Log.d(TAG, "Category title is not String")
+
+                        readSharingCategoryListener?.onFailure(
+                            TypeCastException("Native Word or Foreign are not String")
+                        )
                     }
                 }
 

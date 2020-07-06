@@ -34,13 +34,13 @@ class UpdateWordThread(
 
     fun run() {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
-        if(firebaseUser == null) {
+        if (firebaseUser == null) {
             Log.d(TAG, "Firebase user is null")
             this.updateWordThreadListener?.onFailure(NullPointerException("Firebase user is null"))
 
             return
         }
-        if(word.uid == null) {
+        if (word.uid == null) {
             Log.d(TAG, "Word's key is null")
             this.updateWordThreadListener?.onFailure(NullPointerException("Word's key is null"))
 
@@ -48,34 +48,21 @@ class UpdateWordThread(
         }
         Log.d(TAG, word.level.toString())
 
-        val reference
-                = FirebaseDatabase.getInstance().reference
-                    .child(USERS_REFERENCE)
-                    .child(firebaseUser.uid)
-                    .child(WORDS_REFERENCE)
-                    .child(word.uid)
+        val reference = FirebaseDatabase.getInstance().reference
+            .child(USERS_REFERENCE)
+            .child(firebaseUser.uid)
+            .child(WORDS_REFERENCE)
+            .child(word.uid)
 
 
-        reference.child(WORD_LEVEL_DATABASE_KEY).setValue(word.level)
+        reference.setValue(word.toMap())
             .addOnSuccessListener {
-                Log.d(TAG, "Word's level has been successfully updated")
-                reference.child(WORD_LAST_DATE_DATABASE_KEY).setValue(word.lastDateCheck)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Word's last date has been successfully updated")
+                Log.d(TAG, "Word has been successfully updated")
 
-                        this.updateWordThreadListener?.onSuccess()
-                    }
-                    .addOnCanceledListener {
-                        Log.d(TAG, "Transaction canceled")
-
-                        this.updateWordThreadListener?.onCanceled()
-                    }
-                    .addOnFailureListener {
-                        Log.d(TAG, "Error while updating word's last date. Error is ${it.message}")
-                    }
+                this.updateWordThreadListener?.onSuccess()
             }
             .addOnFailureListener {
-                Log.d(TAG, "Error while updating level in database. The error is ${it.message}")
+                Log.d(TAG, "Error while updating word's last date. Error is ${it.message}")
 
                 this.updateWordThreadListener?.onFailure(it)
             }

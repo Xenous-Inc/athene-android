@@ -52,9 +52,9 @@ class ReadWordsThread {
 
                 for(wordSnapshot in snapshot.children) {
                     val word = Word(
-                        wordSnapshot.child(NATIVE_WORD_DATABASE_KEY).value as String?,
-                        wordSnapshot.child(LEARNING_WORD_DATABASE_KEY).value as String?,
-                        wordSnapshot.child(WORD_CATEGORY_DATABASE_KEY).value as String?,
+                        wordSnapshot.child(NATIVE_WORD_DATABASE_KEY).value as String,
+                        wordSnapshot.child(LEARNING_WORD_DATABASE_KEY).value as String,
+                        wordSnapshot.child(WORD_CATEGORY_DATABASE_KEY).value as String,
                         wordSnapshot.child(WORD_LAST_DATE_DATABASE_KEY).value as Long,
                         wordSnapshot.child(WORD_LEVEL_DATABASE_KEY).value as Long,
                         wordSnapshot.key

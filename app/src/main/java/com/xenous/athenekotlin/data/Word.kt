@@ -1,18 +1,28 @@
 package com.xenous.athenekotlin.data
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.firebase.database.Exclude
 import com.xenous.athenekotlin.utils.forbiddenSymbols
 import com.xenous.athenekotlin.utils.getCurrentDateTimeInMills
 
 data class Word(
-    var native: String?,
-    var foreign: String?,
-    var category: String? = null,
+    var native: String,
+    var foreign: String,
+    var category: String = "Без категории",
     var lastDateCheck: Long = 0,
     var level: Long = 0,
     val uid: String? = null
-) {
-    companion object {
+) : Parcelable {
+    companion object  CREATOR : Parcelable.Creator<Word> {
+        override fun createFromParcel(parcel: Parcel): Word {
+            return Word(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Word?> {
+            return arrayOfNulls(size)
+        }
+
         const val LEVEL_ADDED = -2
         const val LEVEL_ARCHIVED = -1
         const val LEVEL_DAY = 0
@@ -34,6 +44,16 @@ data class Word(
         const val WORD_IS_OK = 0
         const val WORD_CONTAINS_FORBIDDEN_SYMBOLS = 1
         const val WORD_IS_TO_LONG = 2
+    }
+
+    constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readLong(),
+        parcel.readLong(),
+        parcel.readString()
+    ) {
     }
 
     @Exclude
@@ -101,5 +121,18 @@ data class Word(
         }
 
         return false
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(native)
+        parcel.writeString(foreign)
+        parcel.writeString(category)
+        parcel.writeLong(lastDateCheck)
+        parcel.writeLong(level)
+        parcel.writeString(uid)
+    }
+
+    override fun describeContents(): Int {
+        return 0
     }
 }
