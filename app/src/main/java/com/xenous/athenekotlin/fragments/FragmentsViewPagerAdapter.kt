@@ -1,11 +1,8 @@
 package com.xenous.athenekotlin.fragments
 
-import android.annotation.SuppressLint
-import android.os.Handler
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.xenous.athenekotlin.data.Word
 
 class FragmentsViewPagerAdapter(
     fm: FragmentManager,
@@ -13,18 +10,7 @@ class FragmentsViewPagerAdapter(
 ) : FragmentPagerAdapter(fm, behavior) {
 
     private val addWordFragment = AddWordFragment()
-    private val wordsCheckFragment = WordsCheckFragmentTest(
-        Word(
-            "Здоровенное яблоко",
-            "Giant apple",
-            "Huge Fruits",
-            null,
-            null,
-            null
-        ),
-        @SuppressLint("HandlerLeak")
-        object : Handler() {}
-    )
+    private val wordsCheckFragmentHolder = WordsCheckFragmentHolder()
     private val categoriesFragment = CategoriesFragment()
     private val archiveFragment = ArchiveFragment()
 
@@ -32,7 +18,7 @@ class FragmentsViewPagerAdapter(
         var fragment : Fragment? = null
         when(position) {
             0 -> fragment = addWordFragment
-            1 -> fragment = wordsCheckFragment
+            1 -> fragment = wordsCheckFragmentHolder
             2 -> fragment =categoriesFragment
             3 -> fragment = archiveFragment
         }

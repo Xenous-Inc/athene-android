@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.animation.addListener
+import androidx.core.view.isVisible
 import com.xenous.athenekotlin.R
 
 const val ANIMATION_DURATION = 400L
@@ -188,7 +189,9 @@ fun View.slideOutToBottom(
         })
         this.duration = duration
     }
-    view.startAnimation(animation)
+    if(view.isVisible) {
+        view.startAnimation(animation)
+    }
 }
 
 fun View.slideOutToLeft(
@@ -213,7 +216,9 @@ fun View.slideOutToLeft(
         })
         this.duration = duration
     }
-    view.startAnimation(animation)
+    if(view.isVisible) {
+        view.startAnimation(animation)
+    }
 }
 
 fun View.slideOutToRight(
@@ -238,7 +243,9 @@ fun View.slideOutToRight(
         })
         this.duration = duration
     }
-    view.startAnimation(animation)
+    if(view.isVisible) {
+        view.startAnimation(animation)
+    }
 }
 
 fun CardView.animateCardBackgroundColorTo(
