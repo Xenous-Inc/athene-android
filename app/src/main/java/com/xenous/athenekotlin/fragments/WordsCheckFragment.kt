@@ -1,7 +1,6 @@
 package com.xenous.athenekotlin.fragments
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,33 +15,55 @@ import com.xenous.athenekotlin.utils.slideInFromRight
 import com.xenous.athenekotlin.utils.slideOutToLeft
 import java.util.*
 
-const val WORD_CHECKED = 9094
+class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): Fragment() {
 
-class WordsCheckFragmentTest(val word: Word, val handler: Handler): Fragment() {
+    interface OnWordCheckStateChangeListener {
+        fun onWordChecked()
+
+        fun onWordsEnd()
+    }
+
+    var onWordCheckStateChangeListener: OnWordCheckStateChangeListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_words_check, container, false)
+        return if(word != null) {
+            inflater.inflate(R.layout.fragment_words_check, container, false)
+        } else {
+            inflater.inflate(R.layout.fragment_words_check_no_words, container, false)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        Prepare fragment for new word
-        view.prepareFragmentForNewWord()
+        if(word != null) {
+            view.prepareFragmentForNewWord(word)
+        }
+        else {
+            view.showNoWordsTitle()
+        }
     }
 
-    private fun View.prepareFragmentForNewWord() {
+    private fun View.showNoWordsTitle() {
+        val noWordsTitleTextView = findViewById<TextView>(R.id.wordsCheckNoWordsTitleTextView)
+
+        noWordsTitleTextView.slideInFromRight(onAnimationEnd = {
+            onWordCheckStateChangeListener?.onWordsEnd()
+        })
+    }
+
+    private fun View.prepareFragmentForNewWord(word: Word) {
 //        Variables Initial Block
         val clickBlocker = findViewById<FrameLayout>(R.id.clickBlocker)
 
         val translationsLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckTranslationsLinearLayout)
-        val foreignTextView = findViewById<TextView>(R.id.wordsCheckForeignTextView)
-        val nativeUserAnswerEditText = findViewById<EditText>(R.id.wordsCheckNativeUserAnswerEditText)
-        val nativeCorrectAnswerTextView = findViewById<TextView>(R.id.wordsCheckNativeCorrectAnswerTextView)
+        val nativeTextView = findViewById<TextView>(R.id.wordsCheckNativeTextView)
+        val foreignUserAnswerEditText = findViewById<EditText>(R.id.wordsCheckForeignUserAnswerEditText)
+        val foreignCorrectAnswerTextView = findViewById<TextView>(R.id.wordsCheckForeignCorrectAnswerTextView)
 
         val wordActionEditLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckWordActionEditLinearLayout)
         val wordActionDeleteLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckWordActionDeleteLinearLayout)
@@ -54,8 +75,8 @@ class WordsCheckFragmentTest(val word: Word, val handler: Handler): Fragment() {
 
 //        Slide in
         translationsLinearLayout.slideInFromRight(onAnimationStart = {
-            foreignTextView.text = word.foreign
-            nativeCorrectAnswerTextView.text = word.native
+            nativeTextView.text = word.nativeWord
+            foreignCorrectAnswerTextView.text = word.learningWord
         })
         continueActionsLinearLayout.slideInFromRight()
 
@@ -68,13 +89,13 @@ class WordsCheckFragmentTest(val word: Word, val handler: Handler): Fragment() {
         }
         nextLinearLayout.setOnClickListener {
             clearFragmentAfterWord(onClearEnd = {
-                handler.sendEmptyMessage(WORD_CHECKED)
+                onWordCheckStateChangeListener?.onWordChecked()
             })
         }
         continueLinearLayout.setOnClickListener {
             if(
-                nativeUserAnswerEditText.text.toString().trim().toLowerCase(Locale.ROOT) ==
-                word.native?.trim()?.toLowerCase(Locale.ROOT)
+                foreignUserAnswerEditText.text.toString().trim().toLowerCase(Locale.ROOT) ==
+                word.learningWord?.trim()?.toLowerCase(Locale.ROOT)
             ) {
                 this@prepareFragmentForNewWord.animateCorrectAnswer(
                     onAnimationStart = {
@@ -119,43 +140,43 @@ class WordsCheckFragmentTest(val word: Word, val handler: Handler): Fragment() {
         val colorCorrect = ContextCompat.getColor(context, R.color.colorCorrect)
         val colorIncorrect = ContextCompat.getColor(context, R.color.colorIncorrect)
 
-        val nativeUserAnswerFrameLayout = findViewById<FrameLayout>(R.id.wordsCheckNativeUserAnswerFrameLayout)
-        val nativeUserAnswerEditText = findViewById<EditText>(R.id.wordsCheckNativeUserAnswerEditText)
-        val nativeUserAnswerTextView = findViewById<TextView>(R.id.wordsCheckNativeUserAnswerTextView)
-        val nativeCorrectAnswerTextView = findViewById<TextView>(R.id.wordsCheckNativeCorrectAnswerTextView)
+        val foreignUserAnswerFrameLayout = findViewById<FrameLayout>(R.id.wordsCheckForeignUserAnswerFrameLayout)
+        val foreignUserAnswerEditText = findViewById<EditText>(R.id.wordsCheckForeignUserAnswerEditText)
+        val foreignUserAnswerTextView = findViewById<TextView>(R.id.wordsCheckForeignUserAnswerTextView)
+        val foreignCorrectAnswerTextView = findViewById<TextView>(R.id.wordsCheckForeignCorrectAnswerTextView)
 
         val wordActionsLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckWordActionsLinearLayout)
         val nextLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckNextLinearLayout)
         val continueActionsLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckContinueActionsLinearLayout)
 
         onAnimationStart?.let { it() }
-        nativeUserAnswerFrameLayout.slideOutToLeft(
+        foreignUserAnswerFrameLayout.slideOutToLeft(
             onAnimationStart = {
-                nativeUserAnswerEditText.clearFocus()
+                foreignUserAnswerEditText.clearFocus()
             },
             onAnimationEnd = {
-                nativeUserAnswerFrameLayout.visibility = View.INVISIBLE
-                nativeUserAnswerEditText.visibility = View.INVISIBLE
+                foreignUserAnswerFrameLayout.visibility = View.INVISIBLE
+                foreignUserAnswerEditText.visibility = View.INVISIBLE
             }
         )
-        nativeUserAnswerTextView.slideInFromRight(
+        foreignUserAnswerTextView.slideInFromRight(
             onAnimationStart = {
-                nativeUserAnswerTextView.visibility = View.VISIBLE
+                foreignUserAnswerTextView.visibility = View.VISIBLE
                 if(isForgotten) {
-                    nativeUserAnswerTextView.text = "Вспомнить Перевод:"
+                    foreignUserAnswerTextView.text = getString(R.string.words_check_recall_translation)
                 }
                 else {
-                    nativeUserAnswerTextView.text = nativeUserAnswerEditText.text.toString()
-                    nativeUserAnswerTextView.animateTextColorTo(colorIncorrect)
+                    foreignUserAnswerTextView.text = foreignUserAnswerEditText.text.toString()
+                    foreignUserAnswerTextView.animateTextColorTo(colorIncorrect)
                 }
             },
             onAnimationEnd = {
-                if(!isForgotten) nativeUserAnswerTextView.animateStrikeThroughText()
+                if(!isForgotten) foreignUserAnswerTextView.animateStrikeThroughText()
 
-                nativeCorrectAnswerTextView.slideInFromRight(
+                foreignCorrectAnswerTextView.slideInFromRight(
                     onAnimationStart = {
-                        nativeCorrectAnswerTextView.visibility = View.VISIBLE
-                        nativeCorrectAnswerTextView.animateTextColorTo(colorCorrect)
+                        foreignCorrectAnswerTextView.visibility = View.VISIBLE
+                        foreignCorrectAnswerTextView.animateTextColorTo(colorCorrect)
                     },
                     onAnimationEnd = {
                         wordActionsLinearLayout.slideInFromRight(onAnimationStart = {
@@ -184,37 +205,35 @@ class WordsCheckFragmentTest(val word: Word, val handler: Handler): Fragment() {
     ) {
         //        Variables Initial Block
         val colorCorrect = ContextCompat.getColor(context, R.color.colorCorrect)
-        val colorIncorrect = ContextCompat.getColor(context, R.color.colorIncorrect)
 
-        val nativeUserAnswerFrameLayout = findViewById<FrameLayout>(R.id.wordsCheckNativeUserAnswerFrameLayout)
-        val nativeUserAnswerEditText = findViewById<EditText>(R.id.wordsCheckNativeUserAnswerEditText)
-        val nativeUserAnswerTextView = findViewById<TextView>(R.id.wordsCheckNativeUserAnswerTextView)
-        val nativeCorrectAnswerTextView = findViewById<TextView>(R.id.wordsCheckNativeCorrectAnswerTextView)
+        val foreignUserAnswerFrameLayout = findViewById<FrameLayout>(R.id.wordsCheckForeignUserAnswerFrameLayout)
+        val foreignUserAnswerEditText = findViewById<EditText>(R.id.wordsCheckForeignUserAnswerEditText)
+        val foreignUserAnswerTextView = findViewById<TextView>(R.id.wordsCheckForeignUserAnswerTextView)
+        val foreignCorrectAnswerTextView = findViewById<TextView>(R.id.wordsCheckForeignCorrectAnswerTextView)
 
-        val wordActionsLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckWordActionsLinearLayout)
         val nextLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckNextLinearLayout)
         val continueActionsLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckContinueActionsLinearLayout)
 
         onAnimationStart?.let { it() }
-        nativeUserAnswerFrameLayout.slideOutToLeft(
+        foreignUserAnswerFrameLayout.slideOutToLeft(
             onAnimationStart = {
-                nativeUserAnswerEditText.clearFocus()
+                foreignUserAnswerEditText.clearFocus()
             },
             onAnimationEnd = {
-                nativeUserAnswerFrameLayout.visibility = View.INVISIBLE
-                nativeUserAnswerEditText.visibility = View.INVISIBLE
+                foreignUserAnswerFrameLayout.visibility = View.INVISIBLE
+                foreignUserAnswerEditText.visibility = View.INVISIBLE
             }
         )
-        nativeUserAnswerTextView.slideInFromRight(
+        foreignUserAnswerTextView.slideInFromRight(
             onAnimationStart = {
-                nativeUserAnswerTextView.visibility = View.VISIBLE
-                nativeUserAnswerTextView.text = "Отлично!"
+                foreignUserAnswerTextView.visibility = View.VISIBLE
+                foreignUserAnswerTextView.text = getString(R.string.words_check_fine)
             },
             onAnimationEnd = {
-                nativeCorrectAnswerTextView.slideInFromRight(
+                foreignCorrectAnswerTextView.slideInFromRight(
                     onAnimationStart = {
-                        nativeCorrectAnswerTextView.visibility = View.VISIBLE
-                        nativeCorrectAnswerTextView.animateTextColorTo(colorCorrect)
+                        foreignCorrectAnswerTextView.visibility = View.VISIBLE
+                        foreignCorrectAnswerTextView.animateTextColorTo(colorCorrect)
                     },
                     onAnimationEnd = {
                         continueActionsLinearLayout.slideOutToLeft(onAnimationEnd = {
@@ -236,10 +255,12 @@ class WordsCheckFragmentTest(val word: Word, val handler: Handler): Fragment() {
 
 
     private fun View.clearFragmentAfterWord(onClearEnd: (() -> Unit)? = null) {
+        val titleTextView = findViewById<TextView>(R.id.wordsCheckTitleTextView)
         val translationsLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckTranslationsLinearLayout)
         val wordActionsLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckWordActionsLinearLayout)
         val nextLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckNextLinearLayout)
 
+        if(isLast) { titleTextView.slideOutToLeft() }
         translationsLinearLayout.slideOutToLeft()
         wordActionsLinearLayout.slideOutToLeft()
         nextLinearLayout.slideOutToLeft(onAnimationEnd = {

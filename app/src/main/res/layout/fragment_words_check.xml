@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verticalGuideline1"
@@ -29,11 +30,11 @@
         android:id="@+id/wordsCheckTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Проверить"
+        android:text="@string/words_check_title"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/accent_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/verticalGuideline2"
+        app:layout_constraintStart_toStartOf="@+id/verticalGuideline1"
         app:layout_constraintTop_toTopOf="@+id/horizontalGuideline1" />
 
     <LinearLayout
@@ -47,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/wordsCheckTitleTextView">
 
         <TextView
-            android:id="@+id/wordsCheckForeignTextView"
+            android:id="@+id/wordsCheckNativeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -63,16 +64,16 @@
             android:layout_height="match_parent">
 
             <FrameLayout
-                android:id="@+id/wordsCheckNativeUserAnswerFrameLayout"
+                android:id="@+id/wordsCheckForeignUserAnswerFrameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:id="@+id/wordsCheckNativeUserAnswerEditText"
+                    android:id="@+id/wordsCheckForeignUserAnswerEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/white"
-                    android:hint="@string/add_word_foreign_input_hint"
+                    android:hint="@string/words_check_foreign_input_hint"
                     android:inputType="textShortMessage"
                     android:singleLine="true"
                     android:textColor="@android:color/white"
@@ -81,7 +82,7 @@
             </FrameLayout>
 
             <TextView
-                android:id="@+id/wordsCheckNativeUserAnswerTextView"
+                android:id="@+id/wordsCheckForeignUserAnswerTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -92,7 +93,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/wordsCheckNativeCorrectAnswerTextView"
+            android:id="@+id/wordsCheckForeignCorrectAnswerTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -102,7 +103,7 @@
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/wordsCheckNativeUserAnswerEditText" />
+            app:layout_constraintTop_toBottomOf="@+id/wordsCheckForeignUserAnswerEditText" />
 
     </LinearLayout>
 
@@ -135,7 +136,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Изменить"
+                android:text="@string/edit"
                 android:textColor="@color/colorTextSecondary"
                 android:textSize="@dimen/secondary_text_size" />
         </LinearLayout>
@@ -159,7 +160,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Удалить"
+                android:text="@string/delete"
                 android:textColor="@color/colorTextSecondary"
                 android:textSize="@dimen/secondary_text_size" />
         </LinearLayout>
@@ -194,7 +195,7 @@
             android:id="@+id/wordsCheckNextTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Следующее"
+            android:text="@string/next"
             android:textColor="@color/colorTextSecondary"
             android:textSize="@dimen/secondary_text_size" />
 
@@ -235,7 +236,7 @@
                 android:id="@+id/wordsCheckContinueTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Проверить"
+                android:text="@string/check"
                 android:textColor="@color/colorTextSecondary"
                 android:textSize="@dimen/secondary_text_size" />
 
@@ -254,7 +255,7 @@
             android:padding="@dimen/textview_primary_padding"
             android:paddingStart="@dimen/textview_secondary_padding"
             android:paddingEnd="@dimen/textview_secondary_padding"
-            android:text="Не помню"
+            android:text="@string/forgot"
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/secondary_text_size" />
     </LinearLayout>

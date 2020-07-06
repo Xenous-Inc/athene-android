@@ -2,10 +2,16 @@
     <string name="app_name">AtheneKotlin</string>
 
 <!--    Universal   -->
-    <string name="add">Добавить</string>
     <string name="no_category">Без категории</string>
+    <string name="add">Добавить</string>
+    <string name="check">Проверить</string>
+    <string name="next">Далее</string>
+    <string name="forgot">Не помню</string>
+    <string name="edit">Изменить</string>
+    <string name="delete">Удалить</string>
 
-<!--    Main Activity   -->
+
+    <!--    Main Activity   -->
     <string name="main_ic_sign_out_content_description">Выйти из аккаунта</string>
 
 <!--    Login Activity  -->
@@ -59,5 +65,12 @@
     <string name="student_name_hint">Имя(для учителя)</string>
     <string name="add_category_message">Добавить</string>
     <string name="cancel">Отменв</string>
+
+<!--    Words Check Fragment    -->
+    <string name="words_check_title">Проверить</string>
+    <string name="words_check_no_words_title">На сегодняшний день слова для повторения закончились</string>
+    <string name="words_check_foreign_input_hint">Перевод</string>
+    <string name="words_check_recall_translation">Вспомнить перевод:</string>
+    <string name="words_check_fine">Отлично!</string>
 
 </resources>
