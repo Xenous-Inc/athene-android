@@ -16,7 +16,7 @@ class AddWordThread(
     }
 
     interface AddWordResultListener {
-        fun onSuccess()
+        fun onSuccess(word: Word)
 
         fun onFailure(exception: Exception)
 
@@ -26,7 +26,7 @@ class AddWordThread(
     private var addWordResultListener: AddWordResultListener? = null
 
     fun setAddWordResultListener(addWordResultListener: AddWordResultListener) {
-        this.addWordResultListener
+        this.addWordResultListener = addWordResultListener
     }
 
     fun run() {
@@ -64,7 +64,7 @@ class AddWordThread(
             .addOnSuccessListener {
                 Log.d(TAG, "Success while adding word to database")
 
-                this.addWordResultListener?.onSuccess()
+                this.addWordResultListener?.onSuccess(word)
             }
             .addOnFailureListener {
                 Log.d(TAG, "Error while adding word to database. The error is ${it.message}")

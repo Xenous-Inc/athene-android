@@ -52,5 +52,12 @@
     <string name="add_new_category_error_message">Произошла ошибка при добавлении категории, проверьте подключение к сети Интернет и повторите попытку</string>
     <string name="yes">Ок</string>
     <string name="add_new_word_error_message">Произошла неизвестная ошибка при попытке добавить слово. Проверьте подключение к сети Интернет и повторите попытку</string>
+    <string name="user_already_exist">Вы уже состоите в этом классе</string>
+    <string name="understand">Понятно</string>
+    <string name="accept">Принять</string>
+    <string name="deny">Отклонить</string>
+    <string name="student_name_hint">Имя(для учителя)</string>
+    <string name="add_category_message">Добавить</string>
+    <string name="cancel">Отменв</string>
 
 </resources>

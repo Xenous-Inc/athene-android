@@ -16,11 +16,11 @@ class ReadWordsThread {
     }
 
     interface ReadWordsResultListener {
-        fun onSuccess(wordsList: MutableList<Word>, categoriesList: MutableList<Category>)
+        fun onSuccess(wordsList: List<Word>, categoriesList: List<Category>)
 
         fun onFailure(exception: Exception) {}
 
-        fun onCanceled(error: DatabaseError)
+        fun onError(error: DatabaseError)
     }
 
     private var downloadWordsResultListener: ReadWordsResultListener? = null
@@ -47,8 +47,8 @@ class ReadWordsThread {
             override fun onDataChange(snapshot: DataSnapshot) {
                 Log.d(TAG, "Starting downloading words")
 
-                val wordsList = mutableListOf<Word>()
-                val categoriesList = mutableListOf<Category>()
+                val wordsMutableList = mutableListOf<Word>()
+                val categoriesMutableList = mutableListOf<Category>()
 
                 for(wordSnapshot in snapshot.children) {
                     val word = Word(
@@ -60,10 +60,10 @@ class ReadWordsThread {
                         wordSnapshot.key
                     )
 
-                    wordsList.add(word)
+                    wordsMutableList.add(word)
                 }
 
-                Log.d(TAG, "Words list size is ${wordsList.size}")
+                Log.d(TAG, "Words list size is ${wordsMutableList.size}")
                 Log.d(TAG, "Completely downloaded all words")
                 Log.d(TAG,  "Starting downloading categories")
 
@@ -75,19 +75,19 @@ class ReadWordsThread {
                                 categorySnapshot.key as String
                             )
 
-                            categoriesList.add(category)
+                            categoriesMutableList.add(category)
                         }
 
                         Log.d(TAG, "All categories downloaded completely")
-                        Log.d(TAG, categoriesList.size.toString())
+                        Log.d(TAG, categoriesMutableList.size.toString())
 
-                       downloadWordsResultListener?.onSuccess(wordsList, categoriesList)
+                       downloadWordsResultListener?.onSuccess(wordsMutableList.toList(), categoriesMutableList.toList())
                     }
 
                     override fun onCancelled(error: DatabaseError) {
                         Log.d(TAG, "Error while downloading categories, aborting... Error is ${error.message}")
 
-                        downloadWordsResultListener?.onCanceled(error)
+                        downloadWordsResultListener?.onError(error)
                     }
                 })
             }
@@ -95,7 +95,7 @@ class ReadWordsThread {
             override fun onCancelled(error: DatabaseError) {
                 Log.d(TAG, "Error while downloading words, aborting... Error is ${error.message}")
 
-               downloadWordsResultListener?.onCanceled(error)
+               downloadWordsResultListener?.onError(error)
             }
         })
     }

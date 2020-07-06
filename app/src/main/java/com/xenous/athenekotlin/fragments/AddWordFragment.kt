@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Word
-import com.xenous.athenekotlin.storage.categoryArrayList
+import com.xenous.athenekotlin.storage.categoriesArrayList
 import com.xenous.athenekotlin.storage.getCategoriesArrayListWithDefault
 import com.xenous.athenekotlin.threads.AddCategoryThread
 import com.xenous.athenekotlin.threads.AddWordThread
@@ -98,13 +98,15 @@ class AddWordFragment: Fragment() {
                     val category = Category(
                         categoryText
                     )
-                    categoryArrayList.add(category)
+                    categoriesArrayList.add(category)
                     openingView.categoryChosenTextView.text = category.title
 
-                    if(categoryArrayList.contains(category)) {
+                    if(categoriesArrayList.contains(category)) {
                         val addCategoryThread = AddCategoryThread(category)
                         addCategoryThread.setAddCategoryResultListener(object : AddCategoryThread.AddCategoryResultListener {
-                            override fun onSuccess() { }
+
+                            override fun onSuccess(category: Category) {
+                            }
 
                             override fun onFailure(exception: Exception) {
                                 val atheneDialog = AtheneDialog(context!!)
@@ -134,8 +136,7 @@ class AddWordFragment: Fragment() {
 
         addWordContinueImageView.setOnClickListener {
             val foreignWordText = addWordForeignEditText.text.toString().toLowerCase(Locale.ROOT).trim()
-            val nativeWordText = addWordNativeEditText.text.toString().toLowerCase(Locale.ROOT)
-                .trim()
+            val nativeWordText = addWordNativeEditText.text.toString().toLowerCase(Locale.ROOT).trim()
 
             if(foreignWordText.isEmpty() or nativeWordText.isEmpty()) {
                 createAtheneDialog(getString(R.string.fill_all_fields_message))
@@ -166,7 +167,8 @@ class AddWordFragment: Fragment() {
 
             val addWordThread = AddWordThread(word)
             addWordThread.setAddWordResultListener(object : AddWordThread.AddWordResultListener {
-                override fun onSuccess() {}
+                override fun onSuccess(word: Word) {
+                }
 
                 override fun onFailure(exception: Exception) {
                     val atheneDialog = AtheneDialog(context!!)
@@ -219,7 +221,7 @@ class AddWordFragment: Fragment() {
                     if(msg.obj is Category) {
                         val category = msg.obj as Category
 
-                        categoryArrayList[position] = category
+                        categoriesArrayList[position] = category
                     }
                 }
             }

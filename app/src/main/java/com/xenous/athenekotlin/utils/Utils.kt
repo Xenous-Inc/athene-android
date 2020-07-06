@@ -20,8 +20,11 @@ const val USERS_REFERENCE = "users"
 const val WORDS_REFERENCE = "words"
 const val CATEGORY_REFERENCE = "categories"
 
-const val TEACHER_REFERENCE = "teachers"
+const val STUDENTS_REFERENCE = "students"
+const val TEACHER_REFERENCE = "teacher"
+const val TEACHERS_REFERENCE = "teachers"
 const val TEACHER_NAME_DATABASE_KEY = "name"
+const val CLASSROOM_REFERENCE = "class"
 const val CLASSROOMS_DATABASE_KEY = "classes"
 const val CLASSROOM_NAME_DATABASE_KEY = "name"
 

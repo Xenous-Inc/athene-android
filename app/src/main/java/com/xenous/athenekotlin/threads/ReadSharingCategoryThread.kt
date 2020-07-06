@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.xenous.athenekotlin.data.Word
+import com.xenous.athenekotlin.storage.wordsArrayList
 import com.xenous.athenekotlin.utils.*
 
 class ReadSharingCategoryThread(
@@ -57,7 +58,16 @@ class ReadSharingCategoryThread(
                                         Word.LEVEL_ADDED.toLong()
                                     )
 
-                                    sharingWordsList.add(word)
+                                    var isNew = false
+                                    for(w in wordsArrayList) {
+                                        if(w == word) {
+                                            isNew = true
+                                            break
+                                        }
+                                    }
+                                    if(isNew) {
+                                        sharingWordsList.add(word)
+                                    }
                                 }
                                 else {
                                     //ToDo: Add Logging

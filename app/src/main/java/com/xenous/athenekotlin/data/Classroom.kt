@@ -6,4 +6,7 @@ data class Classroom(
     val categoriesTitlesList: List<String>,
     val wordsListsList: List<List<Word>>
 ) {
+    override fun toString(): String {
+        return teacherName + " " + classroomName + " " + categoriesTitlesList.size + " " + wordsListsList.size
+    }
 }

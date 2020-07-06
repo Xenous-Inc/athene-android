@@ -67,4 +67,17 @@ data class Word(
 
         return WORD_IS_OK
     }
+
+    override fun equals(other: Any?): Boolean {
+        if(other is Word) {
+            if(
+                this.foreign == other.foreign &&
+                this.native == other.native
+            ) {
+                return true
+            }
+        }
+
+        return false
+    }
 }

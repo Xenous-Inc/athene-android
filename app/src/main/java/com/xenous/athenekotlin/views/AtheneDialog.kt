@@ -26,10 +26,12 @@ class AtheneDialog(
     var negativeText = ""
 
     interface OnAnswersItemClickListener {
-        fun onPositiveClick(view: android.view.View)
+        fun onPositiveClick(view: View)
 
-        fun onNegativeClickListener(view: android.view.View)
+        fun onNegativeClickListener(view: View) { }
     }
+
+    private var onAnswersItemClickListener: OnAnswersItemClickListener? = null
 
     init {
         dialog.setContentView(R.layout.dialog_athene)
@@ -51,8 +53,16 @@ class AtheneDialog(
         if(negativeText.isNotEmpty()) {
             this.negativeAnswerTextView.visibility = View.VISIBLE
             this.negativeAnswerTextView.text = this.negativeText
+            this.negativeAnswerTextView.setOnClickListener {
+                dismiss()
+                onAnswersItemClickListener?.onNegativeClickListener(it)
+            }
         }
         this.positiveAnswerTextView.text = this.positiveText
+        this.positiveAnswerTextView.setOnClickListener {
+            dismiss()
+            onAnswersItemClickListener?.onPositiveClick(it)
+        }
 
         return this
     }
@@ -66,12 +76,6 @@ class AtheneDialog(
     }
 
     fun setOnAnswersItemClickListener(answersItemClickListener: OnAnswersItemClickListener) {
-        this.positiveAnswerTextView.setOnClickListener {
-            answersItemClickListener.onPositiveClick(it)
-        }
-
-        this.negativeAnswerTextView.setOnClickListener {
-            answersItemClickListener.onNegativeClickListener(it)
-        }
+        this.onAnswersItemClickListener = answersItemClickListener
     }
 }

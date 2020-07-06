@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.utils.CATEGORY_REFERENCE
+import com.xenous.athenekotlin.utils.USERS_REFERENCE
 import java.lang.Exception
 
 class AddCategoryThread(
@@ -15,7 +16,7 @@ class AddCategoryThread(
     }
 
     interface AddCategoryResultListener {
-        fun onSuccess()
+        fun onSuccess(category: Category)
 
         fun onFailure(exception: Exception)
 
@@ -37,6 +38,7 @@ class AddCategoryThread(
         }
 
         val reference = FirebaseDatabase.getInstance().reference
+            .child(USERS_REFERENCE)
             .child(user.uid)
             .child(CATEGORY_REFERENCE)
 
@@ -57,7 +59,7 @@ class AddCategoryThread(
             .addOnSuccessListener {
                 Log.d(TAG, "Category has been successfully added to database")
 
-                this.addCategoryResultListener?.onSuccess()
+                this.addCategoryResultListener?.onSuccess(category)
             }
             .addOnFailureListener {
                 Log.d(TAG, "Error while adding category to database")
@@ -69,6 +71,5 @@ class AddCategoryThread(
 
                 this.addCategoryResultListener?.onCanceled()
             }
-
     }
 }
