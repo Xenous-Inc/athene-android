@@ -55,6 +55,12 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+
+    }
+
     private fun View.showNoWordsTitle() {
         val noWordsTitleTextView = findViewById<TextView>(R.id.wordsCheckNoWordsTitleTextView)
 
@@ -89,7 +95,6 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
 
 //        Set onClick and onTouch listeners
         wordActionEditLinearLayout.setOnClickListener {
-            Log.d("BOB", word.uid)
             startActivity(
                 Intent(
                     activity!!,
@@ -111,7 +116,7 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
         continueLinearLayout.setOnClickListener {
             if(
                 foreignUserAnswerEditText.text.toString().trim().toLowerCase(Locale.ROOT) ==
-                word.foreign?.trim()?.toLowerCase(Locale.ROOT)
+                word.foreign.trim().toLowerCase(Locale.ROOT)
             ) {
                 this@prepareFragmentForNewWord.animateCorrectAnswer(
                     onAnimationStart = {
