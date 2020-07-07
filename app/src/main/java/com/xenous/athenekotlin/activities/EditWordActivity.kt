@@ -119,16 +119,18 @@ class EditWordActivity : AppCompatActivity() {
         }
 
         editWordContinueImageView.setOnClickListener {
-            val editingWord = word
-            editingWord.apply {
-                this!!.foreign = editWordForeignEditText.text.toString().trim().toLowerCase(Locale.ROOT)
-                this.native = editWordNativeEditText.text.toString().trim().toLowerCase(Locale.ROOT)
-                this.category = openingView.categoryChosenTextView.text.toString().trim()
-            }
+            val editingWord = Word(
+                editWordNativeEditText.text.toString().trim().toLowerCase(Locale.ROOT),
+                editWordForeignEditText.text.toString().trim().toLowerCase(Locale.ROOT),
+                openingView.categoryChosenTextView.text.toString().trim(),
+                word!!.lastDateCheck,
+                word!!.level,
+                word!!.uid
 
+            )
 
-            if(word != editingWord || word!!.category != editingWord!!.category) {
-                val updateWordThread = UpdateWordThread(editingWord!!)
+            if(word != editingWord) {
+                val updateWordThread = UpdateWordThread(editingWord)
                 updateWordThread.setUpdateWordThreadListener(object : UpdateWordThread.UpdateWordThreadListener {
                     override fun onSuccess() {
 //                      ToDo: Add loading screen
