@@ -5,17 +5,20 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.github.ybq.android.spinkit.SpinKitView
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.ktx.Firebase
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Classroom
 import com.xenous.athenekotlin.data.Word
-import com.xenous.athenekotlin.exceptions.UserExistInClassroomException
+import com.xenous.athenekotlin.exceptions.UserIsAlreadyInClassroomException
 import com.xenous.athenekotlin.fragments.FragmentsViewPagerAdapter
 import com.xenous.athenekotlin.storage.categoriesArrayList
 import com.xenous.athenekotlin.storage.checkingWordsArrayList
@@ -27,8 +30,7 @@ import com.xenous.athenekotlin.utils.WORD_CATEGORY_DATABASE_KEY
 import com.xenous.athenekotlin.utils.getCurrentDateTimeInMills
 import com.xenous.athenekotlin.views.AtheneDialog
 import nl.dionsegijn.konfetti.KonfettiView
-import nl.dionsegijn.konfetti.models.Shape.Companion.CIRCLE
-import nl.dionsegijn.konfetti.models.Shape.Companion.RECT
+import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 
 class MainActivity : AppCompatActivity() {
@@ -45,11 +47,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val signOutImageView = findViewById<ImageView>(R.id.signOutImageView)
+        signOutImageView.setOnClickListener {
+            val atheneDialog = AtheneDialog(this)
+            atheneDialog.apply {
+                message = "Вы уверены, что хотите выйти?"
+                positiveText = getString(R.string.yes)
+                negativeText = getString(R.string.cancel)
+                setOnAnswersItemClickListener(object  : AtheneDialog.OnAnswersItemClickListener {
+                    override fun onPositiveClick(view: View) {
+                        Firebase.auth.signOut()
+                        val intent = Intent(this@MainActivity, SignInActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                    }
+                })
+                build()
+                show()
+            }
+        }
 
         spinKitView = findViewById(R.id.spinKitView)
         viewPager = findViewById(R.id.viewPager)
-
-
 
 //      Read Word Thread
         val readWordsThread = ReadWordsThread()
@@ -99,7 +118,7 @@ class MainActivity : AppCompatActivity() {
             .setSpeed(1f, 5f)
             .setFadeOutEnabled(true)
             .setTimeToLive(2000L)
-            .addShapes(CIRCLE, RECT)
+            .addShapes(Shape.Circle, Shape.Square)
             .addSizes(Size(10, 5f))
             .setPosition(-50f, konfettiView.width + 50f, -50f, -50f)
             .streamFor(300, 1500L)
@@ -208,8 +227,8 @@ class MainActivity : AppCompatActivity() {
                                 }
 
                                 override fun onFailure(exception: Exception) {
-                                    if(exception is UserExistInClassroomException) {
-                                        createUserExistAtheneDialog()
+                                    if(exception is UserIsAlreadyInClassroomException) {
+                                        createUserIsAlreadyInClassAtheneDialog()
                                     }
                                 }
 
@@ -240,9 +259,9 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private fun createUserExistAtheneDialog() {
+    private fun createUserIsAlreadyInClassAtheneDialog() {
         val atheneDialog = AtheneDialog(this)
-        atheneDialog.message = getString(R.string.user_already_exist)
+        atheneDialog.message = getString(R.string.main_user_is_already_in_class_dialog_message)
         atheneDialog.positiveText = getString(R.string.understand)
         atheneDialog.build()
         atheneDialog.show()
@@ -253,7 +272,7 @@ class MainActivity : AppCompatActivity() {
 
         val atheneDialog = AtheneDialog(this)
         atheneDialog.message = message
-        atheneDialog.hint = getString(R.string.student_name_hint)
+        atheneDialog.hint = getString(R.string.main_invite_student_name_input_hint)
         atheneDialog.positiveText = getString(R.string.accept)
         atheneDialog.negativeText = getString(R.string.deny)
         atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
@@ -266,11 +285,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createAddCategoryAtheneDialog(categoryTitle: String, wordsList: List<Word>) {
-        val message = "Хотите ли вы добавить новую категорию $categoryTitle? Новых слов для добавления ${wordsList.size}"
+        val message = getString(R.string.main_are_you_sure_to_add_shared_category_dialog_message, categoryTitle, wordsList.size)
 
         val atheneDialog = AtheneDialog(this)
         atheneDialog.message = message
-        atheneDialog.positiveText = getString(R.string.add_category_message)
+        atheneDialog.positiveText = getString(R.string.add)
         atheneDialog.negativeText = getString(R.string.cancel)
         atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
             override fun onPositiveClick(view: View) {
@@ -327,6 +346,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+        atheneDialog.build()
         atheneDialog.build()
         atheneDialog.show()
     }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.activities.MainActivity
@@ -12,7 +11,6 @@ import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.storage.checkingWordsArrayList
 import com.xenous.athenekotlin.threads.UpdateWordThread
 import com.xenous.athenekotlin.views.AtheneDialog
-import java.lang.Exception
 
 class WordsCheckFragmentHolder : Fragment() {
 
@@ -78,8 +76,8 @@ class WordsCheckFragmentHolder : Fragment() {
             override fun onFailure(exception: Exception) {
                 val atheneDialog = AtheneDialog(context!!)
                 atheneDialog.apply {
-                    message = getString(R.string.error_while_updating_message)
-                    positiveText = getString(R.string.yes)
+                    message = getString(R.string.edit_word_error_while_updating_message)
+                    positiveText = getString(R.string.ok)
                     build()
                 }
                 atheneDialog.show()

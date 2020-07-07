@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
     android:layout_gravity="center">
-    
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="15dp"
-        app:cardBackgroundColor="#19191E">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        app:cardBackgroundColor="#19191E"
+        app:cardCornerRadius="@dimen/cardview_corner_radius">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingStart="@dimen/cardview_secondary_padding"
+            android:paddingTop="@dimen/cardview_primary_padding"
+            android:paddingEnd="@dimen/cardview_secondary_padding"
+            android:paddingBottom="@dimen/cardview_primary_padding">
 
             <TextView
                 android:id="@+id/messageTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="@font/roboto"
                 android:gravity="center"
                 android:textColor="@android:color/white"
-                android:textSize="24sp" />
+                android:textSize="@dimen/primary_text_size" />
 
             <EditText
                 android:id="@+id/addNewCategoryEditText"
@@ -38,36 +39,44 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:backgroundTint="@android:color/white"
+                android:fontFamily="@font/roboto"
                 android:hint="Категория"
+                android:inputType="textShortMessage"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/colorBackgroundTransparent"
+                android:textSize="@dimen/secondary_text_size"
                 android:visibility="gone" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="12dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="10dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/negativeAnswerTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="20sp"
-                    android:visibility="gone"
+                    android:fontFamily="@font/roboto"
+                    android:gravity="center"
                     android:textColor="@android:color/white"
-                    android:gravity="center"/>
+                    android:textSize="@dimen/secondary_text_size"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/positiveAnswerTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto"
                     android:gravity="center"
                     android:textColor="@android:color/white"
-                    android:layout_weight="1"/>
+                    android:textSize="@dimen/secondary_text_size" />
 
             </LinearLayout>
 

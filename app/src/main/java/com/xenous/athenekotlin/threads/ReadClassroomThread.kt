@@ -8,11 +8,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.xenous.athenekotlin.data.Classroom
 import com.xenous.athenekotlin.data.Word
-import com.xenous.athenekotlin.exceptions.UserExistInClassroomException
+import com.xenous.athenekotlin.exceptions.UserIsAlreadyInClassroomException
 import com.xenous.athenekotlin.utils.*
-import java.lang.Exception
-import java.lang.NullPointerException
-import kotlin.String as String
 
 class ReadClassroomThread(
     private val teacherUid: String,
@@ -65,7 +62,7 @@ class ReadClassroomThread(
                     if(studentKey is String) {
                         if(firebaseUser.uid == studentKey) {
                             Log.d(TAG, "Current User already exist")
-                            readClassroomResultListener?.onFailure(UserExistInClassroomException())
+                            readClassroomResultListener?.onFailure(UserIsAlreadyInClassroomException())
 
                             break
                         }

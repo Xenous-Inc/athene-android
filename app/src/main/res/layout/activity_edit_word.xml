@@ -30,6 +30,7 @@
         android:id="@+id/editWordTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
         android:text="@string/edit_word_title"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/accent_text_size"
@@ -46,7 +47,7 @@
         app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline2"
         app:layout_constraintEnd_toStartOf="@+id/verticalGuideline2"
         app:layout_constraintStart_toStartOf="@+id/verticalGuideline1"
-        app:layout_constraintTop_toBottomOf="@+id/addWordTitleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/editWordTitleTextView"
         app:layout_constraintVertical_bias="0.4">
 
         <EditText
@@ -54,6 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/roboto"
             android:hint="@string/add_word_foreign_input_hint"
             android:inputType="textEmailAddress"
             android:minWidth="@dimen/input_min_width"
@@ -67,6 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/roboto"
             android:hint="@string/add_word_native_input_hint"
             android:inputType="textPassword"
             android:minWidth="@dimen/input_min_width"
@@ -111,9 +114,10 @@
             android:id="@+id/editWordContinueTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
             android:text="@string/save"
             android:textColor="@color/colorTextSecondary"
-            android:textSize="@dimen/secondary_text_size" />
+            android:textSize="@dimen/hint_text_size" />
 
     </LinearLayout>
 
@@ -151,6 +155,7 @@
             android:id="@+id/editWordCategoryTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
             android:text="@string/add_word_choose_category_title"
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/primary_text_size" />

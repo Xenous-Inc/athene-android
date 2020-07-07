@@ -2,11 +2,11 @@ package com.xenous.athenekotlin.activities
 
 import android.app.Activity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.xenous.athenekotlin.R
@@ -20,8 +20,6 @@ import com.xenous.athenekotlin.views.AtheneDialog
 import com.xenous.athenekotlin.views.OpeningView
 import com.xenous.athenekotlin.views.adapters.ChooseCategoryRecyclerViewAdapter
 import com.xenous.athenekotlin.views.adapters.OnItemClickListener
-import java.lang.Exception
-import java.lang.NullPointerException
 import java.util.*
 
 class EditWordActivity : AppCompatActivity() {
@@ -65,8 +63,8 @@ class EditWordActivity : AppCompatActivity() {
 
             val atheneDialog = AtheneDialog(this)
             atheneDialog.apply {
-                message = getString(R.string.add_category_message)
-                hint = getString(R.string.category_hint)
+                message = getString(R.string.add)
+                hint = getString(R.string.add_word_add_category_input_hint)
                 positiveText = getString(R.string.add)
                 negativeText = getString(R.string.cancel)
             }
@@ -93,8 +91,8 @@ class EditWordActivity : AppCompatActivity() {
                             override fun onFailure(exception: Exception) {
                                 val failAtheneDialog = AtheneDialog(this@EditWordActivity)
                                 failAtheneDialog.apply {
-                                    message = getString(R.string.add_new_category_error_message)
-                                    positiveText = getString(R.string.yes)
+                                    message = getString(R.string.add_word_add_category_error_dialog_message)
+                                    positiveText = getString(R.string.ok)
                                     build()
                                 }
                                 failAtheneDialog.show()
@@ -140,8 +138,8 @@ class EditWordActivity : AppCompatActivity() {
                     override fun onFailure(exception: Exception) {
                         val atheneDialog = AtheneDialog(this@EditWordActivity)
                         atheneDialog.apply {
-                            message = getString(R.string.update_word_error_message)
-                            positiveText = getString(R.string.yes)
+                            message = getString(R.string.edit_word_update_word_error_message)
+                            positiveText = getString(R.string.ok)
                             build()
                         }
                         atheneDialog.show()

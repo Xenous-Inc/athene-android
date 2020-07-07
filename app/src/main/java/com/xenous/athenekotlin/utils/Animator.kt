@@ -20,6 +20,7 @@ const val ANIMATION_DURATION_HALF = ANIMATION_DURATION/2
 
 fun View.animateHeightTo(
     expectingHeight: Int,
+    delay: Long = 0,
     duration: Long = ANIMATION_DURATION,
     onAnimationEnd: (() -> Unit)? = null
 ) {
@@ -41,6 +42,8 @@ fun View.animateHeightTo(
                 onAnimationEnd?.let { it() }
             }
         } }
+
+        this.startDelay = delay
         this.duration = duration
         this.start()
     }
@@ -48,6 +51,7 @@ fun View.animateHeightTo(
 
 fun View.animateWidthTo(
     expectingWidth: Int,
+    delay: Long = 0,
     duration: Long = ANIMATION_DURATION,
     onAnimationEnd: (() -> Unit)? = null
 ) {
@@ -69,6 +73,7 @@ fun View.animateWidthTo(
                 onAnimationEnd?.let { it() }
             }
         } }
+        this.startDelay = delay
         this.duration = duration
         this.start()
     }
@@ -250,6 +255,7 @@ fun View.slideOutToRight(
 
 fun CardView.animateCardBackgroundColorTo(
     color: Int,
+    delay: Long = 0,
     duration: Long = ANIMATION_DURATION,
     onAnimationEnd: (() -> Unit)? = null
 ) {
@@ -271,6 +277,7 @@ fun CardView.animateCardBackgroundColorTo(
                 onAnimationEnd?.let { it() }
             }
         } }
+        this.startDelay = delay
         this.duration = duration
         this.start()
     }

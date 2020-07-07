@@ -30,6 +30,7 @@
         android:id="@+id/signInTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
         android:text="@string/sign_in_title"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/accent_text_size"
@@ -53,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/roboto"
             android:hint="@string/sign_in_email_input_hint"
             android:inputType="textEmailAddress"
             android:minWidth="@dimen/input_min_width"
@@ -66,6 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/roboto"
             android:hint="@string/sign_in_password_input_hint"
             android:inputType="textPassword"
             android:minWidth="@dimen/input_min_width"
@@ -82,9 +85,10 @@
             android:layout_marginStart="@dimen/forgot_password_textview_margin"
             android:layout_marginTop="@dimen/forgot_password_textview_margin"
             android:layout_marginEnd="@dimen/forgot_password_textview_margin"
+            android:fontFamily="@font/roboto"
             android:text="@string/sign_in_forgot_password"
             android:textColor="@color/colorTextSecondary"
-            android:textSize="@dimen/secondary_text_size" />
+            android:textSize="@dimen/hint_text_size" />
     </LinearLayout>
 
     <LinearLayout
@@ -103,6 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/background_outline_primary"
+            android:fontFamily="@font/roboto"
             android:gravity="center"
             android:paddingStart="@dimen/textview_accent_padding"
             android:paddingEnd="@dimen/textview_accent_padding"

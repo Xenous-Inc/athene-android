@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/main_background">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verticalGuideline1"
@@ -30,6 +30,7 @@
         android:id="@+id/wordsCheckTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
         android:text="@string/words_check_title"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/accent_text_size"
@@ -51,6 +52,7 @@
             android:id="@+id/wordsCheckNativeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
             android:gravity="center"
             android:padding="@dimen/textview_primary_padding"
             android:textColor="@color/colorTextPrimary"
@@ -73,6 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/white"
+                    android:fontFamily="@font/roboto"
                     android:hint="@string/words_check_foreign_input_hint"
                     android:inputType="textShortMessage"
                     android:singleLine="true"
@@ -85,6 +88,7 @@
                 android:id="@+id/wordsCheckForeignUserAnswerTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/roboto"
                 android:gravity="center"
                 android:padding="@dimen/textview_primary_padding"
                 android:textColor="@color/colorTextPrimary"
@@ -96,6 +100,7 @@
             android:id="@+id/wordsCheckForeignCorrectAnswerTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
             android:gravity="center"
             android:padding="@dimen/textview_primary_padding"
             android:textColor="@color/colorTextPrimary"
@@ -136,9 +141,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
                 android:text="@string/edit"
                 android:textColor="@color/colorTextSecondary"
-                android:textSize="@dimen/secondary_text_size" />
+                android:textSize="@dimen/hint_text_size" />
         </LinearLayout>
 
         <Space
@@ -150,7 +156,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="@dimen/imageview_size"
@@ -160,9 +167,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
                 android:text="@string/delete"
                 android:textColor="@color/colorTextSecondary"
-                android:textSize="@dimen/secondary_text_size" />
+                android:textSize="@dimen/hint_text_size" />
         </LinearLayout>
     </LinearLayout>
 
@@ -195,9 +203,10 @@
             android:id="@+id/wordsCheckNextTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
             android:text="@string/next"
             android:textColor="@color/colorTextSecondary"
-            android:textSize="@dimen/secondary_text_size" />
+            android:textSize="@dimen/hint_text_size" />
 
     </LinearLayout>
 
@@ -236,9 +245,10 @@
                 android:id="@+id/wordsCheckContinueTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
                 android:text="@string/check"
                 android:textColor="@color/colorTextSecondary"
-                android:textSize="@dimen/secondary_text_size" />
+                android:textSize="@dimen/hint_text_size" />
 
         </LinearLayout>
 
@@ -251,13 +261,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/background_outline_primary"
+            android:fontFamily="@font/roboto"
             android:gravity="center"
             android:padding="@dimen/textview_primary_padding"
             android:paddingStart="@dimen/textview_secondary_padding"
             android:paddingEnd="@dimen/textview_secondary_padding"
             android:text="@string/forgot"
             android:textColor="@color/colorTextPrimary"
-            android:textSize="@dimen/secondary_text_size" />
+            android:textSize="@dimen/hint_text_size" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline

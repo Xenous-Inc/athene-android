@@ -50,8 +50,8 @@ class AddWordFragment: Fragment() {
 
         findViewsById(view)
 
-        val outerFrameLayout = view.findViewById<FrameLayout>(R.id.editWordCategoryOuterFrameLayout)
-        val categoryFrameLayout = view.findViewById<FrameLayout>(R.id.editWordCategoryFrameLayout)
+        val outerFrameLayout = view.findViewById<FrameLayout>(R.id.addWordCategoryOuterFrameLayout)
+        val categoryFrameLayout = view.findViewById<FrameLayout>(R.id.addWordCategoryFrameLayout)
 
         val openingView = OpeningView.Builder(outerFrameLayout).build(layoutInflater)
 
@@ -69,10 +69,10 @@ class AddWordFragment: Fragment() {
             openingView.categoryChosenTextView.text = "Без категории"
 
             val atheneDialog = AtheneDialog(context!!)
-            atheneDialog.message = getString(R.string.add_new_category_message)
-            atheneDialog.hint = getString(R.string.category_hint)
-            atheneDialog.negativeText = "Отмена"
-            atheneDialog.positiveText = "OK"
+            atheneDialog.message = getString(R.string.add_word_add_category_dialog_message)
+            atheneDialog.hint = getString(R.string.add_word_add_category_input_hint)
+            atheneDialog.negativeText = getString(R.string.cancel)
+            atheneDialog.positiveText = getString(R.string.add)
             atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
                 override fun onPositiveClick(view: View) {
                     atheneDialog.dismiss()
@@ -80,15 +80,15 @@ class AddWordFragment: Fragment() {
                     val categoryText = atheneDialog.categoryEditText.text.toString()
 
                     if(categoryText.isEmpty()) {
-                        openingView.categoryChosenTextView.text = "Без категории"
+                        openingView.categoryChosenTextView.text = getString(R.string.no_category)
 
                         return
                     }
                     for(forbiddenSymbol in forbiddenSymbols) {
                         if(categoryText.contains(forbiddenSymbol)) {
-                            openingView.categoryChosenTextView.text = "Без категории"
+                            openingView.categoryChosenTextView.text = getString(R.string.no_category)
 
-                            createAtheneDialog(getString(R.string.category_contains_forbidden_symbols))
+                            createAtheneDialog(getString(R.string.add_word_add_category_category_contains_forbidden_symbols_dialog_message))
 
                             return
                         }
@@ -109,8 +109,8 @@ class AddWordFragment: Fragment() {
 
                             override fun onFailure(exception: Exception) {
                                 val atheneDialog = AtheneDialog(context!!)
-                                atheneDialog.message = getString(R.string.add_new_category_error_message)
-                                atheneDialog.positiveText = getString(R.string.yes)
+                                atheneDialog.message = getString(R.string.add_word_add_category_error_dialog_message)
+                                atheneDialog.positiveText = getString(R.string.ok)
                                 atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
                                     override fun onPositiveClick(view: View) {
                                         atheneDialog.dismiss()
@@ -138,7 +138,7 @@ class AddWordFragment: Fragment() {
             val nativeWordText = addWordNativeEditText.text.toString().toLowerCase(Locale.ROOT).trim()
 
             if(foreignWordText.isEmpty() or nativeWordText.isEmpty()) {
-                createAtheneDialog(getString(R.string.fill_all_fields_message))
+                createAtheneDialog(getString(R.string.add_word_fill_all_fields_dialog_message))
 
                 return@setOnClickListener
             }
@@ -154,11 +154,11 @@ class AddWordFragment: Fragment() {
 
             when(word.filter()) {
                 Word.WORD_IS_TO_LONG -> {
-                    createAtheneDialog(getString(R.string.word_is_too_long_message))
+                    createAtheneDialog(getString(R.string.add_word_word_is_too_long_dialog_message))
                     return@setOnClickListener
                 }
                 Word.WORD_CONTAINS_FORBIDDEN_SYMBOLS -> {
-                    createAtheneDialog(getString(R.string.word_contains_forbidden_symbols))
+                    createAtheneDialog(getString(R.string.add_word_word_contains_forbidden_symbols_dialog_message))
                     return@setOnClickListener
                 }
                 Word.WORD_IS_NULL ->  return@setOnClickListener
@@ -171,9 +171,9 @@ class AddWordFragment: Fragment() {
 
                 override fun onFailure(exception: Exception) {
                     val atheneDialog = AtheneDialog(context!!)
-                    atheneDialog.message = getString(R.string.add_new_word_error_message)
+                    atheneDialog.message = getString(R.string.add_word_unknown_error_dialog_message)
                     //ToDo: Fix athene dialog click listeners
-                    atheneDialog.positiveText = getString(R.string.yes)
+                    atheneDialog.positiveText = getString(R.string.ok)
                     atheneDialog.build().show()
                 }
             })
@@ -194,9 +194,9 @@ class AddWordFragment: Fragment() {
     }
 
     private fun findViewsById(view: View) {
-        this.addWordForeignEditText = view.findViewById(R.id.editWordForeignEditText)
-        this.addWordNativeEditText = view.findViewById(R.id.editWordNativeEditText)
-        this.addWordContinueImageView = view.findViewById(R.id.editWordContinueImageView)
+        this.addWordForeignEditText = view.findViewById(R.id.addWordForeignEditText)
+        this.addWordNativeEditText = view.findViewById(R.id.addWordNativeEditText)
+        this.addWordContinueImageView = view.findViewById(R.id.addWordContinueImageView)
     }
 
     private fun getCategoriesRecyclerViewAdapter(openingView: OpeningView) = ChooseCategoryRecyclerViewAdapter(
@@ -226,7 +226,7 @@ class AddWordFragment: Fragment() {
             }
             else if(msg.what == ERROR_CODE) {
                 val atheneDialog = AtheneDialog(context!!)
-                atheneDialog.message = getString(R.string.unknown_error_message)
+                atheneDialog.message = getString(R.string.add_word_add_category_unknown_error_message)
                 atheneDialog.positiveText = "OK"
 
                 atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
@@ -251,10 +251,10 @@ class AddWordFragment: Fragment() {
             if(msg.what == SUCCESS_CODE) {
                 addWordNativeEditText.setText("")
                 addWordForeignEditText.setText("")
-                openingView.categoryChosenTextView.text = "Без категории"
+                openingView.categoryChosenTextView.text = getString(R.string.no_category)
             }
             else if(msg.what == ERROR_CODE) {
-                createAtheneDialog(getString(R.string.word_sending_error_message))
+                createAtheneDialog(getString(R.string.add_word_add_category_error_while_sending_message))
             }
         }
     }
@@ -262,7 +262,7 @@ class AddWordFragment: Fragment() {
     private fun createAtheneDialog(message: String) {
         val atheneDialog = AtheneDialog(context!!)
         atheneDialog.message = message
-        atheneDialog.positiveText = "OK"
+        atheneDialog.positiveText = getString(R.string.ok)
         atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
             override fun onPositiveClick(view: View) {
                 atheneDialog.dismiss()

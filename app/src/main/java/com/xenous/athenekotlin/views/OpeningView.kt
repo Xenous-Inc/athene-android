@@ -26,9 +26,10 @@ class OpeningView(val view: View, private val outerView: View) {
         fun onCollapse()
     }
 
-    var onStateChangeListener : OnStateChangeListener? = null
 
     /*  Initial Block   */
+    var onStateChangeListener : OnStateChangeListener? = null
+
     private var isExpanded = false
     private var isRunning = false
 
@@ -91,9 +92,13 @@ class OpeningView(val view: View, private val outerView: View) {
     fun expand() {
         if(!isExpanded && !isRunning) {
             if(expandedWidth != null && expandedHeight != null) {
-                categoryChosenTextView.animateAlphaTo(expectingAlpha = 0F, onAnimationStart = {
-                    isRunning = true
-                })
+                categoryChosenTextView.animateAlphaTo(
+                    expectingAlpha = 0F,
+                    duration = ANIMATION_DURATION_HALF,
+                    onAnimationStart = {
+                        isRunning = true
+                    }
+                )
                 categoryCardView.animateWidthTo(expandedWidth!!)
                 categoryCardView.animateHeightTo(expandedHeight!!)
                 categoryCardView.animateCardBackgroundColorTo(Color.WHITE)
@@ -123,6 +128,7 @@ class OpeningView(val view: View, private val outerView: View) {
             if(collapsedWidth != null && collapsedHeight != null) {
                 categoriesListConstraintLayout.animateAlphaTo(
                     expectingAlpha = 0F,
+                    duration = ANIMATION_DURATION_HALF,
                     onAnimationStart = {
                       isRunning = true
                     },
