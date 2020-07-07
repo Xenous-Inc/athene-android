@@ -12,7 +12,7 @@ import java.lang.StringBuilder
 
 class ArchiveRecyclerViewAdapter(
     private val context: Context,
-    private val archivedWordList: MutableList<Word>
+    private val archivedWordList: List<Word>
 ) : RecyclerView.Adapter<ArchiveRecyclerViewAdapter.ArchiveRecyclerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArchiveRecyclerViewHolder {
@@ -22,18 +22,11 @@ class ArchiveRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ArchiveRecyclerViewHolder, position: Int) {
-        if(
-            archivedWordList[position].native != null &&
-            archivedWordList[position].foreign != null
-        ) {
-            return
-        }
-
         val stringBuilder = StringBuilder()
         stringBuilder
             .append(archivedWordList[position].native)
-            .append("-")
-            .append(archivedWordList[position])
+            .append(" - ")
+            .append(archivedWordList[position].foreign)
 
         holder.archiveWordTextView.text = stringBuilder.toString()
     }

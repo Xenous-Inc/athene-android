@@ -77,5 +77,6 @@
     <string name="edit_word_title">Изменить слово</string>
     <string name="update_word_error_message">Произошла ошибка при попытке сохранить изменения. Проверьте подлкючение к сети Интернет и повторите попытку</string>
     <string name="word_extra">WORD</string>
+    <string name="archive_title">Архив слов</string>
 
 </resources>
