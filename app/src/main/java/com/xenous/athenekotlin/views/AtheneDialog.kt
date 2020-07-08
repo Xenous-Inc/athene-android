@@ -4,10 +4,9 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
-import android.view.View
-
 import com.xenous.athenekotlin.R
 
 class AtheneDialog(
@@ -34,7 +33,7 @@ class AtheneDialog(
     private var onAnswersItemClickListener: OnAnswersItemClickListener? = null
 
     init {
-        dialog.setContentView(R.layout.dialog_athene)
+        dialog.setContentView(R.layout.layout_dialog_athene)
 
         messageTextView = dialog.findViewById(R.id.messageTextView)
         positiveAnswerTextView = dialog.findViewById(R.id.positiveAnswerTextView)

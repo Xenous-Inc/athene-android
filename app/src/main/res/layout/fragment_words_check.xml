@@ -193,11 +193,11 @@
             android:layout_height="@dimen/button_height"
             android:adjustViewBounds="true"
             android:background="@drawable/background_outline_primary"
-            android:padding="@dimen/button_primary_padding"
-            android:paddingStart="@dimen/button_accent_padding"
-            android:paddingEnd="@dimen/button_accent_padding"
+            android:padding="@dimen/imageview_primary_padding"
+            android:paddingStart="@dimen/imageview_accent_padding"
+            android:paddingEnd="@dimen/imageview_accent_padding"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_arrow_small_white" />
+            app:srcCompat="@drawable/ic_continue_white" />
 
         <TextView
             android:id="@+id/wordsCheckNextTextView"
@@ -235,11 +235,11 @@
                 android:layout_height="@dimen/button_height"
                 android:adjustViewBounds="true"
                 android:background="@drawable/background_outline_primary"
-                android:padding="@dimen/button_primary_padding"
-                android:paddingStart="@dimen/button_accent_padding"
-                android:paddingEnd="@dimen/button_accent_padding"
+                android:padding="@dimen/imageview_primary_padding"
+                android:paddingStart="@dimen/imageview_accent_padding"
+                android:paddingEnd="@dimen/imageview_accent_padding"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_arrow_small_white" />
+                app:srcCompat="@drawable/ic_continue_white" />
 
             <TextView
                 android:id="@+id/wordsCheckContinueTextView"

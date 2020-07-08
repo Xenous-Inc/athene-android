@@ -42,7 +42,6 @@ fun View.animateHeightTo(
                 onAnimationEnd?.let { it() }
             }
         } }
-
         this.startDelay = delay
         this.duration = duration
         this.start()

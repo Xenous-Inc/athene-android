@@ -57,7 +57,7 @@
             android:backgroundTint="@android:color/white"
             android:fontFamily="@font/roboto"
             android:hint="@string/add_word_foreign_input_hint"
-            android:inputType="textEmailAddress"
+            android:inputType="textShortMessage"
             android:minWidth="@dimen/input_min_width"
             android:singleLine="true"
             android:textColor="@android:color/white"
@@ -71,7 +71,7 @@
             android:backgroundTint="@android:color/white"
             android:fontFamily="@font/roboto"
             android:hint="@string/add_word_native_input_hint"
-            android:inputType="textPassword"
+            android:inputType="textShortMessage"
             android:minWidth="@dimen/input_min_width"
             android:singleLine="true"
             android:textColor="@android:color/white"
@@ -104,11 +104,11 @@
             android:layout_height="@dimen/button_height"
             android:adjustViewBounds="true"
             android:background="@drawable/background_outline_primary"
-            android:padding="@dimen/button_primary_padding"
-            android:paddingStart="@dimen/button_accent_padding"
-            android:paddingEnd="@dimen/button_accent_padding"
+            android:padding="@dimen/imageview_primary_padding"
+            android:paddingStart="@dimen/imageview_accent_padding"
+            android:paddingEnd="@dimen/imageview_accent_padding"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_add_word_white" />
+            app:srcCompat="@drawable/ic_continue_white" />
 
         <TextView
             android:id="@+id/editWordContinueTextView"

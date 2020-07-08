@@ -69,8 +69,8 @@
     <string name="add_word_add_category_category_contains_forbidden_symbols_dialog_message">Категория содержит запретные символы</string>
     <string name="add_word_add_category_error_dialog_message">Произошла ошибка при добавлении категории, проверьте подключение к сети Интернет и повторите попытку</string>
     <string name="add_word_add_category_unknown_error_message">Произошла неизвестная ошибка при попытке добавить категорию. Проверьте подключение к сети Интернет и повторите попытку</string>
-<!--    todo: update error texts    -->
     <string name="add_word_add_category_error_while_sending_message">Произошла неизвестная ошибка при попытке добавить категорию. Проверьте подключение к сети Интернет и повторите попытку</string>
+    <!--    todo: update error texts    -->
 
 <!--    Words Check Fragment    -->
     <string name="words_check_title">Проверить</string>
@@ -78,6 +78,9 @@
     <string name="words_check_foreign_input_hint">Перевод</string>
     <string name="words_check_recall_translation">Вспомнить перевод:</string>
     <string name="words_check_fine">Отлично!</string>
+
+<!--    Category Activity   -->
+    <string name="category_title_transition_name">categoryTitleTransitionName</string>
 
 <!--    Extras  -->
     <string name="word_extra">WORD</string>

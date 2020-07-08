@@ -125,11 +125,11 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:background="@drawable/background_outline_primary"
-            android:padding="@dimen/button_primary_padding"
-            android:paddingStart="@dimen/button_secondary_padding"
-            android:paddingEnd="@dimen/button_secondary_padding"
+            android:padding="@dimen/imageview_primary_padding"
+            android:paddingStart="@dimen/imageview_secondary_padding"
+            android:paddingEnd="@dimen/imageview_secondary_padding"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_arrow_small_white" />
+            app:srcCompat="@drawable/ic_continue_white" />
     </LinearLayout>
 
     <ImageView

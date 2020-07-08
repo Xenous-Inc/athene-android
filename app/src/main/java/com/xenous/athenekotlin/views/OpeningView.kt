@@ -38,17 +38,21 @@ class OpeningView(val view: View, private val outerView: View) {
     private var expandedWidth: Int? = null
     private var expandedHeight: Int? = null
 
-    private val categoryCardView = view.findViewById<CardView>(R.id.addWordCategoryCardView)
-    val categoryChosenTextView = view.findViewById<TextView>(R.id.addWordCategoryChosenTextView)
-    private val categoriesListConstraintLayout = view.findViewById<ConstraintLayout>(R.id.addWordCategoriesListConstraintLayout)
-    val categoriesListRecyclerView = view.findViewById<RecyclerView>(R.id.addWordCategoriesListRecyclerView)
-    val addWordAddCategoryTextView = view.findViewById<TextView>(R.id.addWordAddCategoryTextView)
+    private val categoryCardView: CardView = view.findViewById(R.id.addWordCategoryCardView)
+    val categoryChosenTextView: TextView = view.findViewById(R.id.addWordCategoryChosenTextView)
+    private val categoriesListConstraintLayout: ConstraintLayout = view.findViewById(R.id.addWordCategoriesListConstraintLayout)
+    val categoriesListRecyclerView: RecyclerView = view.findViewById(R.id.addWordCategoriesListRecyclerView)
+    val addWordAddCategoryTextView: TextView = view.findViewById(R.id.addWordAddCategoryTextView)
 
     init {
         view.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 collapsedWidth = categoryCardView.measuredWidth
                 collapsedHeight = categoryCardView.measuredHeight
+                categoryCardView.layoutParams = categoryCardView.layoutParams.apply {
+                    width = collapsedWidth as Int
+                    height = collapsedHeight as Int
+                }
 
                 view.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }

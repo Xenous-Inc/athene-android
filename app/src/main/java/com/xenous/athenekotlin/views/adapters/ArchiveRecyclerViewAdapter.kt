@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.data.Word
-import java.lang.StringBuilder
 
 class ArchiveRecyclerViewAdapter(
     private val context: Context,
@@ -17,7 +16,7 @@ class ArchiveRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArchiveRecyclerViewHolder {
         return ArchiveRecyclerViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.cell_archived_word, parent, false)
+            LayoutInflater.from(context).inflate(R.layout.layout_cell_archived_word, parent, false)
         )
     }
 

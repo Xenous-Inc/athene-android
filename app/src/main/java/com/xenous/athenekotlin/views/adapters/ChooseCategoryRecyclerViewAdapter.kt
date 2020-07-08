@@ -20,7 +20,7 @@ class ChooseCategoryRecyclerViewAdapter(
         viewType: Int
     ): ChooseCategoryRecyclerViewHolder {
         return ChooseCategoryRecyclerViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.cell_category_choose, parent, false)
+            LayoutInflater.from(context).inflate(R.layout.layout_cell_category_choose, parent, false)
         )
     }
 
