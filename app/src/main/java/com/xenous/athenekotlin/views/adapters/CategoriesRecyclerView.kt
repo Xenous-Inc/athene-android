@@ -61,8 +61,8 @@ class CategoriesRecyclerViewAdapter(
 
     inner class CategoriesRecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //init here all views which you need to add logic
-        val categoryCardView = itemView.findViewById<CardView>(R.id.categoryCardView)
-        val categoryTitleTextView = itemView.findViewById<TextView>(R.id.categoryTitleTextView)
+        val categoryCardView: CardView = itemView.findViewById(R.id.categoryCardView)
+        val categoryTitleTextView: TextView = itemView.findViewById(R.id.categoryTitleTextView)
 
     }
 }
