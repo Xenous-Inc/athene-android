@@ -41,8 +41,7 @@ class ArchiveFragment: Fragment() {
 
         for(word in wordsArrayList) {
             if(word.level == Word.LEVEL_ARCHIVED.toLong()) {
-                for(i in 0..100)
-                    wordMutableList.add(word)
+                wordMutableList.add(word)
             }
         }
 

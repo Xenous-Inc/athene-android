@@ -41,7 +41,7 @@ class ReadWordsThread {
 
         val database = FirebaseDatabase.getInstance()
         val reference = database.reference.child(USERS_REFERENCE).child(firebaseUser.uid).child(WORDS_REFERENCE)
-        val categoryReference = FirebaseDatabase.getInstance().reference.child(firebaseUser.uid).child(CATEGORY_REFERENCE)
+        val categoryReference = database.reference.child(USERS_REFERENCE).child(firebaseUser.uid).child(CATEGORY_REFERENCE)
 
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
