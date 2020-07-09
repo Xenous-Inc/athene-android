@@ -19,6 +19,7 @@ import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.storage.categoriesArrayList
 import com.xenous.athenekotlin.storage.getCategoriesArrayListWithDefault
+import com.xenous.athenekotlin.storage.wordsArrayList
 import com.xenous.athenekotlin.threads.AddCategoryThread
 import com.xenous.athenekotlin.threads.AddWordThread
 import com.xenous.athenekotlin.utils.ERROR_CODE
@@ -66,7 +67,7 @@ class AddWordFragment: Fragment() {
             }
         }
         openingView.addWordAddCategoryTextView.setOnClickListener {
-            openingView.categoryChosenTextView.text = "Без категории"
+            openingView.categoryChosenTextView.text = getString(R.string.no_category)
 
             val atheneDialog = AtheneDialog(context!!)
             atheneDialog.message = getString(R.string.add_word_add_category_dialog_message)
@@ -77,7 +78,10 @@ class AddWordFragment: Fragment() {
                 override fun onPositiveClick(view: View) {
                     atheneDialog.dismiss()
 
-                    val categoryText = atheneDialog.categoryEditText.text.toString()
+                    val categoryText = atheneDialog.categoryEditText.text
+                                                .toString()
+                                                .trim()
+                                                .toLowerCase(Locale.ROOT)
 
                     if(categoryText.isEmpty()) {
                         openingView.categoryChosenTextView.text = getString(R.string.no_category)
@@ -97,30 +101,35 @@ class AddWordFragment: Fragment() {
                     val category = Category(
                         categoryText
                     )
-                    categoriesArrayList.add(category)
-                    openingView.categoryChosenTextView.text = category.title
 
-                    if(categoriesArrayList.contains(category)) {
+                    var isNew = true
+                    for(c in categoriesArrayList) {
+                        if(c.title == category.title) {
+                            isNew = false
+                            break
+                        }
+                    }
+
+                    if(isNew) {
                         val addCategoryThread = AddCategoryThread(category)
                         addCategoryThread.setAddCategoryResultListener(object : AddCategoryThread.AddCategoryResultListener {
 
                             override fun onSuccess(category: Category) {
+                                openingView.categoryChosenTextView.text = category.title
+                                categoriesArrayList.add(category)
                             }
 
                             override fun onFailure(exception: Exception) {
                                 val atheneDialog = AtheneDialog(context!!)
                                 atheneDialog.message = getString(R.string.add_word_add_category_error_dialog_message)
                                 atheneDialog.positiveText = getString(R.string.ok)
-                                atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
-                                    override fun onPositiveClick(view: View) {
-                                        atheneDialog.dismiss()
-                                    }
-
-                                    override fun onNegativeClickListener(view: View) {}
-                                })
-                                atheneDialog.build().show()
+                                atheneDialog.build()
+                                atheneDialog.show()
                             }
                         })
+                    }
+                    else {
+                        openingView.categoryChosenTextView.text = category.title
                     }
                 }
 
@@ -130,6 +139,7 @@ class AddWordFragment: Fragment() {
             })
             atheneDialog.build()
             atheneDialog.show()
+
             openingView.collapse()
         }
 
@@ -149,16 +159,18 @@ class AddWordFragment: Fragment() {
                 foreignWordText,
                 nativeWordText,
                 categoryText,
-                getCurrentDateTimeInMills()
+                getCurrentDateTimeInMills() + Word.LEVEL_DAY
             )
 
             when(word.filter()) {
                 Word.WORD_IS_TO_LONG -> {
                     createAtheneDialog(getString(R.string.add_word_word_is_too_long_dialog_message))
+
                     return@setOnClickListener
                 }
                 Word.WORD_CONTAINS_FORBIDDEN_SYMBOLS -> {
                     createAtheneDialog(getString(R.string.add_word_word_contains_forbidden_symbols_dialog_message))
+
                     return@setOnClickListener
                 }
                 Word.WORD_IS_NULL ->  return@setOnClickListener
@@ -167,6 +179,13 @@ class AddWordFragment: Fragment() {
             val addWordThread = AddWordThread(word)
             addWordThread.setAddWordResultListener(object : AddWordThread.AddWordResultListener {
                 override fun onSuccess(word: Word) {
+                    wordsArrayList.add(word)
+                    //ToDo: Add tick or X animation
+
+                    addWordForeignEditText.setText("")
+                    addWordNativeEditText.setText("")
+
+                    openingView.categoryChosenTextView.text = getString(R.string.no_category)
                 }
 
                 override fun onFailure(exception: Exception) {
@@ -177,6 +196,7 @@ class AddWordFragment: Fragment() {
                     atheneDialog.build().show()
                 }
             })
+            addWordThread.run()
             addWordContinueImageView.isClickable = false
         }
 
@@ -211,66 +231,10 @@ class AddWordFragment: Fragment() {
         }
     )
 
-    private fun getAddCategoryHandler(position: Int) = @SuppressLint("HandlerLeak") object : Handler() {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-
-            if(msg.what == SUCCESS_CODE) {
-                if(msg.obj != null) {
-                    if(msg.obj is Category) {
-                        val category = msg.obj as Category
-
-                        categoriesArrayList[position] = category
-                    }
-                }
-            }
-            else if(msg.what == ERROR_CODE) {
-                val atheneDialog = AtheneDialog(context!!)
-                atheneDialog.message = getString(R.string.add_word_add_category_unknown_error_message)
-                atheneDialog.positiveText = "OK"
-
-                atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
-                    override fun onPositiveClick(view: View) {
-                        atheneDialog.dismiss()
-                    }
-
-                    override fun onNegativeClickListener(view: View) {}
-                })
-                atheneDialog.build()
-                atheneDialog.show()
-            }
-        }
-    }
-
-    private fun getAddWordHandler(openingView: OpeningView) = @SuppressLint("HandlerLeak") object : Handler() {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-
-            addWordContinueImageView.isClickable = true
-
-            if(msg.what == SUCCESS_CODE) {
-                addWordNativeEditText.setText("")
-                addWordForeignEditText.setText("")
-                openingView.categoryChosenTextView.text = getString(R.string.no_category)
-            }
-            else if(msg.what == ERROR_CODE) {
-                createAtheneDialog(getString(R.string.add_word_add_category_error_while_sending_message))
-            }
-        }
-    }
-
     private fun createAtheneDialog(message: String) {
         val atheneDialog = AtheneDialog(context!!)
         atheneDialog.message = message
         atheneDialog.positiveText = getString(R.string.ok)
-        atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
-            override fun onPositiveClick(view: View) {
-                atheneDialog.dismiss()
-            }
-
-            override fun onNegativeClickListener(view: View) {
-            }
-        })
         atheneDialog.build()
         atheneDialog.show()
     }

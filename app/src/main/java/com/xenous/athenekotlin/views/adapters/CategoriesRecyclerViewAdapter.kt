@@ -75,7 +75,9 @@ class CategoriesRecyclerViewAdapter(
         holder.categoryTitleTextView.text = notEmptyCategories[position].title
 
         holder.actionAddToLearningLinearLayout.setOnClickListener {
-
+            val wordsToLearnCount = 0
+            wordInCategoriesMatrix[position].forEach {
+            }
         }
         holder.actionShareLinearLayout.setOnClickListener {  }
         holder.actionMoreDetailsLinearLayout.setOnClickListener {

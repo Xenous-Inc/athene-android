@@ -10,12 +10,12 @@ var categoriesArrayList = mutableListOf<Category>()
 
 fun getCategoriesArrayListWithDefault(): MutableList<Category> {
     val defaultList = mutableListOf<Category>()
-    defaultList.add(Category("Без категории"))
-    defaultList.add(Category("Спорт"))
-    defaultList.add(Category("Наука"))
-    defaultList.add(Category("Еда"))
-    defaultList.add(Category("Транспорт"))
-    defaultList.add(Category("Одежда"))
+    defaultList.add(Category("без категории"))
+    defaultList.add(Category("спорт"))
+    defaultList.add(Category("наука"))
+    defaultList.add(Category("еда"))
+    defaultList.add(Category("транспорт"))
+    defaultList.add(Category("одежда"))
     defaultList.addAll(categoriesArrayList)
 
     return defaultList

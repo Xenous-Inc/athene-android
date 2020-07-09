@@ -15,7 +15,7 @@
     <string name="next">Далее</string>
     <string name="check">Проверить</string>
     <string name="forgot">Не помню</string>
-    <string name="no_category">Без категории</string>
+    <string name="no_category">без категории</string>
 
 <!--    Main Activity   -->
     <string name="main_ic_sign_out_content_description">Выйти из аккаунта</string>
