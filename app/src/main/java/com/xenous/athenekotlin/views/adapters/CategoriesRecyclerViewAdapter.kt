@@ -14,6 +14,7 @@ import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.views.CategoryCellOpening
 import java.util.*
+import kotlin.collections.ArrayList
 
 class CategoriesRecyclerViewAdapter(
     private val activity: Activity,
@@ -22,7 +23,7 @@ class CategoriesRecyclerViewAdapter(
 ) : RecyclerView.Adapter<CategoriesRecyclerViewAdapter.CategoriesRecyclerViewHolder>() {
 
     private val notEmptyCategories = mutableListOf<Category>()
-    private val wordInCategoriesMatrix = mutableListOf<List<Word>>()
+    private val wordInCategoriesMatrix = mutableListOf<ArrayList<Word>>()
     private val categoryCellOpeningMutableList = mutableListOf<CategoryCellOpening>()
 
     init {
@@ -31,7 +32,7 @@ class CategoriesRecyclerViewAdapter(
                 continue
             }
 
-            val wordInCurrentCategoryMutableList = mutableListOf<Word>()
+            val wordInCurrentCategoryMutableList = ArrayList<Word>()
             for(word in wordsList) {
                 if(
                     word.category.trim().toLowerCase(Locale.ROOT) ==
@@ -43,7 +44,7 @@ class CategoriesRecyclerViewAdapter(
 
             if(wordInCurrentCategoryMutableList.size != 0) {
                 notEmptyCategories.add(category)
-                wordInCategoriesMatrix.add(wordInCurrentCategoryMutableList.toList())
+                wordInCategoriesMatrix.add(wordInCurrentCategoryMutableList)
             }
         }
     }
@@ -78,7 +79,17 @@ class CategoriesRecyclerViewAdapter(
         }
         holder.actionShareLinearLayout.setOnClickListener {  }
         holder.actionMoreDetailsLinearLayout.setOnClickListener {
-            val intent = Intent(activity, CategoryActivity::class.java)
+            val intent = Intent(
+                activity,
+                CategoryActivity::class.java
+                ).putExtra(
+                    activity.getString(R.string.category_extra),
+                    notEmptyCategories[position].title
+                ).putParcelableArrayListExtra(
+                    activity.getString(R.string.words_extra),
+                    wordInCategoriesMatrix[position]
+            )
+
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 activity,
                 holder.categoryTitleTextView,

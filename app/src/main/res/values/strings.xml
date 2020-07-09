@@ -79,11 +79,16 @@
     <string name="words_check_recall_translation">Вспомнить перевод:</string>
     <string name="words_check_fine">Отлично!</string>
 
+<!--    Archive Fragment    -->
+    <string name="archive_title">Архив слов</string>
+
 <!--    Category Activity   -->
     <string name="category_title_transition_name">categoryTitleTransitionName</string>
 
 <!--    Extras  -->
     <string name="word_extra">WORD</string>
-    <string name="archive_title">Архив слов</string>
+    <string name="words_extra">WORDS</string>
+    <string name="category_extra">CATEGORY</string>
+
 
 </resources>
