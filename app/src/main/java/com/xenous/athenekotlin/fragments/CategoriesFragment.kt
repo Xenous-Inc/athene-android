@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.storage.getCategoriesArrayListWithDefault
 import com.xenous.athenekotlin.storage.wordsArrayList
+import com.xenous.athenekotlin.utils.slideInFromBottom
+import com.xenous.athenekotlin.utils.slideInFromTop
 import com.xenous.athenekotlin.views.adapters.CategoriesRecyclerViewAdapter
 
 class CategoriesFragment: Fragment() {
@@ -28,6 +30,7 @@ class CategoriesFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         categoriesRecyclerView = view.findViewById(R.id.categoriesRecyclerView)
+        categoriesRecyclerView.slideInFromBottom()
         categoriesRecyclerView.layoutManager = LinearLayoutManager(context)
         categoriesRecyclerView.adapter = CategoriesRecyclerViewAdapter(
             activity!!,

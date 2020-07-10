@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.github.ybq.android.spinkit.SpinKitView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -17,6 +18,7 @@ import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Classroom
+import com.xenous.athenekotlin.data.Student
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.exceptions.UserIsAlreadyInClassroomException
 import com.xenous.athenekotlin.fragments.FragmentsViewPagerAdapter
@@ -86,12 +88,13 @@ class MainActivity : AppCompatActivity() {
 
 //              Optimize View Pager
                 viewPager.adapter = FragmentsViewPagerAdapter(supportFragmentManager, 0)
-                viewPager.offscreenPageLimit = 4
+                viewPager.offscreenPageLimit = 1
                 viewPager.currentItem = 1
 
 //              Connect
                 dotsIndicator = findViewById(R.id.dotsIndicator)
                 dotsIndicator.setViewPager(viewPager)
+                dotsIndicator.visibility = View.VISIBLE
 
                 spinKitView.visibility = View.INVISIBLE
 
@@ -268,16 +271,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createInviteToClassroomAtheneDialog(classroom: Classroom) {
+        //ToDo: Replace with string resource
         val message = "Учитель " + classroom.teacherName + " Приглашает вас в класс " + classroom.classroomName
 
+        Log.d("BOB", classroom.categoriesTitlesList.size.toString())
+        Log.d("BOB", classroom.wordsListsList.size.toString())
         val atheneDialog = AtheneDialog(this)
         atheneDialog.message = message
         atheneDialog.hint = getString(R.string.main_invite_student_name_input_hint)
         atheneDialog.positiveText = getString(R.string.accept)
         atheneDialog.negativeText = getString(R.string.deny)
-        atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
+        atheneDialog.setOnAnswersItemClickListener(
+                object : AtheneDialog.OnAnswersItemClickListener {
             override fun onPositiveClick(view: View) {
-                //Add User To Classroom
+                val studentName = atheneDialog.categoryEditText.text.toString().trim()
+
+                val synchronizeStudentWithClassroomThread
+                        = SynchronizeStudentWithClassroomThread(
+                            classroom,
+                            Student(
+                                studentName,
+                                FirebaseAuth.getInstance().currentUser!!.uid
+                            )
+                        )
+                synchronizeStudentWithClassroomThread.run()
             }
         })
         atheneDialog.build()
@@ -346,7 +363,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
-        atheneDialog.build()
         atheneDialog.build()
         atheneDialog.show()
     }

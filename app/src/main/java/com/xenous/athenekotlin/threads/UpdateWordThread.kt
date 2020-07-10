@@ -52,7 +52,7 @@ class UpdateWordThread(
             .child(USERS_REFERENCE)
             .child(firebaseUser.uid)
             .child(WORDS_REFERENCE)
-            .child(word.uid)
+            .child(word.uid!!)
 
 
         reference.setValue(word.toMap())

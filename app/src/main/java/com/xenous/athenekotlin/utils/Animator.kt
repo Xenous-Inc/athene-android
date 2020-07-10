@@ -172,6 +172,31 @@ fun View.slideInFromTop(
     view.startAnimation(animation)
 }
 
+fun View.slideInFromBottom(
+    duration: Long = ANIMATION_DURATION,
+    onAnimationStart: (() -> Unit)? = null,
+    onAnimationEnd: (() -> Unit)? = null
+) {
+    val view = this
+    val animation = AnimationUtils.loadAnimation(view.context, R.anim.slide_in_from_bottom)
+
+    animation.apply {
+        this.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(p0: Animation?) {
+                onAnimationStart?.let { it() }
+            }
+
+            override fun onAnimationRepeat(p0: Animation?) {  }
+
+            override fun onAnimationEnd(p0: Animation?) {
+                onAnimationEnd?.let { it() }
+            }
+        })
+        this.duration = duration
+    }
+    view.startAnimation(animation)
+}
+
 fun View.slideOutToBottom(
     duration: Long = ANIMATION_DURATION,
     onAnimationStart: (() -> Unit)? = null,
