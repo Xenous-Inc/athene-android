@@ -117,10 +117,12 @@ class ReadClassroomThread(
                         .child(CLASSROOM_CATEGORY_NAME_DATABASE_KEY)
                         .value
 
-                    if(categoryTitle != null) {
-                        if(categoryTitle is String) {
-                            categoriesTitleList.add(categoryTitle)
-                        }
+
+                    if(categoryTitle is String) {
+                        categoriesTitleList.add(categoryTitle)
+                    }
+                    else {
+                        continue
                     }
 
                     val wordsInCurrentCategoryList = mutableListOf<Word>()
@@ -133,7 +135,8 @@ class ReadClassroomThread(
                             if(foreign is String && native is String) {
                                 val word = Word(
                                     native,
-                                    foreign
+                                    foreign,
+                                    categoryTitle
                                 )
 
                                 wordsInCurrentCategoryList.add(word)

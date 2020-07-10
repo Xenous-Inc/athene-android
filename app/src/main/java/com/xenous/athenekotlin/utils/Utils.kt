@@ -29,6 +29,8 @@ const val CLASSROOMS_DATABASE_KEY = "classes"
 const val CLASSROOM_NAME_DATABASE_KEY = "name"
 
 const val CLASSROOM_CATEGORY_NAME_DATABASE_KEY = "name"
+const val STUDENT_NAME_DATABASE_KEY = "name"
+const val STUDENT_ID_DATABASE_KEY = "id"
 
 const val NATIVE_WORD_DATABASE_KEY = "Russian"
 const val FOREIGN_WORD_DATABASE_KEY = "English"
