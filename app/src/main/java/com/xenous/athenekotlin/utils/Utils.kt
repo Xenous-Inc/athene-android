@@ -30,8 +30,8 @@ const val CLASSROOM_NAME_DATABASE_KEY = "name"
 
 const val CLASSROOM_CATEGORY_NAME_DATABASE_KEY = "name"
 
-const val NATIVE_WORD_DATABASE_KEY = "English"
-const val LEARNING_WORD_DATABASE_KEY = "Russian"
+const val NATIVE_WORD_DATABASE_KEY = "Russian"
+const val FOREIGN_WORD_DATABASE_KEY = "English"
 const val WORD_CATEGORY_DATABASE_KEY = "category"
 const val WORD_LAST_DATE_DATABASE_KEY = "date"
 const val WORD_LEVEL_DATABASE_KEY = "level"

@@ -38,7 +38,7 @@
     <string name="sign_up_email_is_invalid">Адрес электронной почты недействителен</string>
     <string name="sign_up_passwords_do_not_match">Пароли не совпадают</string>
 
-    <!--    Loading Activity    -->
+<!--    Loading Activity    -->
     <string name="loading_waiting_for_user">Загрузка…</string>
 
 <!--    Verification Activity   -->
@@ -84,6 +84,9 @@
 
 <!--    Category Activity   -->
     <string name="category_title_transition_name">categoryTitleTransitionName</string>
+
+<!--    Multiple Athene Dialog  -->
+    <string name="multiple_athene_dialog_message">Выберите опцию:</string>
 
 <!--    Extras  -->
     <string name="word_extra">WORD</string>

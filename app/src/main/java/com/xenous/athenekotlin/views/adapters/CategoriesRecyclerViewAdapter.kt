@@ -12,6 +12,7 @@ import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.activities.CategoryActivity
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Word
+import com.xenous.athenekotlin.threads.GenerateDynamicLinksThread
 import com.xenous.athenekotlin.views.CategoryCellOpening
 import java.util.*
 import kotlin.collections.ArrayList
@@ -22,19 +23,19 @@ class CategoriesRecyclerViewAdapter(
     private val wordsList: List<Word>
 ) : RecyclerView.Adapter<CategoriesRecyclerViewAdapter.CategoriesRecyclerViewHolder>() {
 
-    private val notEmptyCategories = mutableListOf<Category>()
+    private val notNoNameCategories = mutableListOf<Category>()
     private val wordInCategoriesMatrix = mutableListOf<ArrayList<Word>>()
     private val categoryCellOpeningMutableList = mutableListOf<CategoryCellOpening>()
 
+    private val context = activity.applicationContext
+
     init {
         for(category in categoriesList) {
-            if(category.title.isEmpty() || category.title == "Без категории") { //Replace with string resource
-                continue
-            }
+            if (category.title == context.getString(R.string.no_category)) continue
 
             val wordInCurrentCategoryMutableList = ArrayList<Word>()
-            for(word in wordsList) {
-                if(
+            for (word in wordsList) {
+                if (
                     word.category.trim().toLowerCase(Locale.ROOT) ==
                     category.title.trim().toLowerCase(Locale.ROOT)
                 ) {
@@ -42,10 +43,8 @@ class CategoriesRecyclerViewAdapter(
                 }
             }
 
-            if(wordInCurrentCategoryMutableList.size != 0) {
-                notEmptyCategories.add(category)
-                wordInCategoriesMatrix.add(wordInCurrentCategoryMutableList)
-            }
+            notNoNameCategories.add(category)
+            wordInCategoriesMatrix.add(wordInCurrentCategoryMutableList)
         }
     }
 
@@ -61,57 +60,78 @@ class CategoriesRecyclerViewAdapter(
     }
 
     override fun getItemCount(): Int {
-        return notEmptyCategories.size
+        return notNoNameCategories.size
     }
 
     override fun onBindViewHolder(holder: CategoriesRecyclerViewHolder, position: Int) {
-        holder.categoryCardView.setOnClickListener {_ ->
-            holder.categoryCellOpening.expand()
-
-            categoryCellOpeningMutableList.forEach {
-                if(it != holder.categoryCellOpening) { it.collapse() }
-            }
-        }
-        holder.categoryTitleTextView.text = notEmptyCategories[position].title
-
-        holder.actionAddToLearningLinearLayout.setOnClickListener {
-            val wordsToLearnCount = 0
-            wordInCategoriesMatrix[position].forEach {
-            }
-        }
-        holder.actionShareLinearLayout.setOnClickListener {  }
-        holder.actionMoreDetailsLinearLayout.setOnClickListener {
-            val intent = Intent(
-                activity,
-                CategoryActivity::class.java
-                ).putExtra(
-                    activity.getString(R.string.category_extra),
-                    notEmptyCategories[position].title
-                ).putParcelableArrayListExtra(
-                    activity.getString(R.string.words_extra),
-                    wordInCategoriesMatrix[position]
-            )
-
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                activity,
-                holder.categoryTitleTextView,
-                activity.getString(R.string.category_title_transition_name)
-            )
-            activity.startActivity(intent, options.toBundle())
-        }
-        holder.actionDeleteLinearLayout.setOnClickListener {  }
-//        todo: add other methods
+        holder.bind(notNoNameCategories[position])
     }
 
 
-    inner class CategoriesRecyclerViewHolder(val categoryCellOpening: CategoryCellOpening) : RecyclerView.ViewHolder(categoryCellOpening.view) {
-        val categoryCardView: CardView = categoryCellOpening.cardView
-        val categoryTitleTextView: TextView = categoryCellOpening.titleTextView
-        val categoryActionsLinearLayout: LinearLayout = categoryCellOpening.actionsLinearLayout
-        val actionAddToLearningLinearLayout: LinearLayout = categoryCellOpening.actionAddToLearningLinearLayout
-        val actionShareLinearLayout: LinearLayout = categoryCellOpening.actionShareLinearLayout
-        val actionMoreDetailsLinearLayout: LinearLayout = categoryCellOpening.actionMoreDetailsLinearLayout
-        val actionDeleteLinearLayout: LinearLayout = categoryCellOpening.actionDeleteLinearLayout
+    inner class CategoriesRecyclerViewHolder(private val categoryCellOpening: CategoryCellOpening) : RecyclerView.ViewHolder(categoryCellOpening.view) {
+        private val categoryCardView: CardView = categoryCellOpening.cardView
+        private val categoryTitleTextView: TextView = categoryCellOpening.titleTextView
+        private val categoryActionsLinearLayout: LinearLayout = categoryCellOpening.actionsLinearLayout
+        private val actionAddToLearningLinearLayout: LinearLayout = categoryCellOpening.actionAddToLearningLinearLayout
+        private val actionShareLinearLayout: LinearLayout = categoryCellOpening.actionShareLinearLayout
+        private val actionMoreDetailsLinearLayout: LinearLayout = categoryCellOpening.actionMoreDetailsLinearLayout
+        private val actionDeleteLinearLayout: LinearLayout = categoryCellOpening.actionDeleteLinearLayout
 
+        fun bind(category: Category) {
+            categoryCellOpening.collapse()
+            categoryTitleTextView.text = category.title
+            categoryCardView.setOnClickListener {_ ->
+                categoryCellOpening.expand()
+
+                categoryCellOpeningMutableList.forEach {
+                    if(it != categoryCellOpening) { it.collapse() }
+                }
+            }
+
+            actionAddToLearningLinearLayout.setOnClickListener {
+                val wordsToLearnCount = 0
+                wordInCategoriesMatrix[position].forEach {
+                }
+            }
+            actionShareLinearLayout.setOnClickListener {
+                val generateDynamicLinksThread = GenerateDynamicLinksThread(categoriesList[position].title)
+                generateDynamicLinksThread.setGenerateDynamicLinkResultListener(object : GenerateDynamicLinksThread.GenerateDynamicLinkResultListener {
+                    override fun onSuccess(shortLink: String?) {
+                        val intent = Intent(Intent.ACTION_SEND)
+                        intent.type = "text/plain"
+                        intent.putExtra(
+                            Intent.EXTRA_TEXT,
+                            shortLink
+                        )
+                        activity.startActivity(Intent.createChooser(intent, "Share via"))
+                    }
+
+                    override fun onFailure(exception: Exception) {
+//                    todo: handle error
+                    }
+                })
+                generateDynamicLinksThread.run()
+            }
+            actionMoreDetailsLinearLayout.setOnClickListener {
+                val intent = Intent(
+                    activity,
+                    CategoryActivity::class.java
+                ).putExtra(
+                    activity.getString(R.string.category_extra),
+                    notNoNameCategories[position].title
+                ).putParcelableArrayListExtra(
+                    activity.getString(R.string.words_extra),
+                    wordInCategoriesMatrix[position]
+                )
+
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    activity,
+                    categoryTitleTextView,
+                    activity.getString(R.string.category_title_transition_name)
+                )
+                activity.startActivity(intent, options.toBundle())
+            }
+            actionDeleteLinearLayout.setOnClickListener {  }
+        }
     }
 }

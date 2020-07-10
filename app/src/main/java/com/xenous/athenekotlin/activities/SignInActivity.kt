@@ -152,6 +152,7 @@ class SignInActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 clickBlocker?.visibility = View.GONE
+                Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
 //                todo: handle error
             }
     }

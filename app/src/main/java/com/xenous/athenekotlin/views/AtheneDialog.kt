@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import com.xenous.athenekotlin.R
+import kotlinx.android.synthetic.main.layout_athene_dialog.*
 
 class AtheneDialog(
     context: Context
@@ -33,12 +34,12 @@ class AtheneDialog(
     private var onAnswersItemClickListener: OnAnswersItemClickListener? = null
 
     init {
-        dialog.setContentView(R.layout.layout_dialog_athene)
+        dialog.setContentView(R.layout.layout_athene_dialog)
 
-        messageTextView = dialog.findViewById(R.id.messageTextView)
-        positiveAnswerTextView = dialog.findViewById(R.id.positiveAnswerTextView)
-        negativeAnswerTextView = dialog.findViewById(R.id.negativeAnswerTextView)
-        categoryEditText = dialog.findViewById(R.id.addNewCategoryEditText)
+        messageTextView = dialog.atheneDialogMessageTextView
+        positiveAnswerTextView = dialog.atheneDialogPositiveAnswerTextView
+        negativeAnswerTextView = dialog.atheneDialogNegativeAnswerTextView
+        categoryEditText = dialog.atheneDialogEditText
     }
 
     fun build(): AtheneDialog {

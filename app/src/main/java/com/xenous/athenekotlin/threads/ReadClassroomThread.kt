@@ -127,7 +127,7 @@ class ReadClassroomThread(
 
                     val wordsSnapshot = categoriesSnapshot.child(categoryAddress)
                     for(wordSnapshot in wordsSnapshot.children) {
-                        val foreign = wordSnapshot.child(LEARNING_WORD_DATABASE_KEY).value
+                        val foreign = wordSnapshot.child(FOREIGN_WORD_DATABASE_KEY).value
                         val native = wordSnapshot.child(NATIVE_WORD_DATABASE_KEY).value
                         if(foreign != null && native != null) {
                             if(foreign is String && native is String) {

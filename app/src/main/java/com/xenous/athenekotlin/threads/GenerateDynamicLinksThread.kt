@@ -1,23 +1,17 @@
 package com.xenous.athenekotlin.threads
 
 import android.net.Uri
-import android.os.Handler
-import android.os.Message
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.xenous.athenekotlin.utils.ERROR_CODE
-import com.xenous.athenekotlin.utils.SUCCESS_CODE
 import com.xenous.athenekotlin.utils.USER_REFERENCE
 import com.xenous.athenekotlin.utils.WORD_CATEGORY_DATABASE_KEY
-import java.lang.Exception
 import java.net.URI
 import java.net.URISyntaxException
 
 class GenerateDynamicLinksThread(
-    private val handler: Handler?,
-    private val category: String
+    private val categoryTitle: String
 ) {
 
     private companion object {
@@ -32,11 +26,17 @@ class GenerateDynamicLinksThread(
         fun onCanceled() {}
     }
 
-    fun generate() {
+    private var generateDynamicLinkResultListener: GenerateDynamicLinkResultListener? = null
+
+    fun setGenerateDynamicLinkResultListener(generateDynamicLinkResultListener: GenerateDynamicLinkResultListener) {
+        this.generateDynamicLinkResultListener = generateDynamicLinkResultListener
+    }
+
+    fun run() {
         val uri = generateLink()
         if(uri == null) {
             Log.d(TAG, "Error while generating uri")
-            sendErrorMessage()
+            generateDynamicLinkResultListener?.onFailure(Exception("URI must not be null"))
 
             return
         }
@@ -52,46 +52,16 @@ class GenerateDynamicLinksThread(
                 DynamicLink.AndroidParameters.Builder("com.xenous.athenekotlin").build()
             )
             .buildShortDynamicLink()
-            .addOnSuccessListener {
+            .addOnSuccessListener { shortDynamicLink ->
                 Log.d(TAG, "Short link has been completely created")
 
-                sendSuccessMessage(it.shortLink.toString())
+                generateDynamicLinkResultListener?.onSuccess(shortDynamicLink.shortLink.toString())
             }
-            .addOnFailureListener {
-                Log.d(TAG, "Error while creating short link, The error is - $it")
+            .addOnFailureListener { e ->
+                Log.d(TAG, "Error while creating short link, The error is - $e")
 
-                sendErrorMessage()
+                generateDynamicLinkResultListener?.onFailure(e)
             }
-    }
-
-    private fun sendErrorMessage() {
-        if(handler == null) {
-            Log.d(TAG, "Handler is null")
-            return
-        }
-
-        val message = Message.obtain()
-        message.apply {
-            what = ERROR_CODE
-            obj = null
-        }
-
-        handler.sendMessage(message)
-    }
-
-    private fun sendSuccessMessage(link: String?) {
-        if(handler == null) {
-            Log.d(TAG, "Handler is null")
-            return
-        }
-
-        val message = Message.obtain()
-        message.apply {
-            what = SUCCESS_CODE
-            obj = link
-        }
-
-        handler.sendMessage(message)
     }
 
     @Throws(URISyntaxException::class)
@@ -129,13 +99,13 @@ class GenerateDynamicLinksThread(
         val currentUser = FirebaseAuth.getInstance().currentUser
         if(currentUser == null) {
             Log.d(TAG, "User is null")
-            sendErrorMessage()
+            generateDynamicLinkResultListener?.onFailure(Exception("FirabaseUser must not be null"))
 
             return null
         }
 
         var currentUri = appendQueryParameters(uri, USER_REFERENCE, currentUser.toString())
-        currentUri = appendQueryParameters(currentUri.toString(), WORD_CATEGORY_DATABASE_KEY, category)
+        currentUri = appendQueryParameters(currentUri.toString(), WORD_CATEGORY_DATABASE_KEY, categoryTitle)
 
         return currentUri
     }

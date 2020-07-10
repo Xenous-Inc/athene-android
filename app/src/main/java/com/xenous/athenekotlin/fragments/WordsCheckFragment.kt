@@ -2,7 +2,6 @@ package com.xenous.athenekotlin.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,12 +54,6 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-
-    }
-
     private fun View.showNoWordsTitle() {
         val noWordsTitleTextView = findViewById<TextView>(R.id.wordsCheckNoWordsTitleTextView)
 
@@ -95,15 +88,9 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
 
 //        Set onClick and onTouch listeners
         wordActionEditLinearLayout.setOnClickListener {
-            startActivity(
-                Intent(
-                    activity!!,
-                    EditWordActivity::class.java
-                ).putExtra(
-                    getString(R.string.word_extra),
-                    word
-                )
-            )
+            val intent = Intent(activity!!, EditWordActivity::class.java)
+            intent.putExtra(getString(R.string.word_extra), word)
+            startActivity(intent)
         }
         wordActionDeleteLinearLayout.setOnClickListener {
             Toast.makeText(context, "DELETE", Toast.LENGTH_LONG).show()

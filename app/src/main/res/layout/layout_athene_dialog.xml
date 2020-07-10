@@ -18,13 +18,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="@dimen/cardview_primary_padding"
             android:paddingStart="@dimen/cardview_secondary_padding"
-            android:paddingTop="@dimen/cardview_primary_padding"
-            android:paddingEnd="@dimen/cardview_secondary_padding"
-            android:paddingBottom="@dimen/cardview_primary_padding">
+            android:paddingEnd="@dimen/cardview_secondary_padding">
 
             <TextView
-                android:id="@+id/messageTextView"
+                android:id="@+id/atheneDialogMessageTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -34,7 +33,7 @@
                 android:textSize="@dimen/primary_text_size" />
 
             <EditText
-                android:id="@+id/addNewCategoryEditText"
+                android:id="@+id/atheneDialogEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -58,7 +57,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/negativeAnswerTextView"
+                    android:id="@+id/atheneDialogNegativeAnswerTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -69,7 +68,7 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/positiveAnswerTextView"
+                    android:id="@+id/atheneDialogPositiveAnswerTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

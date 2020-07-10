@@ -35,5 +35,4 @@ class CategoriesFragment: Fragment() {
             wordsArrayList
         )
     }
-
 }

@@ -17,6 +17,7 @@ import com.xenous.athenekotlin.R
 
 const val ANIMATION_DURATION = 400L
 const val ANIMATION_DURATION_HALF = ANIMATION_DURATION/2
+const val ANIMATION_DURATION_TWO_THIRDS = ANIMATION_DURATION/3*2
 
 fun View.animateHeightTo(
     expectingHeight: Int,

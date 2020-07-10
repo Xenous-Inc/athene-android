@@ -5,6 +5,7 @@ import android.os.Parcelable
 import com.google.firebase.database.Exclude
 import com.xenous.athenekotlin.utils.forbiddenSymbols
 import com.xenous.athenekotlin.utils.getCurrentDateTimeInMills
+import java.util.*
 
 data class Word(
     var native: String,
@@ -53,8 +54,7 @@ data class Word(
         parcel.readLong(),
         parcel.readLong(),
         parcel.readString()
-    ) {
-    }
+    )
 
     @Exclude
     fun toMap(): Map<String, Any?> {
@@ -75,7 +75,7 @@ data class Word(
         val equawalent = listOf(native, foreign)
 
         for(element in equawalent) {
-            if(element!!.length >= 35) {
+            if(element.length >= 35) {
                 return WORD_IS_TO_LONG
             }
 
@@ -113,8 +113,8 @@ data class Word(
     override fun equals(other: Any?): Boolean {
         if(other is Word) {
             if(
-                this.foreign == other.foreign &&
-                this.native == other.native
+                this.foreign.trim().toLowerCase(Locale.ROOT) == other.foreign.trim().toLowerCase(Locale.ROOT) &&
+                this.native.trim().toLowerCase(Locale.ROOT) == other.native.trim().toLowerCase(Locale.ROOT)
             ) {
                 return true
             }

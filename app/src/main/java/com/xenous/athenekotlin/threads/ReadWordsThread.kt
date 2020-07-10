@@ -2,11 +2,13 @@ package com.xenous.athenekotlin.threads
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.utils.*
-import java.lang.Exception
 
 
 class ReadWordsThread {
@@ -53,7 +55,7 @@ class ReadWordsThread {
                 for(wordSnapshot in snapshot.children) {
                     val word = Word(
                         wordSnapshot.child(NATIVE_WORD_DATABASE_KEY).value as String,
-                        wordSnapshot.child(LEARNING_WORD_DATABASE_KEY).value as String,
+                        wordSnapshot.child(FOREIGN_WORD_DATABASE_KEY).value as String,
                         wordSnapshot.child(WORD_CATEGORY_DATABASE_KEY).value as String,
                         wordSnapshot.child(WORD_LAST_DATE_DATABASE_KEY).value as Long,
                         wordSnapshot.child(WORD_LEVEL_DATABASE_KEY).value as Long,

@@ -1,10 +1,7 @@
 package com.xenous.athenekotlin.fragments
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +19,8 @@ import com.xenous.athenekotlin.storage.getCategoriesArrayListWithDefault
 import com.xenous.athenekotlin.storage.wordsArrayList
 import com.xenous.athenekotlin.threads.AddCategoryThread
 import com.xenous.athenekotlin.threads.AddWordThread
-import com.xenous.athenekotlin.utils.ERROR_CODE
-import com.xenous.athenekotlin.utils.SUCCESS_CODE
+import com.xenous.athenekotlin.utils.ANIMATION_DURATION_TWO_THIRDS
+import com.xenous.athenekotlin.utils.animateAlphaTo
 import com.xenous.athenekotlin.utils.forbiddenSymbols
 import com.xenous.athenekotlin.utils.getCurrentDateTimeInMills
 import com.xenous.athenekotlin.views.AtheneDialog
@@ -60,6 +57,9 @@ class AddWordFragment: Fragment() {
             override fun onExpand() {
                 openingView.categoriesListRecyclerView.adapter = getCategoriesRecyclerViewAdapter(openingView)
                 openingView.categoriesListRecyclerView.layoutManager = GridLayoutManager(context,2)
+                openingView.categoriesListRecyclerView.alpha = 0F
+                openingView.categoriesListRecyclerView
+                    .animateAlphaTo(1F, duration = ANIMATION_DURATION_TWO_THIRDS)
             }
 
             override fun onCollapse() {

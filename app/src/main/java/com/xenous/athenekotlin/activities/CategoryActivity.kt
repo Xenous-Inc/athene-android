@@ -1,13 +1,12 @@
 package com.xenous.athenekotlin.activities
 
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.data.Word
+import com.xenous.athenekotlin.views.adapters.CategoryWordsRecyclerViewRecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_category.*
-import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class CategoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,5 +22,9 @@ class CategoryActivity : AppCompatActivity() {
         }
 
         categoryTitleTextView.text = categoryTitle
+
+        categoryWordsRecyclerView.adapter =
+            CategoryWordsRecyclerViewRecyclerViewAdapter(this, wordArrayList)
+        categoryWordsRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 }

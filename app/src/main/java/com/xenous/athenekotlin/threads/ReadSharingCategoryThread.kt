@@ -8,7 +8,6 @@ import com.google.firebase.database.ValueEventListener
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.storage.wordsArrayList
 import com.xenous.athenekotlin.utils.*
-import java.lang.Exception
 
 class ReadSharingCategoryThread(
     private val sharingUserUid: String,
@@ -45,11 +44,13 @@ class ReadSharingCategoryThread(
 
                 for(wordSnapshot in wordsSnapshot.children) {
                     val categoryTitle = wordSnapshot.child(WORD_CATEGORY_DATABASE_KEY).value
-                    if(categoryTitle is String) {
+                    if(categoryTitle is String && categoryTitle == sharingCategoryTitle) {
                         val native = wordSnapshot.child(NATIVE_WORD_DATABASE_KEY).value
-                        val foreign = wordSnapshot.child(LEARNING_WORD_DATABASE_KEY).value
-                        if(native is String && foreign is String) {
-                            val word = Word(
+                        val foreign = wordSnapshot.child(FOREIGN_WORD_DATABASE_KEY).value
+                        val category = wordSnapshot.child(WORD_CATEGORY_DATABASE_KEY).value
+
+                        if(native is String && foreign is String && categoryTitle == category) {
+                            val sharedWord = Word(
                                 native,
                                 foreign,
                                 categoryTitle,
@@ -58,14 +59,14 @@ class ReadSharingCategoryThread(
                             )
 
                             var isNew = false
-                            for(w in wordsArrayList) {
-                                if (w == word) {
+                            for(existingWord in wordsArrayList) {
+                                if (sharedWord != existingWord) {
                                     isNew = true
                                     break
                                 }
                             }
                             if(isNew) {
-                                sharingWordsList.add(word)
+                                sharingWordsList.add(sharedWord)
                             }
                         }
                         else {
@@ -85,6 +86,8 @@ class ReadSharingCategoryThread(
                     }
                 }
 
+//                todo: del
+                Log.d("THREAD", sharingWordsList.toList().toString())
                 readSharingCategoryListener?.onSuccess(sharingWordsList.toList())
             }
 
