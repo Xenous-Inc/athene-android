@@ -99,7 +99,7 @@ class ReadClassroomThread(
                         = snapshot
                                 .child(CLASSROOMS_DATABASE_KEY)
                                 .child(classroomUid)
-                                .child(CATEGORY_REFERENCE)
+                                .child(CLASSROOM_CATEGORIES_REFERENCE)
                 for(categorySnapshot in categoriesAddressesSnapshot.children) {
                     val categoryAddress = categorySnapshot.value
                     if(categoryAddress is String) {
@@ -127,7 +127,8 @@ class ReadClassroomThread(
 
                     val wordsInCurrentCategoryList = mutableListOf<Word>()
 
-                    val wordsSnapshot = categoriesSnapshot.child(categoryAddress)
+                    val wordsSnapshot = categoriesSnapshot.child(categoryAddress).child(
+                        WORDS_REFERENCE)
                     for(wordSnapshot in wordsSnapshot.children) {
                         val foreign = wordSnapshot.child(FOREIGN_WORD_DATABASE_KEY).value
                         val native = wordSnapshot.child(NATIVE_WORD_DATABASE_KEY).value
@@ -148,10 +149,12 @@ class ReadClassroomThread(
                 }
 
                 val classroom = Classroom(
-                    teacherName,
-                    classroomName,
-                    categoriesTitleList.toList(),
-                    wordsList.toList()
+                    teacherName = teacherName,
+                    teacherKey = teacherUid,
+                    classroomName = classroomName,
+                    classroomKey = classroomUid,
+                    categoriesTitlesList = categoriesTitleList.toList(),
+                    wordsListsList = wordsList.toList()
                 )
 
                 readClassroomResultListener?.onSuccess(classroom)

@@ -267,7 +267,6 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
         )
     }
 
-
     private fun View.clearFragmentAfterWord(onClearEnd: (() -> Unit)? = null) {
         val titleTextView = findViewById<TextView>(R.id.wordsCheckTitleTextView)
         val translationsLinearLayout = findViewById<LinearLayout>(R.id.wordsCheckTranslationsLinearLayout)
