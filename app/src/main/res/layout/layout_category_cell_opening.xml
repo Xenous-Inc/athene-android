@@ -30,7 +30,6 @@
                 android:gravity="start|center_vertical"
                 android:paddingStart="@dimen/textview_secondary_padding"
                 android:tag="animation3"
-                android:text="Название категории"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/primary_text_size"
                 android:transitionName="@string/category_title_transition_name"

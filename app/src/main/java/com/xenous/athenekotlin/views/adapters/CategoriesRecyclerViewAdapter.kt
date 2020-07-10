@@ -3,6 +3,7 @@ package com.xenous.athenekotlin.views.adapters
 import android.app.Activity
 import android.content.Intent
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -56,6 +57,15 @@ class CategoriesRecyclerViewAdapter(
             CategoryCellOpening.Builder().build(activity.layoutInflater)
         categoryCellOpeningMutableList.add(categoryCellOpening)
 
+        categoryCellOpening.view.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                categoryCellOpening.setExpandedSize(categoryCellOpening.actionsLinearLayout)
+                categoryCellOpening.collapse(0)
+
+                categoryCellOpening.view.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+
         return CategoriesRecyclerViewHolder(categoryCellOpening)
     }
 
@@ -64,28 +74,26 @@ class CategoriesRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: CategoriesRecyclerViewHolder, position: Int) {
-        holder.bind(notNoNameCategories[position])
+        holder.bind(notNoNameCategories[position], position)
     }
 
 
     inner class CategoriesRecyclerViewHolder(private val categoryCellOpening: CategoryCellOpening) : RecyclerView.ViewHolder(categoryCellOpening.view) {
         private val categoryCardView: CardView = categoryCellOpening.cardView
         private val categoryTitleTextView: TextView = categoryCellOpening.titleTextView
-        private val categoryActionsLinearLayout: LinearLayout = categoryCellOpening.actionsLinearLayout
+        private val actionsLinearLayout: LinearLayout = categoryCellOpening.actionsLinearLayout
         private val actionAddToLearningLinearLayout: LinearLayout = categoryCellOpening.actionAddToLearningLinearLayout
         private val actionShareLinearLayout: LinearLayout = categoryCellOpening.actionShareLinearLayout
         private val actionMoreDetailsLinearLayout: LinearLayout = categoryCellOpening.actionMoreDetailsLinearLayout
         private val actionDeleteLinearLayout: LinearLayout = categoryCellOpening.actionDeleteLinearLayout
 
-        fun bind(category: Category) {
-            categoryCellOpening.collapse()
+        fun bind(category: Category, position: Int) {
+//            categoryCellOpening.collapse(0)
+
             categoryTitleTextView.text = category.title
             categoryCardView.setOnClickListener {_ ->
                 categoryCellOpening.expand()
-
-                categoryCellOpeningMutableList.forEach {
-                    if(it != categoryCellOpening) { it.collapse() }
-                }
+                categoryCellOpeningMutableList.forEach { if(it != categoryCellOpening) it.collapse() }
             }
 
             actionAddToLearningLinearLayout.setOnClickListener {

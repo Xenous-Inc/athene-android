@@ -6,10 +6,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.utils.USERS_REFERENCE
 import com.xenous.athenekotlin.utils.WORDS_REFERENCE
-import com.xenous.athenekotlin.utils.WORD_LAST_DATE_DATABASE_KEY
-import com.xenous.athenekotlin.utils.WORD_LEVEL_DATABASE_KEY
-import java.lang.Exception
-import java.lang.NullPointerException
 
 class UpdateWordThread(
     private val word: Word
@@ -52,7 +48,7 @@ class UpdateWordThread(
             .child(USERS_REFERENCE)
             .child(firebaseUser.uid)
             .child(WORDS_REFERENCE)
-            .child(word.uid)
+            .child(word.uid!!)
 
 
         reference.setValue(word.toMap())
