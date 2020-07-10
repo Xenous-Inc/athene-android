@@ -1,11 +1,13 @@
 package com.xenous.athenekotlin.threads
 
+import android.os.Handler
+import android.os.Message
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.xenous.athenekotlin.data.Word
-import com.xenous.athenekotlin.utils.USERS_REFERENCE
-import com.xenous.athenekotlin.utils.WORDS_REFERENCE
+import com.xenous.athenekotlin.utils.*
+import java.lang.Exception
 
 class DeleteWordThread(
     private val word: Word?
@@ -57,7 +59,8 @@ class DeleteWordThread(
             .child(USERS_REFERENCE)
             .child(user.uid)
             .child(WORDS_REFERENCE)
-            .child(word.uid)
+            .child(word.uid!!)
+
 
         reference
             .removeValue()

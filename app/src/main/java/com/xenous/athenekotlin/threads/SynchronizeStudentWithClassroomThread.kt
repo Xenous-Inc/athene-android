@@ -7,6 +7,7 @@ import com.xenous.athenekotlin.data.Student
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.storage.getCategoriesArrayListWithDefault
 import com.xenous.athenekotlin.utils.*
+import java.lang.Exception
 
 class SynchronizeStudentWithClassroomThread(
     private val teacherKey: String,
@@ -15,13 +16,25 @@ class SynchronizeStudentWithClassroomThread(
     private val classroom: Classroom
 ) {
     interface SynchronizeStudentWithClassroomListener {
+        fun onSuccessAddedToClassroom() { }
 
+        fun onSuccessSynchronize() { }
+
+        fun onFailureAddedToClassroom(exception: Exception)
+
+        fun onFailureSynchronize(exception: Exception)
+
+        fun onCanceled() { }
+    }
+
+    private var synchronizeStudentWithClassroomListener: SynchronizeStudentWithClassroomListener? = null
+
+    fun setSynchronizeStudentWithClassroomListener(
+        synchronizeStudentWithClassroomListener: SynchronizeStudentWithClassroomListener
+    ) {
     }
 
     fun run() {
-
-
-
 
     }
 
