@@ -8,6 +8,7 @@ import com.google.firebase.database.ValueEventListener
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.storage.wordsArrayList
 import com.xenous.athenekotlin.utils.*
+import java.lang.Exception
 
 class ReadSharingCategoryThread(
     private val sharingUserUid: String,
@@ -60,7 +61,7 @@ class ReadSharingCategoryThread(
 
                             var isNew = false
                             for(existingWord in wordsArrayList) {
-                                if (sharedWord != existingWord) {
+                                if(sharedWord != existingWord) {
                                     isNew = true
                                     break
                                 }
@@ -86,8 +87,6 @@ class ReadSharingCategoryThread(
                     }
                 }
 
-//                todo: del
-                Log.d("THREAD", sharingWordsList.toList().toString())
                 readSharingCategoryListener?.onSuccess(sharingWordsList.toList())
             }
 

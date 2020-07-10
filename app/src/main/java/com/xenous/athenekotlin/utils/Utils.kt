@@ -27,6 +27,8 @@ const val TEACHER_NAME_DATABASE_KEY = "name"
 const val CLASSROOM_REFERENCE = "class"
 const val CLASSROOMS_DATABASE_KEY = "classes"
 const val CLASSROOM_NAME_DATABASE_KEY = "name"
+const val STUDENT_NAME_DATABASE_KEY = "name"
+const val STUDENT_KEY_DATABASE_KEY = "id"
 
 const val CLASSROOM_CATEGORY_NAME_DATABASE_KEY = "name"
 

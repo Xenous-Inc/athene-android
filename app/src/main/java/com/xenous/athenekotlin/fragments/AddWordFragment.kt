@@ -127,6 +127,7 @@ class AddWordFragment: Fragment() {
                                 atheneDialog.show()
                             }
                         })
+                        addCategoryThread.run()
                     }
                     else {
                         openingView.categoryChosenTextView.text = category.title
@@ -156,8 +157,8 @@ class AddWordFragment: Fragment() {
             val categoryText = openingView.categoryChosenTextView.text.toString()
 
             val word = Word(
-                foreignWordText,
                 nativeWordText,
+                foreignWordText,
                 categoryText,
                 getCurrentDateTimeInMills() + Word.LEVEL_DAY
             )

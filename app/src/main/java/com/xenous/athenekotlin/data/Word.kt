@@ -13,7 +13,7 @@ data class Word(
     var category: String = "Без категории",
     var lastDateCheck: Long = 0,
     var level: Long = 0,
-    val uid: String? = null
+    var uid: String? = null
 ) : Parcelable {
     companion object  CREATOR : Parcelable.Creator<Word> {
         override fun createFromParcel(parcel: Parcel): Word {
