@@ -3,12 +3,16 @@ package com.xenous.athenekotlin.utils
 import android.animation.Animator
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Message
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.StrikethroughSpan
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.EditText
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.animation.addListener
@@ -123,6 +127,7 @@ fun View.slideInFromLeft(
 }
 
 fun View.slideInFromRight(
+    delay: Long = 0,
     duration: Long = ANIMATION_DURATION,
     onAnimationStart: (() -> Unit)? = null,
     onAnimationEnd: (() -> Unit)? = null
@@ -146,6 +151,8 @@ fun View.slideInFromRight(
     }
     view.startAnimation(animation)
 }
+
+
 
 fun View.slideInFromTop(
     duration: Long = ANIMATION_DURATION,
@@ -276,6 +283,45 @@ fun View.slideOutToRight(
     if(view.isVisible) {
         view.startAnimation(animation)
     }
+}
+
+fun EditText.clearInputLetterByLetter(
+    duration: Long = ANIMATION_DURATION,
+    onAnimationStart: (() -> Unit)? = null,
+    onAnimationEnd: (() -> Unit)? = null
+) {
+    val CLEAR_CONTINUE = 9076
+    val CLEAR_END = 9078
+
+    val editText = this
+    val letterClearDuration = duration / editText.text.toString().length
+
+    @SuppressLint("HandlerLeak")
+    val handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+
+            when(msg.what) {
+                CLEAR_CONTINUE -> {
+                    val textString = editText.text.toString()
+                    editText.setText(
+                        if(textString.isNotEmpty()) textString.subSequence(0, textString.length-1)
+                        else ""
+                    )
+                }
+                CLEAR_END -> onAnimationEnd?.let { it() }
+            }
+        }
+    }
+
+    onAnimationStart?.let { it() }
+    Thread {
+        while(editText.text.toString().length > 1) {
+            Thread.sleep(letterClearDuration)
+            handler.sendEmptyMessage(CLEAR_CONTINUE)
+        }
+        handler.sendEmptyMessage(CLEAR_END)
+    }.start()
 }
 
 fun CardView.animateCardBackgroundColorTo(

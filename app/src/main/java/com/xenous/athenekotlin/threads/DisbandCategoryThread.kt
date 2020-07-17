@@ -1,23 +1,23 @@
 package com.xenous.athenekotlin.threads
 
+import android.content.Context
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
+import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Word
+import com.xenous.athenekotlin.storage.storedInStorageCategoriesArrayList
 import com.xenous.athenekotlin.utils.CATEGORY_REFERENCE
 import com.xenous.athenekotlin.utils.USERS_REFERENCE
 import com.xenous.athenekotlin.utils.WORDS_REFERENCE
 import com.xenous.athenekotlin.utils.WORD_CATEGORY_DATABASE_KEY
-import java.lang.Exception
-import java.lang.NullPointerException
-import java.util.*
 
 class DisbandCategoryThread(
     private val category: Category,
-    private val wordsInCurrentCategoryList: List<Word>
+    private val wordsInCurrentCategoryList: List<Word>,
+    val context: Context
 ) {
     private companion object {
         const val TAG = "DisbandCategory"
@@ -32,6 +32,10 @@ class DisbandCategoryThread(
     }
 
     private var onDisbandCategoryListener: OnDisbandCategoryListener? = null
+
+    fun setOnOnDisbandCategoryListener(onDisbandCategoryListener: OnDisbandCategoryListener) {
+        this.onDisbandCategoryListener = onDisbandCategoryListener
+    }
 
     fun run() {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
@@ -49,8 +53,8 @@ class DisbandCategoryThread(
             return
         }
 
-        val categoryReference
-                = FirebaseDatabase.getInstance().reference
+        val categoryReference =
+            FirebaseDatabase.getInstance().reference
                     .child(USERS_REFERENCE)
                     .child(firebaseUser.uid)
                     .child(CATEGORY_REFERENCE)
@@ -60,6 +64,8 @@ class DisbandCategoryThread(
             .addOnSuccessListener {
                 Log.d(TAG, "Category has been removed completely")
 
+                storedInStorageCategoriesArrayList.remove(category)
+                onDisbandCategoryListener?.onSuccess()
                 disbandWords(firebaseUser)
             }
             .addOnFailureListener {
@@ -89,18 +95,15 @@ class DisbandCategoryThread(
             reference
                 .child(word.uid!!)
                 .child(WORD_CATEGORY_DATABASE_KEY)
-                .setValue("Без категории") // ToDo: Add constant
+                .setValue(context.getString(R.string.no_category))
                 .addOnSuccessListener {
                     Log.d(TAG, "Word's category has been disbanded successfully updated")
-//                  ToDo: Solve problem with interfaces
                 }
                 .addOnFailureListener {
                     Log.d(TAG, "Error while disbanding word's category. The error is ${it.message}")
-//                  ToDo: Solve problem with interfaces
                 }
                 .addOnCanceledListener {
                     Log.d(TAG, "Transaction canceled")
-//                  ToDo: Solve problem with interfaces
                 }
         }
 

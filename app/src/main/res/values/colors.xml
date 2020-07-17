@@ -3,14 +3,21 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#A99BFE</color>
     <color name="colorAccent">#80FFFFFF</color>
+    <color name="colorAccentInverse">#888FFE</color>
 
     <color name="colorTextAccent">#888FFE</color>
     <color name="colorTextPrimary">@android:color/white</color>
     <color name="colorTextSecondary">#AAFFFFFF</color>
     <color name="colorTextShadowed">#50FFFFFF</color>
 
+    <color name="colorEigengrau">#16161d</color>
     <color name="colorBackgroundTransparent">#70FFFFFF</color>
 
     <color name="colorIncorrect">#F84291</color>
     <color name="colorCorrect">#3BFFB6</color>
+
+    <color name="colorPurple800">#9250FB</color>
+    <color name="colorPurple600">#9958FE</color>
+    <color name="colorPurple400">#9387FE</color>
+    <color name="colorPurple200">#9892FE</color>
 </resources>

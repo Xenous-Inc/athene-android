@@ -47,9 +47,11 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
 //    Firebase Analytics
-    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+    implementation 'com.google.firebase:firebase-analytics:17.4.4'
 //    Firebase Auth
-    implementation 'com.google.firebase:firebase-auth-ktx:19.3.1'
+    implementation 'com.google.firebase:firebase-auth-ktx:19.3.2'
+//    Firebase Dynamic Links
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
 //    Play Services Auth
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
 //    Firebase Realtime Database
@@ -60,7 +62,9 @@ dependencies {
     implementation 'nl.dionsegijn:konfetti:1.2.0'
 //    ViewPager Dots Indicator
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
-//    Firebase Dynamic Links
-    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
+//    SwipeToRefresh Layout
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+//    Lottie
+    implementation "com.airbnb.android:lottie:3.4.1"
 
 }

@@ -3,7 +3,8 @@
 <!--    Common Text Size    -->
     <dimen name="accent_text_size">28sp</dimen>
     <dimen name="primary_text_size">23sp</dimen>
-    <dimen name="secondary_text_size">20sp</dimen>
+    <dimen name="secondary_text_size">19sp</dimen>
+    <dimen name="toast_text_size">16sp</dimen>
     <dimen name="hint_text_size">14sp</dimen>
 
 <!--    Views paddings and margins    -->

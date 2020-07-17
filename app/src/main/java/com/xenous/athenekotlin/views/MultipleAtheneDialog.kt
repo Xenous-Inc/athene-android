@@ -5,10 +5,13 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.xenous.athenekotlin.R
 import kotlinx.android.synthetic.main.layout_multiple_athene_dialog.*
+import kotlinx.android.synthetic.main.layout_multiple_athene_dialog_action_textview.view.*
 
 class MultipleAtheneDialog(
     private val context: Context
@@ -16,15 +19,13 @@ class MultipleAtheneDialog(
     /*  Initial Block   */
     private val dialog = Dialog(context)
 
-    private val messageTextView: TextView
-    private val negativeAnswerTextView: TextView
     private val actionsLinearLayout: LinearLayout
 
     init {
         dialog.setContentView(R.layout.layout_multiple_athene_dialog)
 
-        messageTextView = dialog.multipleAtheneDialogMessageTextView
-        negativeAnswerTextView = dialog.multipleAtheneDialogNegativeAnswerTextView
+//        messageTextView = dialog.multipleAtheneDialogMessageTextView
+//        negativeAnswerTextView = dialog.multipleAtheneDialogNegativeAnswerTextView
         actionsLinearLayout = dialog.multipleAtheneDialogActionsLinearLayout
     }
 
@@ -39,26 +40,36 @@ class MultipleAtheneDialog(
     }
 
     fun build(): MultipleAtheneDialog {
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        messageTextView.text = this.message
-        negativeAnswerTextView.text = this.negativeAnswer
-        negativeAnswerTextView.setOnClickListener { dismiss() }
         for (action in actions) {
-            val actionTextView =
+            val actionLinearLayout =
                 LayoutInflater.from(context)
-                    .inflate(R.layout.layout_multiple_athene_dialog_action_textview, null, false) as TextView
+                    .inflate(R.layout.layout_multiple_athene_dialog_action_textview, null, false) as LinearLayout
 
-            actionTextView.text = action.first
-            actionTextView.setOnClickListener { action.second.onItemClick() }
-            actionsLinearLayout.addView(actionTextView)
+            if(actions.first() == action) { actionLinearLayout.actionDivider.visibility = View.GONE }
+            actionLinearLayout.actionTitleTextView.text = action.first
+            actionLinearLayout.setOnClickListener { action.second.onItemClick() }
+            actionsLinearLayout.addView(actionLinearLayout)
         }
 
         return this
     }
 
     fun show() {
-        this.dialog.show()
+        dialog.show()
+
+        dialog.multipleAtheneDialogActionsLinearLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                dialog.window?.setLayout(
+                    dialog.multipleAtheneDialogActionsLinearLayout.width,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+
+                dialog.multipleAtheneDialogActionsLinearLayout
+                    .viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
     }
 
     fun dismiss() {

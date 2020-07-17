@@ -28,7 +28,7 @@ const val CLASSROOM_REFERENCE = "class"
 const val CLASSROOMS_DATABASE_KEY = "classes"
 const val CLASSROOM_NAME_DATABASE_KEY = "name"
 const val CLASSROOM_CATEGORIES_REFERENCE = "categories"
-const val STUDENT_NAME_DATABASE_NAME = "name"
+const val STUDENT_NAME_DATABASE_KEY = "name"
 const val STUDENT_KEY_DATABASE_KEY = "id"
 
 const val CLASSROOM_CATEGORY_NAME_DATABASE_KEY = "name"
@@ -39,7 +39,7 @@ const val WORD_CATEGORY_DATABASE_KEY = "category"
 const val WORD_LAST_DATE_DATABASE_KEY = "date"
 const val WORD_LEVEL_DATABASE_KEY = "level"
 
-val forbiddenSymbols = listOf('@', '.', ',', '_', ';', ':', '*', '%', '#', '"', '[', ']')
+val forbiddenSymbols = listOf('@', '_', ';', ':', '*', '%', '#', '"', '[', ']')
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 fun createNotificationChannel(c: Context) {
@@ -59,7 +59,7 @@ fun createNotificationChannel(c: Context) {
     notificationManager.createNotificationChannel(channel)
 }
 
-fun getCurrentDateTimeInMills(): Long {
+fun getCurrentDateTimeAtZeroHoursInMills(): Long {
     val calendar = Calendar.getInstance()
     calendar.set(Calendar.HOUR_OF_DAY, 0)
     calendar.set(Calendar.MINUTE, 0)

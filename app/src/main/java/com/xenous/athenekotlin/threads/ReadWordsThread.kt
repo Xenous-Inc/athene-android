@@ -20,7 +20,7 @@ class ReadWordsThread {
     interface ReadWordsResultListener {
         fun onSuccess(wordsList: List<Word>, categoriesList: List<Category>)
 
-        fun onFailure(exception: Exception) {}
+        fun onFailure(exception: Exception)
 
         fun onError(error: DatabaseError)
     }

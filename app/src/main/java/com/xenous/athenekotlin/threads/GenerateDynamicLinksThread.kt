@@ -94,7 +94,7 @@ class GenerateDynamicLinksThread(
     }
 
     private fun generateLink(): URI? {
-        val uri = "https://athene.page.link"
+        val uri = "https://athene.page.link/category"
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         if(currentUser == null) {
@@ -104,7 +104,7 @@ class GenerateDynamicLinksThread(
             return null
         }
 
-        var currentUri = appendQueryParameters(uri, USER_REFERENCE, currentUser.toString())
+        var currentUri = appendQueryParameters(uri, USER_REFERENCE, currentUser.uid)
         currentUri = appendQueryParameters(currentUri.toString(), WORD_CATEGORY_DATABASE_KEY, categoryTitle)
 
         return currentUri

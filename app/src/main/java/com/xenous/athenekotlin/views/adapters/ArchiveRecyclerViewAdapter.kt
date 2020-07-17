@@ -23,9 +23,9 @@ class ArchiveRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ArchiveRecyclerViewHolder, position: Int) {
         val stringBuilder = StringBuilder()
         stringBuilder
-            .append(archivedWordList[position].native)
-            .append(" - ")
             .append(archivedWordList[position].foreign)
+            .append(" - ")
+            .append(archivedWordList[position].native)
 
         holder.archiveWordTextView.text = stringBuilder.toString()
     }

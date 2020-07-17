@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/categoryChooseCardView"
@@ -8,12 +7,12 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    app:cardBackgroundColor="@android:color/black"
     android:layout_marginBottom="12dp"
-    card_view:rippleColor="#cfd8dc"
-    app:contentPadding="2dp"
+    app:cardBackgroundColor="@color/colorEigengrau"
     app:cardCornerRadius="@dimen/cardview_corner_radius"
-    app:cardElevation="0dp">
+    app:cardElevation="0dp"
+    app:contentPadding="2dp"
+    card_view:rippleColor="#cfd8dc">
 
 
     <TextView
@@ -21,12 +20,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:tag="animatedTagOne"
         android:layout_marginStart="@dimen/textview_secondary_padding"
         android:layout_marginTop="@dimen/textview_primary_padding"
         android:layout_marginEnd="@dimen/textview_secondary_padding"
         android:layout_marginBottom="@dimen/textview_primary_padding"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="3"
+        android:tag="animatedTagOne"
         android:textColor="@android:color/white"
         android:textSize="@dimen/secondary_text_size" />
 

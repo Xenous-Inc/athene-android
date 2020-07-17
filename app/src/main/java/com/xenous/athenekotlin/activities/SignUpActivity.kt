@@ -1,5 +1,6 @@
 package com.xenous.athenekotlin.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,12 +11,15 @@ import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.utils.isEmailValid
+import kotlinx.android.synthetic.main.activity_sign_in.*
+import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignUpActivity : AppCompatActivity() {
     companion object {
@@ -52,15 +56,23 @@ class SignUpActivity : AppCompatActivity() {
         val confirmPassword = confirmPasswordEditText.text.toString()
 
         if(!isEmailValid(email)) {
-            Toast
-                .makeText(this, getString(R.string.sign_up_email_is_invalid), Toast.LENGTH_LONG)
-                .show()
+            val toast = Toast(this)
+            toast.duration = Toast.LENGTH_LONG
+            toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+            toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                getString(R.string.sign_up_email_is_invalid)
+            toast.show()
+
             return@OnClickListener
         }
         if(password != confirmPassword) {
-            Toast
-                .makeText(this, getString(R.string.sign_up_passwords_do_not_match), Toast.LENGTH_LONG)
-                .show()
+            val toast = Toast(this)
+            toast.duration = Toast.LENGTH_LONG
+            toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+            toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                getString(R.string.sign_up_passwords_do_not_match)
+            toast.show()
+
             return@OnClickListener
         }
 
@@ -78,9 +90,26 @@ class SignUpActivity : AppCompatActivity() {
                 updateUI(currentUser)
             }
             .addOnFailureListener {
+                val toast = Toast(this)
+                toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                toast.duration = Toast.LENGTH_LONG
+
+                toast.view.findViewById<TextView>(R.id.toastTextView).text = when(it) {
+                    is FirebaseAuthUserCollisionException ->
+                        getString(R.string.firebase_auth_exception_user_collision_toast_message)
+                    is FirebaseNetworkException ->
+                        getString(R.string.firebase_auth_exception_network_error_toast_message)
+                    is FirebaseAuthWeakPasswordException ->
+                        getString(R.string.firebase_auth_exception_weak_password_toast_message)
+                    else ->
+                        getString(R.string.firebase_auth_exception_unknown_error_toast_message)
+                }
+                Log.d(TAG, "${it::class.java}: $it")
+
+                toast.show()
+
+                signUpImageView.setImageDrawable(getDrawable(R.drawable.ic_continue_white))
                 clickBlocker?.visibility = View.GONE
-                Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
-//                todo: handle exception
             }
     }
 
@@ -106,7 +135,13 @@ class SignUpActivity : AppCompatActivity() {
     private fun updateUI(currentUser: FirebaseUser) {
 //            User email is verified, start MainActivity
         if (currentUser.isEmailVerified) {
-            val intent = Intent(this, MainActivity::class.java)
+            val isTutorialPassed =
+                getSharedPreferences(getString(R.string.shared_pref_tutorial_key), Context.MODE_PRIVATE)
+                    .getBoolean(getString(R.string.shared_pref_tutorial_key), false)
+
+            val intent: Intent =
+                if(!isTutorialPassed) Intent(this, TutorialActivity::class.java)
+                else Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         }
@@ -114,28 +149,29 @@ class SignUpActivity : AppCompatActivity() {
         else {
             currentUser.sendEmailVerification()
                 .addOnSuccessListener {
-                    Toast
-                        .makeText(
-                            this,
-                            getString(R.string.verification_successfully_sent_verification_letter),
-                            Toast.LENGTH_LONG
-                        )
-                        .show()
+                    val toast = Toast(this)
+                    toast.duration = Toast.LENGTH_LONG
+                    toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                    toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                        getString(R.string.verification_successfully_sent_verification_letter)
+                    toast.show()
+
                     val intent = Intent(this, VerificationActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                 }
                 .addOnFailureListener { exception ->
-//                    todo: handle error
-                    clickBlocker?.visibility = View.GONE
                     Log.d(TAG, "Failed to send verification letter. $exception")
-                    Toast
-                        .makeText(
-                            this,
-                            getString(R.string.verification_failed_to_send_verification_letter),
-                            Toast.LENGTH_LONG
-                        )
-                        .show()
+
+                    val toast = Toast(this)
+                    toast.duration = Toast.LENGTH_LONG
+                    toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                    toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                        getString(R.string.verification_failed_to_send_verification_letter)
+                    toast.show()
+
+                    signUpImageView.setImageDrawable(getDrawable(R.drawable.ic_continue_white))
+                    clickBlocker?.visibility = View.GONE
                 }
         }
     }
@@ -146,13 +182,45 @@ class SignUpActivity : AppCompatActivity() {
 
         if(requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+
             try {
-                val account = task.getResult(ApiException::class.java)!!
-                firebaseAuthWithGoogle(account.idToken!!)
+                val account = task.getResult(ApiException::class.java)
+                if (account != null && account.idToken != null) {
+                    firebaseAuthWithGoogle(account.idToken!!)
+                }
+                else {
+                    throw NullPointerException("An account or it's idToken is null")
+                }
             }
-            catch(e: Exception) {
+            catch (e: ApiException) {
+                val toast = Toast(this)
+                toast.duration = Toast.LENGTH_LONG
+                toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                toast.view.findViewById<TextView>(R.id.toastTextView).text = when (e.statusCode) {
+                    CommonStatusCodes.TIMEOUT ->
+                        getString(R.string.api_exception_timeout_toast_message)
+                    CommonStatusCodes.NETWORK_ERROR ->
+                        getString(R.string.api_exception_network_error_toast_message)
+                    CommonStatusCodes.INVALID_ACCOUNT ->
+                        getString(R.string.api_exception_invalid_account_toast_message)
+                    else ->
+                        getString(R.string.api_exception_unknown_error_toast_message)
+                }
+                toast.show()
+
+                signUpWithGoogleImageView.setImageDrawable(getDrawable(R.drawable.ic_google_sign_in))
                 clickBlocker?.visibility = View.GONE
-//                todo: handle error
+            }
+            catch (e: NullPointerException) {
+                val toast = Toast(this)
+                toast.duration = Toast.LENGTH_LONG
+                toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                    getString(R.string.api_exception_unknown_error_toast_message)
+                toast.show()
+
+                signUpWithGoogleImageView.setImageDrawable(getDrawable(R.drawable.ic_google_sign_in))
+                clickBlocker?.visibility = View.GONE
             }
         }
     }
@@ -161,12 +229,40 @@ class SignUpActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         Firebase.auth.signInWithCredential(credential)
             .addOnSuccessListener { authResult ->
-                val currentUser = authResult.user!!
-                updateUI(currentUser)
+                try {
+                    val currentUser = authResult.user!!
+                    updateUI(currentUser)
+                }
+                catch(e: NullPointerException) {
+                    val toast = Toast(this)
+                    toast.duration = Toast.LENGTH_LONG
+                    toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                    toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                        getString(R.string.api_exception_unknown_error_toast_message)
+                    toast.show()
+
+                    signUpWithGoogleImageView.setImageDrawable(getDrawable(R.drawable.ic_google_sign_in))
+                    clickBlocker?.visibility = View.GONE
+                }
             }
             .addOnFailureListener {
+                val toast = Toast(this)
+                toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                toast.duration = Toast.LENGTH_LONG
+
+                toast.view.findViewById<TextView>(R.id.toastTextView).text = when(it) {
+                    is FirebaseAuthInvalidUserException ->
+                        getString(R.string.firebase_auth_exception_invalid_user_toast_message)
+                    is FirebaseAuthUserCollisionException ->
+                        getString(R.string.firebase_auth_exception_user_collision_toast_message)
+                    else ->
+                        getString(R.string.firebase_auth_exception_unknown_error_toast_message)
+                }
+
+                toast.show()
+
+                signInWithGoogleImageView.setImageDrawable(getDrawable(R.drawable.ic_google_sign_in))
                 clickBlocker?.visibility = View.GONE
-//                todo: handle error
             }
     }
 }

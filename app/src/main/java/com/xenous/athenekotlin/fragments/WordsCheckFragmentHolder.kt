@@ -14,6 +14,8 @@ import com.xenous.athenekotlin.views.AtheneDialog
 
 class WordsCheckFragmentHolder : Fragment() {
 
+    var wordsCheckFragment: WordsCheckFragment? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,11 +35,19 @@ class WordsCheckFragmentHolder : Fragment() {
         index: Int = 0
     ) {
         val word = if(index < words.size) words[index] else null
-        val wordsCheckFragment = WordsCheckFragment(word, isLast = (index == words.size -1))
-        wordsCheckFragment.onWordCheckStateChangeListener = object : WordsCheckFragment.OnWordCheckStateChangeListener {
+        wordsCheckFragment = WordsCheckFragment(word, isLast = (index == words.size -1))
+        wordsCheckFragment!!.onWordCheckStateChangeListener = object : WordsCheckFragment.OnWordCheckStateChangeListener {
             override fun onWordChecked() {
                 if(index <= words.size - 1) {
                     startWordsCheck(words, index + 1)
+                }
+            }
+
+            override fun onWordDelete() {
+                wordsCheckFragment!!.clearFragmentAfterWord {
+                    if(index <= words.size - 1) {
+                        startWordsCheck(words, index + 1)
+                    }
                 }
             }
 
@@ -60,10 +70,10 @@ class WordsCheckFragmentHolder : Fragment() {
 
         val fragmentTransaction = fragmentManager?.beginTransaction()
         if(index == 0) {
-            fragmentTransaction?.add(R.id.wordsCheckHolderFrameLayout, wordsCheckFragment)
+            fragmentTransaction?.add(R.id.wordsCheckHolderFrameLayout, wordsCheckFragment!!)
         }
         else {
-            fragmentTransaction?.replace(R.id.wordsCheckHolderFrameLayout, wordsCheckFragment)
+            fragmentTransaction?.replace(R.id.wordsCheckHolderFrameLayout, wordsCheckFragment!!)
         }
         fragmentTransaction?.commit()
     }
@@ -84,5 +94,11 @@ class WordsCheckFragmentHolder : Fragment() {
             }
         })
         updateWordThread.run()
+    }
+
+    fun notifyDataSetChanged() {
+        if(wordsCheckFragment != null) {
+            wordsCheckFragment!!.notifyDataSetChanged()
+        }
     }
 }

@@ -6,9 +6,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.github.ybq.android.spinkit.SpinKitView
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseError
@@ -22,21 +25,22 @@ import com.xenous.athenekotlin.data.Student
 import com.xenous.athenekotlin.data.Word
 import com.xenous.athenekotlin.exceptions.UserIsAlreadyInClassroomException
 import com.xenous.athenekotlin.fragments.FragmentsViewPagerAdapter
-import com.xenous.athenekotlin.storage.categoriesArrayList
 import com.xenous.athenekotlin.storage.checkingWordsArrayList
 import com.xenous.athenekotlin.storage.getCategoriesArrayListWithDefault
-import com.xenous.athenekotlin.storage.wordsArrayList
+import com.xenous.athenekotlin.storage.storedInStorageCategoriesArrayList
+import com.xenous.athenekotlin.storage.storedInStorageWordsArrayList
 import com.xenous.athenekotlin.threads.*
 import com.xenous.athenekotlin.utils.USER_REFERENCE
 import com.xenous.athenekotlin.utils.WORD_CATEGORY_DATABASE_KEY
-import com.xenous.athenekotlin.utils.getCurrentDateTimeInMills
+import com.xenous.athenekotlin.utils.getCurrentDateTimeAtZeroHoursInMills
 import com.xenous.athenekotlin.views.AtheneDialog
+import kotlinx.android.synthetic.main.activity_main.*
 import nl.dionsegijn.konfetti.KonfettiView
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewPager: ViewPager
+    private var viewPager: ViewPager? = null
     private lateinit var spinKitView: SpinKitView
     private lateinit var dotsIndicator: DotsIndicator
 
@@ -72,6 +76,70 @@ class MainActivity : AppCompatActivity() {
         spinKitView = findViewById(R.id.spinKitView)
         viewPager = findViewById(R.id.viewPager)
 
+        swipeRefreshLayout.setColorSchemeResources(
+            R.color.colorPurple200,
+            R.color.colorPurple400,
+            R.color.colorPurple600,
+            R.color.colorPurple800
+        )
+        swipeRefreshLayout.setOnRefreshListener {
+            val readWordsThread = ReadWordsThread()
+            readWordsThread.setDownloadWordResultListener(object : ReadWordsThread.ReadWordsResultListener {
+                override fun onSuccess(wordsList: List<Word>, categoriesList: List<Category>) {
+                    storedInStorageCategoriesArrayList =
+                        if(categoriesList.isNotEmpty()) categoriesList.toMutableList() as ArrayList
+                        else arrayListOf()
+
+                    storedInStorageWordsArrayList =
+                        if(wordsList.isNotEmpty()) wordsList.toMutableList() as ArrayList
+                        else arrayListOf()
+
+                    swipeRefreshLayout.isRefreshing = false
+                    viewPager?.let { pager ->
+                        pager.adapter?.let { adapter ->
+                            (adapter as FragmentsViewPagerAdapter).notifyDataSetChanged()
+                        }
+                    }
+                }
+
+                override fun onFailure(exception: Exception) {
+                    if(exception is FirebaseNetworkException) {
+                        val intent = Intent(this@MainActivity, LoadingActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+
+                        return
+                    }
+
+                    val toast = Toast(this@MainActivity)
+                    toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                    toast.duration = Toast.LENGTH_LONG
+                    toast.view.findViewById<TextView>(R.id.toastTextView).text = getString(R.string.database_error_unknown_error_toast_message)
+                    toast.show()
+                }
+
+                override fun onError(error: DatabaseError) {
+                    if(
+                        error.code == DatabaseError.DISCONNECTED ||
+                        error.code == DatabaseError.NETWORK_ERROR
+                    ) {
+                        val intent = Intent(this@MainActivity, LoadingActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+
+                        return
+                    }
+
+                    val toast = Toast(this@MainActivity)
+                    toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                    toast.duration = Toast.LENGTH_LONG
+                    toast.view.findViewById<TextView>(R.id.toastTextView).text = getString(R.string.database_error_unknown_error_toast_message)
+                    toast.show()
+                }
+            })
+            readWordsThread.run()
+        }
+
 //      Read Word Thread
         val readWordsThread = ReadWordsThread()
         readWordsThread.setDownloadWordResultListener(object : ReadWordsThread.ReadWordsResultListener {
@@ -82,18 +150,31 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "Words List Size is ${wordsList.size}")
                 Log.d(TAG, "Categories List Size is ${categoriesList.size}")
 
-                wordsArrayList = wordsList.toMutableList()
-                categoriesArrayList = categoriesList.toMutableList()
+                storedInStorageWordsArrayList = wordsList.toMutableList()
+                storedInStorageCategoriesArrayList = categoriesList.toMutableList()
                 checkingWordsArrayList = initWordsToCheck(wordsList)
 
 //              Optimize View Pager
-                viewPager.adapter = FragmentsViewPagerAdapter(supportFragmentManager, 0)
-                viewPager.offscreenPageLimit = 1
-                viewPager.currentItem = 1
+                viewPager?.adapter = FragmentsViewPagerAdapter(supportFragmentManager, 0)
+                viewPager?.offscreenPageLimit = 4
+                viewPager?.currentItem = 1
+                viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                    override fun onPageSelected(position: Int) {
+                        notifyDataSetChange()
+                    }
+
+                    override fun onPageScrollStateChanged(state: Int) {  }
+
+                    override fun onPageScrolled(
+                        position: Int,
+                        positionOffset: Float,
+                        positionOffsetPixels: Int
+                    ) {  }
+                })
 
 //              Connect
                 dotsIndicator = findViewById(R.id.dotsIndicator)
-                dotsIndicator.setViewPager(viewPager)
+                viewPager?.let { dotsIndicator.setViewPager(it) }
                 dotsIndicator.visibility = View.VISIBLE
 
                 spinKitView.visibility = View.INVISIBLE
@@ -101,11 +182,56 @@ class MainActivity : AppCompatActivity() {
                 parseDynamicLink(intent)
             }
 
+            override fun onFailure(exception: Exception) {
+                if(exception is FirebaseNetworkException) {
+                    val intent = Intent(this@MainActivity, LoadingActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+
+                    return
+                }
+
+                val toast = Toast(this@MainActivity)
+                toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                toast.duration = Toast.LENGTH_LONG
+                toast.view.findViewById<TextView>(R.id.toastTextView).text = getString(R.string.database_error_unknown_error_toast_message)
+                toast.show()
+            }
+
             override fun onError(error: DatabaseError) {
-                Log.d(TAG, "Error in database. The error is ${error.message}")
+                if(
+                    error.code == DatabaseError.DISCONNECTED ||
+                    error.code == DatabaseError.NETWORK_ERROR
+                ) {
+                    val intent = Intent(this@MainActivity, LoadingActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+
+                    return
+                }
+
+                val toast = Toast(this@MainActivity)
+                toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                toast.duration = Toast.LENGTH_LONG
+                toast.view.findViewById<TextView>(R.id.toastTextView).text = getString(R.string.database_error_unknown_error_toast_message)
+                toast.show()
             }
         })
         readWordsThread.run()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        notifyDataSetChange()
+    }
+
+    private fun notifyDataSetChange() {
+        viewPager?.let { pager ->
+            pager.adapter?.let { adapter ->
+                (adapter as FragmentsViewPagerAdapter).notifyDataSetChanged()
+            }
+        }
     }
 
     fun callConfetti() {
@@ -135,10 +261,10 @@ class MainActivity : AppCompatActivity() {
                 continue
             }
 
-            val currentTime = getCurrentDateTimeInMills()
-            if(currentTime > word.lastDateCheck) {
-                if(word.lastDateCheck == Word.LEVEL_DAY.toLong() || word.lastDateCheck == Word.LEVEL_WEEK.toLong()) {
-                    if(currentTime - word.lastDateCheck > Word.CHECK_INTERVAL[Word.LEVEL_DAY]!! * 3) {
+            val currentTime = getCurrentDateTimeAtZeroHoursInMills()
+            if(currentTime > word.dateOfNextCheck) {
+                if(word.dateOfNextCheck == Word.LEVEL_DAY.toLong() || word.dateOfNextCheck == Word.LEVEL_WEEK.toLong()) {
+                    if(currentTime - word.dateOfNextCheck > Word.CHECK_INTERVAL[Word.LEVEL_DAY]!! * 3) {
                         word.level = Word.LEVEL_DAY.toLong()
                     }
                 }
@@ -146,7 +272,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        return checkingWordsList
+        return checkingWordsList.shuffled().toMutableList()
     }
 
     private fun parseDynamicLink(intent: Intent?) {
@@ -197,15 +323,42 @@ class MainActivity : AppCompatActivity() {
                                     )
 
                                     createAddCategoryAtheneDialog(categoryTitle, sharingWordsList)
+
+                                }
+
+                                override fun onFailure(exception: Exception) {
+                                    if(exception is FirebaseNetworkException) {
+                                        val intent = Intent(this@MainActivity, LoadingActivity::class.java)
+                                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                        startActivity(intent)
+
+                                        return
+                                    }
+
+                                    val toast = Toast(this@MainActivity)
+                                    toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                                    toast.duration = Toast.LENGTH_LONG
+                                    toast.view.findViewById<TextView>(R.id.toastTextView).text = getString(R.string.database_error_unknown_error_toast_message)
+                                    toast.show()
                                 }
 
                                 override fun onError(error: DatabaseError) {
-                                    Log.d(
-                                        DYNAMIC_LINK_TAG,
-                                        "Error while reading data from database.The error is ${error.message}"
-                                    )
+                                    if(
+                                        error.code == DatabaseError.DISCONNECTED ||
+                                        error.code == DatabaseError.NETWORK_ERROR
+                                    ) {
+                                        val intent = Intent(this@MainActivity, LoadingActivity::class.java)
+                                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                        startActivity(intent)
 
-//                              ToDo: Create Athene Dialog
+                                        return
+                                    }
+
+                                    val toast = Toast(this@MainActivity)
+                                    toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                                    toast.duration = Toast.LENGTH_LONG
+                                    toast.view.findViewById<TextView>(R.id.toastTextView).text = getString(R.string.database_error_unknown_error_toast_message)
+                                    toast.show()
                                 }
                             }
                         )
@@ -214,7 +367,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 else if(path == "/invite") {
                     Log.d(DYNAMIC_LINK_TAG, "Receive Invite Link")
-                    val teacherUid = link.getQueryParameter("teacherId") //ToDo: Replace to constants
+                    val teacherUid = link.getQueryParameter("teacherId") // ToDo: Replace to constants
                     val classUid = link.getQueryParameter("classId")
                     if(teacherUid != null && classUid != null) {
                         val readClassroomThread = ReadClassroomThread(
@@ -230,17 +383,45 @@ class MainActivity : AppCompatActivity() {
                                 }
 
                                 override fun onFailure(exception: Exception) {
-                                    if(exception is UserIsAlreadyInClassroomException) {
-                                        createUserIsAlreadyInClassAtheneDialog()
+                                    when(exception) {
+                                        is UserIsAlreadyInClassroomException ->
+                                            createUserIsAlreadyInClassAtheneDialog()
+                                        is FirebaseNetworkException -> {
+                                            val loadingActivityIntent = Intent(this@MainActivity, LoadingActivity::class.java)
+                                            loadingActivityIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                            startActivity(loadingActivityIntent)
+                                        }
+                                        else -> {
+                                            val toast = Toast(this@MainActivity)
+                                            toast.view =
+                                                layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                                            toast.duration = Toast.LENGTH_LONG
+                                            toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                                                getString(R.string.database_error_unknown_error_toast_message)
+                                            toast.show()
+                                        }
                                     }
                                 }
 
                                 override fun onError(databaseError: DatabaseError) {
-                                    Log.d(
-                                        DYNAMIC_LINK_TAG,
-                                        "Error while reading from database." +
-                                                " ${databaseError.message}"
-                                    )
+                                    if(
+                                        databaseError.code == DatabaseError.DISCONNECTED ||
+                                        databaseError.code == DatabaseError.NETWORK_ERROR
+                                    ) {
+                                        val loadingActivityIntent = Intent(this@MainActivity, LoadingActivity::class.java)
+                                        loadingActivityIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                        startActivity(loadingActivityIntent)
+
+                                        return
+                                    }
+
+                                    val toast = Toast(this@MainActivity)
+                                    toast.view =
+                                        layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                                    toast.duration = Toast.LENGTH_LONG
+                                    toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                                        getString(R.string.database_error_unknown_error_toast_message)
+                                    toast.show()
                                 }
                             }
                         )
@@ -312,10 +493,10 @@ class MainActivity : AppCompatActivity() {
             override fun onPositiveClick(view: View) {
 
 //              Check is current category is already existed
-                var isCategoryNew = false
+                var isCategoryNew = true
                 for(category in getCategoriesArrayListWithDefault()) {
                     if(category.title == categoryTitle) {
-                        isCategoryNew = true
+                        isCategoryNew = false
 
                         break
                     }
@@ -328,10 +509,27 @@ class MainActivity : AppCompatActivity() {
                         AddCategoryThread.AddCategoryResultListener {
                         override fun onSuccess(category: Category) {
                             Log.d(TAG, "Category has been successfully added to database")
-                            //categoriesArrayList.add(category)
+
+                            storedInStorageCategoriesArrayList.add(category)
+                            notifyDataSetChange()
                         }
 
                         override fun onFailure(exception: Exception) {
+                            if(exception is FirebaseNetworkException) {
+                                val intent = Intent(this@MainActivity, LoadingActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(intent)
+
+                                return
+                            }
+
+                            val toast = Toast(this@MainActivity)
+                            toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                            toast.duration = Toast.LENGTH_LONG
+                            toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                                getString(R.string.database_error_unknown_error_toast_message)
+                            toast.show()
+
                             Log.d(
                                 TAG,
                                 "Error while adding category to database. The error is ${exception.message}"
@@ -349,10 +547,26 @@ class MainActivity : AppCompatActivity() {
                         override fun onSuccess(word: Word) {
                             Log.d(TAG, "Word has been successfully added")
 
-                            wordsArrayList.add(word)
+                            storedInStorageWordsArrayList.add(word)
+                            notifyDataSetChange()
                         }
 
                         override fun onFailure(exception: Exception) {
+                            if(exception is FirebaseNetworkException) {
+                                val intent = Intent(this@MainActivity, LoadingActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(intent)
+
+                                return
+                            }
+
+                            val toast = Toast(this@MainActivity)
+                            toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                            toast.duration = Toast.LENGTH_LONG
+                            toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                                getString(R.string.database_error_unknown_error_toast_message)
+                            toast.show()
+
                             Log.d(
                                 TAG,
                                 "Error while adding word to database. Error is $exception"

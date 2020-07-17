@@ -42,6 +42,7 @@
         <activity android:name=".activities.VerificationActivity" />
         <activity android:name=".activities.EditWordActivity" />
         <activity android:name=".activities.CategoryActivity" />
+        <activity android:name=".activities.TutorialActivity" />
 
         <service
             android:name=".services.NotificationService"

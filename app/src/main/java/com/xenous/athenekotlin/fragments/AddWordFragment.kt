@@ -1,5 +1,6 @@
 package com.xenous.athenekotlin.fragments
 
+import android.animation.Animator
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,22 +12,22 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Word
-import com.xenous.athenekotlin.storage.categoriesArrayList
 import com.xenous.athenekotlin.storage.getCategoriesArrayListWithDefault
-import com.xenous.athenekotlin.storage.wordsArrayList
+import com.xenous.athenekotlin.storage.storedInStorageCategoriesArrayList
+import com.xenous.athenekotlin.storage.storedInStorageWordsArrayList
 import com.xenous.athenekotlin.threads.AddCategoryThread
 import com.xenous.athenekotlin.threads.AddWordThread
-import com.xenous.athenekotlin.utils.ANIMATION_DURATION_TWO_THIRDS
-import com.xenous.athenekotlin.utils.animateAlphaTo
-import com.xenous.athenekotlin.utils.forbiddenSymbols
-import com.xenous.athenekotlin.utils.getCurrentDateTimeInMills
+import com.xenous.athenekotlin.utils.*
 import com.xenous.athenekotlin.views.AtheneDialog
 import com.xenous.athenekotlin.views.OpeningView
 import com.xenous.athenekotlin.views.adapters.ChooseCategoryRecyclerViewAdapter
 import com.xenous.athenekotlin.views.adapters.OnItemClickListener
+import kotlinx.android.synthetic.main.fragment_add_word.*
+import kotlinx.android.synthetic.main.layout_opening_view.*
 import java.util.*
 
 class AddWordFragment: Fragment() {
@@ -103,7 +104,7 @@ class AddWordFragment: Fragment() {
                     )
 
                     var isNew = true
-                    for(c in categoriesArrayList) {
+                    for(c in storedInStorageCategoriesArrayList) {
                         if(c.title == category.title) {
                             isNew = false
                             break
@@ -117,7 +118,7 @@ class AddWordFragment: Fragment() {
 
                             override fun onSuccess(category: Category) {
                                 openingView.categoryChosenTextView.text = category.title
-                                categoriesArrayList.add(category)
+                                storedInStorageCategoriesArrayList.add(category)
                             }
 
                             override fun onFailure(exception: Exception) {
@@ -161,11 +162,11 @@ class AddWordFragment: Fragment() {
                 nativeWordText,
                 foreignWordText,
                 categoryText,
-                getCurrentDateTimeInMills() + Word.LEVEL_DAY
+                getCurrentDateTimeAtZeroHoursInMills() + Word.LEVEL_DAY
             )
 
             when(word.filter()) {
-                Word.WORD_IS_TO_LONG -> {
+                Word.WORD_IS_TOO_LONG -> {
                     createAtheneDialog(getString(R.string.add_word_word_is_too_long_dialog_message))
 
                     return@setOnClickListener
@@ -181,24 +182,57 @@ class AddWordFragment: Fragment() {
             val addWordThread = AddWordThread(word)
             addWordThread.setAddWordResultListener(object : AddWordThread.AddWordResultListener {
                 override fun onSuccess(word: Word) {
-                    wordsArrayList.add(word)
-                    //ToDo: Add tick or X animation
+                    storedInStorageWordsArrayList.add(word)
 
-                    addWordForeignEditText.setText("")
-                    addWordNativeEditText.setText("")
+                    lottieAnimationView.apply {
+                        visibility = View.VISIBLE
 
-                    openingView.categoryChosenTextView.text = getString(R.string.no_category)
+                        addAnimatorListener(object : Animator.AnimatorListener {
+                            override fun onAnimationEnd(animation: Animator?) {
+                                lottieAnimationView.animateAlphaTo(
+                                    0F,
+                                    duration = ANIMATION_DURATION_HALF,
+                                    onAnimationEnd = {
+                                        addWordForeignEditText.clearInputLetterByLetter(ANIMATION_DURATION_TWO_THIRDS)
+                                        addWordNativeEditText.clearInputLetterByLetter(ANIMATION_DURATION_TWO_THIRDS)
+
+                                        lottieAnimationView.alpha = 1F
+                                        lottieAnimationView.visibility = View.GONE
+                                        addWordContinueImageView.setImageDrawable(activity!!.resources.getDrawable(R.drawable.ic_add_word_white))
+                                        addWordContinueImageView.isClickable = true
+                                    }
+                                )
+                            }
+
+                            override fun onAnimationRepeat(animation: Animator?) {  }
+
+                            override fun onAnimationCancel(animation: Animator?) {  }
+
+                            override fun onAnimationStart(animation: Animator?) {  }
+                        })
+                        setAnimation(R.raw.animation_success)
+                        playAnimation()
+                    }
                 }
 
                 override fun onFailure(exception: Exception) {
                     val atheneDialog = AtheneDialog(context!!)
+//                    todo: handle error
                     atheneDialog.message = getString(R.string.add_word_unknown_error_dialog_message)
-                    //ToDo: Fix athene dialog click listeners
                     atheneDialog.positiveText = getString(R.string.ok)
                     atheneDialog.build().show()
+
+                    addWordContinueImageView.setImageDrawable(activity!!.resources.getDrawable(R.drawable.ic_add_word_white))
+                    addWordContinueImageView.isClickable = true
                 }
             })
             addWordThread.run()
+
+            run {
+                val threeBounce = ThreeBounce()
+                addWordContinueImageView.setImageDrawable(threeBounce)
+                threeBounce.start()
+            }
             addWordContinueImageView.isClickable = false
         }
 
@@ -239,5 +273,14 @@ class AddWordFragment: Fragment() {
         atheneDialog.positiveText = getString(R.string.ok)
         atheneDialog.build()
         atheneDialog.show()
+    }
+
+    fun notifyDataSetChanged() {
+        val categoriesArrayList = getCategoriesArrayListWithDefault()
+        val chosenCategoryText = addWordCategoryChosenTextView.text.toString()
+
+        if(!categoriesArrayList.any { it.title == chosenCategoryText }) {
+            addWordCategoryChosenTextView.text = getString(R.string.no_category)
+        }
     }
 }

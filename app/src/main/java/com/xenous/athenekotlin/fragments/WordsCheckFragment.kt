@@ -8,19 +8,33 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.firebase.FirebaseNetworkException
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.activities.EditWordActivity
+import com.xenous.athenekotlin.activities.LoadingActivity
 import com.xenous.athenekotlin.data.Word
+import com.xenous.athenekotlin.storage.storedInStorageWordsArrayList
+import com.xenous.athenekotlin.threads.DeleteWordThread
 import com.xenous.athenekotlin.utils.animateStrikeThroughText
 import com.xenous.athenekotlin.utils.animateTextColorTo
 import com.xenous.athenekotlin.utils.slideInFromRight
 import com.xenous.athenekotlin.utils.slideOutToLeft
+import com.xenous.athenekotlin.views.AtheneDialog
+import kotlinx.android.synthetic.main.fragment_words_check.*
 import java.util.*
 
-class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): Fragment() {
+class WordsCheckFragment(
+    private var word: Word?,
+    private val isLast: Boolean
+): Fragment() {
+
+    private lateinit var fragmentView: View
+    val index = word?.let { storedInStorageWordsArrayList.indexOf(word!!) }
 
     interface OnWordCheckStateChangeListener {
         fun onWordChecked()
+
+        fun onWordDelete() {  }
 
         fun onRightAnswer(word: Word)
 
@@ -46,11 +60,71 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fragmentView = view
         if(word != null) {
-            view.prepareFragmentForNewWord(word)
+            view.prepareFragmentForNewWord(word!!)
         }
         else {
             view.showNoWordsTitle()
+        }
+    }
+
+    fun notifyDataSetChanged() {
+        if(index != null) {
+            word = storedInStorageWordsArrayList[index]
+
+            word?.let {
+                wordsCheckNativeTextView.text = it.native
+                wordsCheckForeignCorrectAnswerTextView.text = it.foreign
+
+                wordsCheckWordActionEditLinearLayout.setOnClickListener {
+                    val intent = Intent(activity!!, EditWordActivity::class.java)
+                    intent.putExtra(getString(R.string.word_extra), word)
+                    startActivity(intent)
+                }
+                wordsCheckWordActionDeleteLinearLayout.setOnClickListener { view ->
+                    val atheneDialog = AtheneDialog(context!!)
+                    atheneDialog.message = context!!.getString(R.string.words_check_do_you_want_to_delete_word_dialog_message)
+                    atheneDialog.positiveText = context!!.getString(R.string.yes)
+                    atheneDialog.negativeText = context!!.getString(R.string.cancel)
+                    atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
+                        override fun onPositiveClick(view: View) {
+                            val deleteWordThread = DeleteWordThread(word)
+                            deleteWordThread.setDeleteWordResultListener(object : DeleteWordThread.DeleteWordResultListener {
+                                override fun onSuccess() {
+                                    onWordCheckStateChangeListener?.onWordDelete()
+                                }
+
+                                override fun onFailure(exception: Exception) {
+                                    if(exception is FirebaseNetworkException) {
+                                        val intent = Intent(context, LoadingActivity::class.java)
+                                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                        context!!.startActivity(intent)
+
+                                        return
+                                    }
+
+                                    val toast = Toast(context)
+                                    toast.view = LayoutInflater.from(context).inflate(R.layout.layout_toast_custom, null, false)
+                                    toast.duration = Toast.LENGTH_LONG
+                                    toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                                        context!!.getString(R.string.category_word_failed_to_add_word_to_learning_toast_message)
+                                    toast.show()
+                                }
+                            })
+                            deleteWordThread.run()
+                        }
+
+                        override fun onNegativeClickListener(view: View) {
+                            super.onNegativeClickListener(view)
+
+                            atheneDialog.dismiss()
+                        }
+                    })
+                    atheneDialog.build()
+                    atheneDialog.show()
+                }
+            }
         }
     }
 
@@ -93,7 +167,46 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
             startActivity(intent)
         }
         wordActionDeleteLinearLayout.setOnClickListener {
-            Toast.makeText(context, "DELETE", Toast.LENGTH_LONG).show()
+            val atheneDialog = AtheneDialog(context)
+            atheneDialog.message = context.getString(R.string.words_check_do_you_want_to_delete_word_dialog_message)
+            atheneDialog.positiveText = context.getString(R.string.yes)
+            atheneDialog.negativeText = context.getString(R.string.cancel)
+            atheneDialog.setOnAnswersItemClickListener(object : AtheneDialog.OnAnswersItemClickListener {
+                override fun onPositiveClick(view: View) {
+                    val deleteWordThread = DeleteWordThread(word)
+                    deleteWordThread.setDeleteWordResultListener(object : DeleteWordThread.DeleteWordResultListener {
+                        override fun onSuccess() {
+                            onWordCheckStateChangeListener?.onWordDelete()
+                        }
+
+                        override fun onFailure(exception: Exception) {
+                            if(exception is FirebaseNetworkException) {
+                                val intent = Intent(context, LoadingActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                context.startActivity(intent)
+
+                                return
+                            }
+
+                            val toast = Toast(context)
+                            toast.view = LayoutInflater.from(context).inflate(R.layout.layout_toast_custom, null, false)
+                            toast.duration = Toast.LENGTH_LONG
+                            toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                                context.getString(R.string.category_word_failed_to_add_word_to_learning_toast_message)
+                            toast.show()
+                        }
+                    })
+                    deleteWordThread.run()
+                }
+
+                override fun onNegativeClickListener(view: View) {
+                    super.onNegativeClickListener(view)
+
+                    atheneDialog.dismiss()
+                }
+            })
+            atheneDialog.build()
+            atheneDialog.show()
         }
         nextLinearLayout.setOnClickListener {
             clearFragmentAfterWord(onClearEnd = {
@@ -101,33 +214,42 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
             })
         }
         continueLinearLayout.setOnClickListener {
-            if(
-                foreignUserAnswerEditText.text.toString().trim().toLowerCase(Locale.ROOT) ==
-                word.foreign.trim().toLowerCase(Locale.ROOT)
-            ) {
-                this@prepareFragmentForNewWord.animateCorrectAnswer(
-                    onAnimationStart = {
-                        clickBlocker.visibility = View.VISIBLE
-                    },
-                    onAnimationEnd = {
-                        clickBlocker.visibility = View.GONE
+            if(foreignUserAnswerEditText.text.toString().trim().isNotBlank()) {
+                if(
+                    foreignUserAnswerEditText.text.toString().trim().toLowerCase(Locale.ROOT) ==
+                    word.foreign.trim().toLowerCase(Locale.ROOT)
+                ) {
+                    this@prepareFragmentForNewWord.animateCorrectAnswer(
+                        onAnimationStart = {
+                            clickBlocker.visibility = View.VISIBLE
+                        },
+                        onAnimationEnd = {
+                            clickBlocker.visibility = View.GONE
 
-                        onWordCheckStateChangeListener?.onRightAnswer(word.apply { increaseLevel() })
-                    }
-                )
+                            onWordCheckStateChangeListener?.onRightAnswer(word.apply { increaseLevel() })
+                        }
+                    )
+                }
+                else {
+                    this@prepareFragmentForNewWord.animateIncorrectAnswer(
+                        false,
+                        onAnimationStart = {
+                            clickBlocker.visibility = View.VISIBLE
+                        },
+                        onAnimationEnd = {
+                            clickBlocker.visibility = View.GONE
+
+                            onWordCheckStateChangeListener?.onWordMistake(word.apply { resetProgress() })
+                        }
+                    )
+                }
             }
             else {
-                this@prepareFragmentForNewWord.animateIncorrectAnswer(
-                    false,
-                    onAnimationStart = {
-                        clickBlocker.visibility = View.VISIBLE
-                    },
-                    onAnimationEnd = {
-                        clickBlocker.visibility = View.GONE
-
-                        onWordCheckStateChangeListener?.onWordMistake(word.apply { resetProgress() })
-                    }
-                )
+                val atheneDialog = AtheneDialog(context)
+                atheneDialog.message = context.getString(R.string.words_check_blank_input_is_not_allowed_dialog_message)
+                atheneDialog.positiveText = context.getString(R.string.ok)
+                atheneDialog.build()
+                atheneDialog.show()
             }
         }
         forgotTextView.setOnClickListener {
@@ -279,5 +401,9 @@ class WordsCheckFragment(private val word: Word?, private val isLast: Boolean): 
         nextLinearLayout.slideOutToLeft(onAnimationEnd = {
             onClearEnd?.let { it() }
         })
+    }
+
+    fun clearFragmentAfterWord(onClearEnd: (() -> Unit)? = null) {
+        fragmentView.clearFragmentAfterWord(onClearEnd)
     }
 }

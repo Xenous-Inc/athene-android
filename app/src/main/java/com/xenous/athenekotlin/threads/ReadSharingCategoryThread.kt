@@ -6,9 +6,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.xenous.athenekotlin.data.Word
-import com.xenous.athenekotlin.storage.wordsArrayList
+import com.xenous.athenekotlin.storage.storedInStorageWordsArrayList
 import com.xenous.athenekotlin.utils.*
-import java.lang.Exception
 
 class ReadSharingCategoryThread(
     private val sharingUserUid: String,
@@ -23,7 +22,7 @@ class ReadSharingCategoryThread(
 
         fun onError(error: DatabaseError)
 
-        fun onFailure(exception: Exception) {}
+        fun onFailure(exception: Exception)
     }
 
     private var readSharingCategoryListener: ReadSharingCategoryListener? = null
@@ -59,10 +58,10 @@ class ReadSharingCategoryThread(
                                 Word.LEVEL_ADDED.toLong()
                             )
 
-                            var isNew = false
-                            for(existingWord in wordsArrayList) {
-                                if(sharedWord != existingWord) {
-                                    isNew = true
+                            var isNew = true
+                            for(existingWord in storedInStorageWordsArrayList) {
+                                if(sharedWord == existingWord) {
+                                    isNew = false
                                     break
                                 }
                             }

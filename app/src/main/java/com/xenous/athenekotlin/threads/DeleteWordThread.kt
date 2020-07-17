@@ -1,16 +1,12 @@
 package com.xenous.athenekotlin.threads
 
-import android.os.Handler
-import android.os.Message
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.xenous.athenekotlin.data.Word
+import com.xenous.athenekotlin.storage.storedInStorageWordsArrayList
 import com.xenous.athenekotlin.utils.USERS_REFERENCE
 import com.xenous.athenekotlin.utils.WORDS_REFERENCE
-import com.xenous.athenekotlin.utils.*
-import java.lang.Exception
-import com.xenous.athenekotlin.utils.*
 
 class DeleteWordThread(
     private val word: Word?
@@ -70,6 +66,7 @@ class DeleteWordThread(
             .addOnSuccessListener {
                 Log.d(TAG, "Word has been deleted completely")
 
+                storedInStorageWordsArrayList.remove(word)
                 this.deleteWordResultListener?.onSuccess()
             }
             .addOnFailureListener {

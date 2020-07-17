@@ -3,10 +3,10 @@ package com.xenous.athenekotlin.storage
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Word
 
-var wordsArrayList = mutableListOf<Word>()
+var storedInStorageWordsArrayList = mutableListOf<Word>()
 var checkingWordsArrayList = mutableListOf<Word>()
 
-var categoriesArrayList = mutableListOf<Category>()
+var storedInStorageCategoriesArrayList = mutableListOf<Category>()
 
 fun getCategoriesArrayListWithDefault(): MutableList<Category> {
     val defaultList = mutableListOf<Category>()
@@ -16,7 +16,7 @@ fun getCategoriesArrayListWithDefault(): MutableList<Category> {
     defaultList.add(Category("еда"))
     defaultList.add(Category("транспорт"))
     defaultList.add(Category("одежда"))
-    defaultList.addAll(categoriesArrayList)
+    defaultList.addAll(storedInStorageCategoriesArrayList)
 
     return defaultList
 }

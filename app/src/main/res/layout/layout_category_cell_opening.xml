@@ -26,9 +26,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:ellipsize="end"
                 android:fontFamily="@font/roboto"
                 android:gravity="start|center_vertical"
+                android:maxLines="2"
                 android:paddingStart="@dimen/textview_secondary_padding"
+                android:paddingEnd="@dimen/textview_secondary_padding"
                 android:tag="animation3"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/primary_text_size"
@@ -68,8 +71,10 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
                         android:fontFamily="@font/roboto"
                         android:gravity="center"
+                        android:singleLine="true"
                         android:text="Изучать"
                         android:textColor="@color/colorTextSecondary"
                         android:textSize="12sp" />
@@ -85,18 +90,21 @@
                     android:paddingEnd="@dimen/imageview_primary_padding">
 
                     <ImageView
+                        android:id="@+id/categoryActionShareImageView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
                         android:maxHeight="@dimen/imageview_size"
                         android:padding="2dp"
-                        app:srcCompat="@drawable/ic_gps_white" />
+                        app:srcCompat="@drawable/ic_share_white" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
                         android:fontFamily="@font/roboto"
                         android:gravity="center"
+                        android:singleLine="true"
                         android:text="Отправить"
                         android:textColor="@color/colorTextSecondary"
                         android:textSize="12sp" />
@@ -122,8 +130,10 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
                         android:fontFamily="@font/roboto"
                         android:gravity="center"
+                        android:singleLine="true"
                         android:text="Просмотреть"
                         android:textColor="@color/colorTextSecondary"
                         android:textSize="12sp" />
@@ -151,8 +161,10 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
                         android:fontFamily="@font/roboto"
                         android:gravity="center"
+                        android:singleLine="true"
                         android:text="Удалить"
                         android:textColor="@color/colorTextSecondary"
                         android:textSize="12sp" />

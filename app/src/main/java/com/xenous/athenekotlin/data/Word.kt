@@ -4,18 +4,18 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.database.Exclude
 import com.xenous.athenekotlin.utils.forbiddenSymbols
-import com.xenous.athenekotlin.utils.getCurrentDateTimeInMills
+import com.xenous.athenekotlin.utils.getCurrentDateTimeAtZeroHoursInMills
 import java.util.*
 
 data class Word(
     var native: String,
     var foreign: String,
     var category: String = "Без категории",
-    var lastDateCheck: Long = 0,
+    var dateOfNextCheck: Long = 0,
     var level: Long = 0,
     var uid: String? = null
 ) : Parcelable {
-    companion object  CREATOR : Parcelable.Creator<Word> {
+    companion object CREATOR : Parcelable.Creator<Word> {
         override fun createFromParcel(parcel: Parcel): Word {
             return Word(parcel)
         }
@@ -44,7 +44,9 @@ data class Word(
         const val WORD_IS_NULL = -1
         const val WORD_IS_OK = 0
         const val WORD_CONTAINS_FORBIDDEN_SYMBOLS = 1
-        const val WORD_IS_TO_LONG = 2
+        const val WORD_IS_TOO_LONG = 2
+
+        const val MAX_LENGTH = 140
     }
 
     constructor(parcel: Parcel) : this(
@@ -62,7 +64,7 @@ data class Word(
             "Russian" to native,
             "English" to foreign,
             "category" to category,
-            "date" to lastDateCheck,
+            "date" to dateOfNextCheck,
             "level" to level
         )
     }
@@ -75,8 +77,8 @@ data class Word(
         val equawalent = listOf(native, foreign)
 
         for(element in equawalent) {
-            if(element.length >= 35) {
-                return WORD_IS_TO_LONG
+            if(element.length >= MAX_LENGTH) {
+                return WORD_IS_TOO_LONG
             }
 
             for(forbiddenSymbol in forbiddenSymbols) {
@@ -103,11 +105,11 @@ data class Word(
         setNextDate()
     }
 
-    private fun setNextDate() {
+    fun setNextDate() {
         if(level == LEVEL_ARCHIVED.toLong()) {
             return
         }
-        lastDateCheck = getCurrentDateTimeInMills() + CHECK_INTERVAL[level.toInt()]!!
+        dateOfNextCheck = getCurrentDateTimeAtZeroHoursInMills() + CHECK_INTERVAL[level.toInt()]!!
     }
 
     override fun equals(other: Any?): Boolean {
@@ -127,7 +129,7 @@ data class Word(
         parcel.writeString(native)
         parcel.writeString(foreign)
         parcel.writeString(category)
-        parcel.writeLong(lastDateCheck)
+        parcel.writeLong(dateOfNextCheck)
         parcel.writeLong(level)
         parcel.writeString(uid)
     }

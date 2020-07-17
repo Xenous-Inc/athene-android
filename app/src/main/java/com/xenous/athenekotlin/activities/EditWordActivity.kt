@@ -1,5 +1,6 @@
 package com.xenous.athenekotlin.activities
 
+import android.animation.Animator
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
@@ -10,11 +11,13 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Word
-import com.xenous.athenekotlin.storage.categoriesArrayList
 import com.xenous.athenekotlin.storage.getCategoriesArrayListWithDefault
+import com.xenous.athenekotlin.storage.storedInStorageCategoriesArrayList
+import com.xenous.athenekotlin.storage.storedInStorageWordsArrayList
 import com.xenous.athenekotlin.threads.AddCategoryThread
 import com.xenous.athenekotlin.threads.UpdateWordThread
 import com.xenous.athenekotlin.utils.ANIMATION_DURATION_TWO_THIRDS
@@ -23,6 +26,7 @@ import com.xenous.athenekotlin.views.AtheneDialog
 import com.xenous.athenekotlin.views.OpeningView
 import com.xenous.athenekotlin.views.adapters.ChooseCategoryRecyclerViewAdapter
 import com.xenous.athenekotlin.views.adapters.OnItemClickListener
+import kotlinx.android.synthetic.main.fragment_add_word.*
 import java.util.*
 
 class EditWordActivity : AppCompatActivity() {
@@ -94,25 +98,43 @@ class EditWordActivity : AppCompatActivity() {
         })
 
         editWordContinueImageView.setOnClickListener {
-            val editingWord = Word(
+            val wordAfterEditing = Word(
                 editWordNativeEditText.text.toString().trim().toLowerCase(Locale.ROOT),
                 editWordForeignEditText.text.toString().trim().toLowerCase(Locale.ROOT),
                 openingView.categoryChosenTextView.text.toString().trim(),
-                word.lastDateCheck,
+                word.dateOfNextCheck,
                 word.level,
                 word.uid
 
             )
 
-            if(word != editingWord) {
-                val updateWordThread = UpdateWordThread(editingWord)
+            if(word != wordAfterEditing) {
+                val updateWordThread = UpdateWordThread(wordAfterEditing)
                 updateWordThread.setUpdateWordThreadListener(object : UpdateWordThread.UpdateWordThreadListener {
                     override fun onSuccess() {
-//                      ToDo: Add loading screen
-                        onBackPressed()
+                        storedInStorageWordsArrayList[storedInStorageWordsArrayList.indexOf(word)] = wordAfterEditing
+
+                        lottieAnimationView.apply {
+                            visibility = View.VISIBLE
+
+                            addAnimatorListener(object : Animator.AnimatorListener {
+                                override fun onAnimationEnd(animation: Animator?) {
+                                    onBackPressed()
+                                }
+
+                                override fun onAnimationRepeat(animation: Animator?) {  }
+
+                                override fun onAnimationCancel(animation: Animator?) {  }
+
+                                override fun onAnimationStart(animation: Animator?) {  }
+                            })
+                            setAnimation(R.raw.animation_success)
+                            playAnimation()
+                        }
                     }
 
                     override fun onFailure(exception: Exception) {
+//                        todo: handle error
                         val atheneDialog = AtheneDialog(this@EditWordActivity)
                         atheneDialog.apply {
                             message = getString(R.string.edit_word_update_word_error_message)
@@ -120,9 +142,19 @@ class EditWordActivity : AppCompatActivity() {
                             build()
                         }
                         atheneDialog.show()
+
+                        editWordContinueImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_add_word_white))
+                        editWordContinueImageView.isClickable = true
                     }
                 })
                 updateWordThread.run()
+
+                run {
+                    val threeBounce = ThreeBounce()
+                    editWordContinueImageView.setImageDrawable(threeBounce)
+                    threeBounce.start()
+                }
+                editWordContinueImageView.isClickable = false
             }
         }
         editWordNativeEditText.setText(word.native)
@@ -145,7 +177,7 @@ class EditWordActivity : AppCompatActivity() {
                 openingView.categoryChosenTextView.text = categoryTitle
 
                 var isNew = true
-                for(category in categoriesArrayList) {
+                for(category in storedInStorageCategoriesArrayList) {
                     if(category.title == categoryTitle) {
                         isNew = false
                         break
@@ -156,7 +188,7 @@ class EditWordActivity : AppCompatActivity() {
                     addCategoryThread.setAddCategoryResultListener(object : AddCategoryThread.AddCategoryResultListener {
                         override fun onSuccess(category: Category) {
                             //ToDo: Disable loading screen
-                            categoriesArrayList.add(category)
+                            storedInStorageCategoriesArrayList.add(category)
                         }
 
                         override fun onFailure(exception: Exception) {

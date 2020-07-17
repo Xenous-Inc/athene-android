@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.utils.ANIMATION_DURATION_HALF
@@ -14,10 +13,26 @@ import com.xenous.athenekotlin.utils.animateHeightTo
 
 class CategoryCellOpening(val view: View) {
 
-    /*  Initial Block   */
-    private var isExpanded = false
+    interface OnStateChangeListener {
+        fun onExpand() {}
 
-    var collapsedHeight: Int = 1
+        fun onCollapse() {}
+    }
+
+    private var onStateChangeListener: OnStateChangeListener? = null
+
+    fun setOnStateChangeListener(onStateChangeListener: OnStateChangeListener) {
+        this.onStateChangeListener = onStateChangeListener
+    }
+
+    fun removeOnStateChangeListener() {
+        this.onStateChangeListener = null
+    }
+
+    /*  Initial Block   */
+    var isExpanded = false
+
+    private var collapsedHeight: Int = 1
     private var expandedHeight: Int? = null
 
     val cardView: CardView = view.findViewById(R.id.categoryCardView)
@@ -34,10 +49,11 @@ class CategoryCellOpening(val view: View) {
     }
 
     fun expand(duration: Long = ANIMATION_DURATION_HALF) {
-        actionsLinearLayout.animateAlphaTo(1F, duration = duration)
         actionsLinearLayout.animateHeightTo(expandedHeight!!, duration = duration)
-
-        Toast.makeText(view.context, "EXPAND $expandedHeight", Toast.LENGTH_SHORT).show()
+        actionsLinearLayout.animateAlphaTo(1F, duration = duration, onAnimationEnd = {
+            isExpanded = true
+            onStateChangeListener?.onExpand()
+        })
     }
 
     fun collapse(duration: Long = ANIMATION_DURATION_HALF) {
@@ -46,10 +62,15 @@ class CategoryCellOpening(val view: View) {
             actionsLinearLayout.layoutParams = actionsLinearLayout.layoutParams.apply {
                 height = collapsedHeight
             }
+            onStateChangeListener?.onCollapse()
+            isExpanded = false
         }
         else {
-            actionsLinearLayout.animateAlphaTo(0F, duration = duration)
             actionsLinearLayout.animateHeightTo(collapsedHeight, duration = duration)
+            actionsLinearLayout.animateAlphaTo(0F, duration = duration, onAnimationEnd = {
+                onStateChangeListener?.onCollapse()
+                isExpanded = false
+            })
         }
     }
 

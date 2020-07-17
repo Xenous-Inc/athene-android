@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.data.Word
-import com.xenous.athenekotlin.storage.wordsArrayList
+import com.xenous.athenekotlin.storage.storedInStorageWordsArrayList
 import com.xenous.athenekotlin.views.adapters.ArchiveRecyclerViewAdapter
+import kotlinx.android.synthetic.main.fragment_words_archive.*
 
 class ArchiveFragment: Fragment() {
 
@@ -28,6 +29,8 @@ class ArchiveFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if(getArchiveWordList().isNotEmpty()) archiveTitleTextView.visibility = View.GONE
+
         wordsArchiveRecyclerView = view.findViewById(R.id.wordsArchiveRecyclerView)
         wordsArchiveRecyclerView.layoutManager = LinearLayoutManager(activity)
         wordsArchiveRecyclerView.adapter = ArchiveRecyclerViewAdapter(
@@ -39,7 +42,7 @@ class ArchiveFragment: Fragment() {
     private fun getArchiveWordList(): List<Word> {
         val wordMutableList = mutableListOf<Word>()
 
-        for(word in wordsArrayList) {
+        for(word in storedInStorageWordsArrayList) {
             if(word.level == Word.LEVEL_ARCHIVED.toLong()) {
                 wordMutableList.add(word)
             }

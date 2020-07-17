@@ -25,7 +25,7 @@ class ReadClassroomThread(
 
         fun onError(databaseError: DatabaseError)
 
-        fun onFailure(exception: Exception) {}
+        fun onFailure(exception: Exception)
     }
 
     private var readClassroomResultListener: ReadClassroomResultListener? = null

@@ -13,6 +13,13 @@
         app:layout_constraintGuide_percent="0.1" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verticalGuideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,18 +33,40 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="24dp" />
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent">
+
+        </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     <TextView
         android:id="@+id/categoryTitleTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
+        android:ellipsize="end"
         android:fontFamily="@font/roboto"
+        android:maxLines="2"
         android:paddingEnd="@dimen/textview_secondary_padding"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/accent_text_size"
         android:transitionName="@string/category_title_transition_name"
+        app:layout_constraintEnd_toStartOf="@+id/verticalGuideline2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/verticalGuideline"
-        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline" />
+        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline"
+        app:layout_constraintWidth_max="wrap" />
 
     <View
         android:id="@+id/divider"
@@ -48,6 +77,25 @@
         app:layout_constraintEnd_toEndOf="@+id/categoryTitleTextView"
         app:layout_constraintStart_toStartOf="@+id/verticalGuideline"
         app:layout_constraintTop_toBottomOf="@+id/categoryTitleTextView" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <TextView
+        android:id="@+id/categoryNoWordsTitleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/category_no_words_title"
+        android:textColor="@color/colorTextSecondary"
+        android:textSize="@dimen/primary_text_size"
+        app:layout_constraintEnd_toStartOf="@+id/verticalGuideline3"
+        app:layout_constraintStart_toStartOf="@+id/verticalGuideline"
+        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline3" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categoryWordsRecyclerView"

@@ -26,6 +26,14 @@ class FragmentsViewPagerAdapter(
         return fragment!!
     }
 
+    override fun notifyDataSetChanged() {
+        super.notifyDataSetChanged()
+
+        addWordFragment.notifyDataSetChanged()
+        wordsCheckFragmentHolder.notifyDataSetChanged()
+        categoriesFragment.notifyDataSetChange()
+    }
+
     override fun getCount(): Int {
         return 4
     }

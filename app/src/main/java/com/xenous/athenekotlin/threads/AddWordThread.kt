@@ -4,8 +4,8 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.xenous.athenekotlin.data.Word
-import com.xenous.athenekotlin.utils.*
-import java.lang.Exception
+import com.xenous.athenekotlin.utils.USERS_REFERENCE
+import com.xenous.athenekotlin.utils.WORDS_REFERENCE
 
 class AddWordThread(
     private val word: Word
@@ -55,7 +55,7 @@ class AddWordThread(
             word.native,
             word.foreign,
             word.category,
-            word.lastDateCheck,
+            word.dateOfNextCheck,
             word.level,
             key
         )
