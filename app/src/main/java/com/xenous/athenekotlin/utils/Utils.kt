@@ -1,12 +1,12 @@
 package com.xenous.athenekotlin.utils
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.app.*
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.xenous.athenekotlin.broadcasts.NotificationBroadcastReceiver
+import com.xenous.athenekotlin.data.Word
 import java.util.*
 
 
@@ -57,6 +57,22 @@ fun createNotificationChannel(c: Context) {
         c.getSystemService(NotificationManager::class.java)!!
 
     notificationManager.createNotificationChannel(channel)
+}
+
+fun startAlarm(context: Context) {
+    val manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val pendingIntent: PendingIntent
+    val calendar: Calendar = GregorianCalendar()
+
+    calendar.set(Calendar.HOUR_OF_DAY, 12)
+    calendar.set(Calendar.MINUTE, 0)
+
+    val intent = Intent(context, NotificationBroadcastReceiver::class.java)
+    pendingIntent =
+        PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+    manager.cancel(pendingIntent)
+    manager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis + Word.CHECK_INTERVAL[Word.LEVEL_DAY]!!, pendingIntent)
 }
 
 fun getCurrentDateTimeAtZeroHoursInMills(): Long {

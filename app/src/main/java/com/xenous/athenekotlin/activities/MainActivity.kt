@@ -1,7 +1,10 @@
 package com.xenous.athenekotlin.activities
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,6 +22,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import com.xenous.athenekotlin.R
+import com.xenous.athenekotlin.broadcasts.NotificationBroadcastReceiver
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Classroom
 import com.xenous.athenekotlin.data.Student
@@ -30,14 +34,13 @@ import com.xenous.athenekotlin.storage.getCategoriesArrayListWithDefault
 import com.xenous.athenekotlin.storage.storedInStorageCategoriesArrayList
 import com.xenous.athenekotlin.storage.storedInStorageWordsArrayList
 import com.xenous.athenekotlin.threads.*
-import com.xenous.athenekotlin.utils.USER_REFERENCE
-import com.xenous.athenekotlin.utils.WORD_CATEGORY_DATABASE_KEY
-import com.xenous.athenekotlin.utils.getCurrentDateTimeAtZeroHoursInMills
+import com.xenous.athenekotlin.utils.*
 import com.xenous.athenekotlin.views.AtheneDialog
 import kotlinx.android.synthetic.main.activity_main.*
 import nl.dionsegijn.konfetti.KonfettiView
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
+
 
 class MainActivity : AppCompatActivity() {
     private var viewPager: ViewPager? = null
@@ -52,6 +55,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Start notification
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(this)
+        }
+        startAlarm(this)
 
         val signOutImageView = findViewById<ImageView>(R.id.signOutImageView)
         signOutImageView.setOnClickListener {

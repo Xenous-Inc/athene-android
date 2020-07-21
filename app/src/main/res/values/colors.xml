@@ -20,4 +20,10 @@
     <color name="colorPurple600">#9958FE</color>
     <color name="colorPurple400">#9387FE</color>
     <color name="colorPurple200">#9892FE</color>
+
+    <color name="colorJellyfish">#ff9ff3</color>
+    <color name="colorDoubleDragon">#ff9f43</color>
+    <color name="colorCassandora">#feca57</color>
+
+    <color name="colorGrey">#DEDEDE</color>
 </resources>
