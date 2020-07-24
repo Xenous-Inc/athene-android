@@ -16,14 +16,14 @@
     <color name="colorIncorrect">#F84291</color>
     <color name="colorCorrect">#3BFFB6</color>
 
-    <color name="colorPurple800">#9250FB</color>
-    <color name="colorPurple600">#9958FE</color>
-    <color name="colorPurple400">#9387FE</color>
-    <color name="colorPurple200">#9892FE</color>
+    <color name="colorPurple800">#C250FB</color>
+    <color name="colorPurple600">#B158FE</color>
+    <color name="colorPurple400">#B587FE</color>
+    <color name="colorPurple200">#B192FE</color>
 
-    <color name="colorJellyfish">#ff9ff3</color>
-    <color name="colorDoubleDragon">#ff9f43</color>
-    <color name="colorCassandora">#feca57</color>
+    <color name="colorMagenta800">#9362FE</color>
+    <color name="colorMagenta600">#9A6DE3</color>
+    <color name="colorMagenta400">#9272F2</color>
 
-    <color name="colorGrey">#DEDEDE</color>
+    <color name="colorGrey">#D9D9D9</color>
 </resources>

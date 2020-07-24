@@ -44,12 +44,13 @@ class ReadSharingCategoryThread(
 
                 for(wordSnapshot in wordsSnapshot.children) {
                     val categoryTitle = wordSnapshot.child(WORD_CATEGORY_DATABASE_KEY).value
+
                     if(categoryTitle is String && categoryTitle == sharingCategoryTitle) {
                         val native = wordSnapshot.child(NATIVE_WORD_DATABASE_KEY).value
                         val foreign = wordSnapshot.child(FOREIGN_WORD_DATABASE_KEY).value
-                        val category = wordSnapshot.child(WORD_CATEGORY_DATABASE_KEY).value
 
-                        if(native is String && foreign is String && categoryTitle == category) {
+                        if(
+                            native is String && foreign is String) {
                             val sharedWord = Word(
                                 native,
                                 foreign,
@@ -73,16 +74,9 @@ class ReadSharingCategoryThread(
                             Log.d(TAG, "Native Word or Foreign are not String")
 
                             readSharingCategoryListener?.onFailure(TypeCastException(
-                                "Native Word or Foreign are not String")
+                                "Native Word or Foreign are not String, but are ${native!!::class.java} and ${foreign!!::class.java}")
                             )
                         }
-                    }
-                    else {
-                        Log.d(TAG, "Category title is not String")
-
-                        readSharingCategoryListener?.onFailure(
-                            TypeCastException("Native Word or Foreign are not String")
-                        )
                     }
                 }
 

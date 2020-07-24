@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import androidx.fragment.app.Fragment
 import com.xenous.athenekotlin.R
 import com.xenous.athenekotlin.views.CategoriesScrollView
@@ -25,6 +26,7 @@ class CategoriesFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         categoriesScrollView = CategoriesScrollView(activity!!)
+        categoriesScrollView.scrollView.overScrollMode = ScrollView.OVER_SCROLL_NEVER
         categoriesContentFrameLayout.addView(categoriesScrollView.scrollView)
     }
 

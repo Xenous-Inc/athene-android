@@ -78,7 +78,6 @@
             android:textSize="@dimen/primary_text_size" />
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -113,7 +112,7 @@
             android:paddingEnd="@dimen/textview_accent_padding"
             android:text="@string/sign_in_go_to_sign_up"
             android:textColor="@color/colorTextPrimary"
-            android:textSize="@dimen/primary_text_size" />
+            android:textSize="@dimen/secondary_text_size" />
 
         <Space
             android:layout_width="16dp"

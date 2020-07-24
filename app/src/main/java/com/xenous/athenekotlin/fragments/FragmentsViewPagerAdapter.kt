@@ -27,8 +27,6 @@ class FragmentsViewPagerAdapter(
     }
 
     override fun notifyDataSetChanged() {
-        super.notifyDataSetChanged()
-
         addWordFragment.notifyDataSetChanged()
         wordsCheckFragmentHolder.notifyDataSetChanged()
         categoriesFragment.notifyDataSetChange()

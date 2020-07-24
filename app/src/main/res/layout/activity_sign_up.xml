@@ -115,7 +115,7 @@
             android:paddingEnd="@dimen/textview_accent_padding"
             android:text="@string/sign_up_go_to_sign_in"
             android:textColor="@color/colorTextPrimary"
-            android:textSize="@dimen/primary_text_size" />
+            android:textSize="@dimen/secondary_text_size" />
 
         <Space
             android:layout_width="16dp"

@@ -36,8 +36,7 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline3"
+        android:layout_height="132dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/horizontalGuideline">
@@ -99,9 +98,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categoryWordsRecyclerView"
-        android:layout_height="0dp"
         android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="24dp"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline2"
         app:layout_constraintEnd_toStartOf="@+id/verticalGuideline3"
         app:layout_constraintStart_toStartOf="@+id/verticalGuideline"

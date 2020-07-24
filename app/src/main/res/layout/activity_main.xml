@@ -8,12 +8,12 @@
     android:background="@drawable/main_background"
     tools:context=".activities.MainActivity">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="24dp" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/statusBarHorizontalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="0dp" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
@@ -22,16 +22,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline" />
+        app:layout_constraintTop_toTopOf="@+id/statusBarHorizontalGuideline" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline4"
+        android:layout_height="132dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline">
+        app:layout_constraintTop_toTopOf="@+id/statusBarHorizontalGuideline">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -40,13 +39,6 @@
 
         </FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontalGuideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
 
     <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
             android:id="@+id/dotsIndicator"
@@ -85,7 +77,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/main_ic_sign_out_content_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/horizontalGuideline"
+            app:layout_constraintTop_toTopOf="@+id/statusBarHorizontalGuideline"
             app:srcCompat="@drawable/ic_sign_out_white" />
 
         <nl.dionsegijn.konfetti.KonfettiView

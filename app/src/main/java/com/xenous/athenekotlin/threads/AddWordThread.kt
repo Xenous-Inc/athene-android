@@ -64,7 +64,7 @@ class AddWordThread(
             .addOnSuccessListener {
                 Log.d(TAG, "Success while adding word to database")
 
-                this.addWordResultListener?.onSuccess(word)
+                this.addWordResultListener?.onSuccess(sendingWord)
             }
             .addOnFailureListener {
                 Log.d(TAG, "Error while adding word to database. The error is ${it.message}")

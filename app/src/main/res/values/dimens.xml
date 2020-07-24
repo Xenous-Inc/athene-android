@@ -16,14 +16,14 @@
     <dimen name="textview_secondary_padding">12dp</dimen>
     <dimen name="textview_accent_padding">24dp</dimen>
 
-    <dimen name="cardview_primary_padding">12dp</dimen>
+    <dimen name="cardview_primary_padding">14dp</dimen>
     <dimen name="cardview_secondary_padding">16dp</dimen>
 
     <dimen name="outline_primary_padding">8dp</dimen>
     <dimen name="outline_secondary_padding">2dp</dimen>
 
     <dimen name="forgot_password_textview_margin">8dp</dimen>
-    <dimen name="dot_indicator_margin">8dp</dimen>
+    <dimen name="dot_indicator_margin">12dp</dimen>
     <dimen name="exit_margin_top">12dp</dimen>
     <dimen name="exit_margin_right">8dp</dimen>
 

@@ -6,6 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:adjustViewBounds="true"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
     android:scaleType="fitCenter"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"

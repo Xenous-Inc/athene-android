@@ -1,7 +1,5 @@
 package com.xenous.athenekotlin.activities
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -22,7 +20,6 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import com.xenous.athenekotlin.R
-import com.xenous.athenekotlin.broadcasts.NotificationBroadcastReceiver
 import com.xenous.athenekotlin.data.Category
 import com.xenous.athenekotlin.data.Classroom
 import com.xenous.athenekotlin.data.Student
@@ -148,6 +145,7 @@ class MainActivity : AppCompatActivity() {
             })
             readWordsThread.run()
         }
+        setStatusBarHeight()
 
 //      Read Word Thread
         val readWordsThread = ReadWordsThread()
@@ -240,6 +238,15 @@ class MainActivity : AppCompatActivity() {
             pager.adapter?.let { adapter ->
                 (adapter as FragmentsViewPagerAdapter).notifyDataSetChanged()
             }
+        }
+    }
+
+    private fun setStatusBarHeight() {
+        statusBarHorizontalGuideline.setOnApplyWindowInsetsListener { _, insets ->
+            val statusBarSize = insets.systemWindowInsetTop
+            statusBarHorizontalGuideline.setGuidelineBegin(statusBarSize)
+
+            return@setOnApplyWindowInsetsListener insets
         }
     }
 

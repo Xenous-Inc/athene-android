@@ -93,7 +93,7 @@ class CategoryWordsRecyclerViewRecyclerViewAdapter(
                             ) {
                                 val atheneDialog = AtheneDialog(context)
                                 atheneDialog.apply {
-                                    message = "You are already learning it"
+                                    message = context.getString(R.string.category_word_you_are_already_learning_it_dialog_message)
                                     positiveText = context.getString(R.string.ok)
                                 }
                                 atheneDialog.build()

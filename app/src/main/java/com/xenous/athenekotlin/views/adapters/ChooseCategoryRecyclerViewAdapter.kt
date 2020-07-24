@@ -19,13 +19,13 @@ class ChooseCategoryRecyclerViewAdapter(
 ): RecyclerView.Adapter<ChooseCategoryRecyclerViewAdapter.ChooseCategoryRecyclerViewHolder>() {
     private companion object {
         val colors = listOf(
-            R.color.colorDoubleDragon,
-            R.color.colorCassandora,
+            R.color.colorPurple200,
             R.color.colorPurple400,
-            R.color.colorCassandora,
+            R.color.colorPurple600,
             R.color.colorPurple800,
-            R.color.colorDoubleDragon,
-            R.color.colorPurple800
+            R.color.colorMagenta400,
+            R.color.colorMagenta600,
+            R.color.colorMagenta800
         )
     }
     override fun onCreateViewHolder(
