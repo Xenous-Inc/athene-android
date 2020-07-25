@@ -128,4 +128,7 @@
 
     <string name="database_error_unknown_error_toast_message">Произошла неизвестная ошибка при попытке загрузки данных</string>
 
+    <!--    Notification    -->
+    <string name="notification_content_text">Пора повторить слова!</string>
+
 </resources>
