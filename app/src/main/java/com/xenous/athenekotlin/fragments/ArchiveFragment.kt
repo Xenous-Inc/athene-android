@@ -29,7 +29,7 @@ class ArchiveFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(getArchiveWordList().isNotEmpty()) archiveTitleTextView.visibility = View.GONE
+        if(getArchiveWordList().isNotEmpty()) archiveNoWordsTitleTextView.visibility = View.GONE
 
         wordsArchiveRecyclerView = view.findViewById(R.id.wordsArchiveRecyclerView)
         wordsArchiveRecyclerView.layoutManager = LinearLayoutManager(activity)
