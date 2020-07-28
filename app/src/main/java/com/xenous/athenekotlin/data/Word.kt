@@ -116,7 +116,8 @@ data class Word(
         if(other is Word) {
             if(
                 this.foreign.trim().toLowerCase(Locale.ROOT) == other.foreign.trim().toLowerCase(Locale.ROOT) &&
-                this.native.trim().toLowerCase(Locale.ROOT) == other.native.trim().toLowerCase(Locale.ROOT)
+                this.native.trim().toLowerCase(Locale.ROOT) == other.native.trim().toLowerCase(Locale.ROOT) &&
+                this.category.trim().toLowerCase(Locale.ROOT) == other.category.trim().toLowerCase(Locale.ROOT)
             ) {
                 return true
             }

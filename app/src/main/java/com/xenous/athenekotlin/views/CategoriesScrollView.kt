@@ -190,7 +190,7 @@ class CategoriesScrollView(val activity: Activity) {
                     intent.type = "text/plain"
                     intent.putExtra(
                         Intent.EXTRA_TEXT,
-                        shortLink
+                        activity.getString(R.string.share_extra_text, categoriesMutableList[index].title) + shortLink
                     )
                     activity.startActivity(Intent.createChooser(intent, "Поделиться категорией"))
 

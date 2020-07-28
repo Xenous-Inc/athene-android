@@ -130,5 +130,8 @@
 
     <!--    Notification    -->
     <string name="notification_content_text">Пора повторить слова!</string>
+    
+    <!--    Share -->
+    <string name="share_extra_text">Я хочу поделиться с тобой категорией \"%1$s\" в приложении Athene!\n</string>
 
 </resources>

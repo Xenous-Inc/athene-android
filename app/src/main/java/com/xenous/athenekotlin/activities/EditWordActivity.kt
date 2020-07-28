@@ -187,7 +187,6 @@ class EditWordActivity : AppCompatActivity() {
                     val addCategoryThread = AddCategoryThread(Category(categoryTitle))
                     addCategoryThread.setAddCategoryResultListener(object : AddCategoryThread.AddCategoryResultListener {
                         override fun onSuccess(category: Category) {
-                            //ToDo: Disable loading screen
                             storedInStorageCategoriesArrayList.add(category)
                         }
 

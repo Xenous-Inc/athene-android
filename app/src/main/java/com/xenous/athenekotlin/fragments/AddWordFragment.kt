@@ -111,7 +111,6 @@ class AddWordFragment: Fragment() {
                         }
                     }
 
-                    //ToDo: Add Loading Screen
                     if(isNew) {
                         val addCategoryThread = AddCategoryThread(category)
                         addCategoryThread.setAddCategoryResultListener(object : AddCategoryThread.AddCategoryResultListener {
