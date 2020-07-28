@@ -127,21 +127,21 @@ class ReadClassroomThread(
 
                     val wordsInCurrentCategoryList = mutableListOf<Word>()
 
-                    val wordsSnapshot = categoriesSnapshot.child(categoryAddress).child(
-                        WORDS_REFERENCE)
-                    for(wordSnapshot in wordsSnapshot.children) {
-                        val foreign = wordSnapshot.child(FOREIGN_WORD_DATABASE_KEY).value
-                        val native = wordSnapshot.child(NATIVE_WORD_DATABASE_KEY).value
-                        if(foreign != null && native != null) {
-                            if(foreign is String && native is String) {
-                                val word = Word(
-                                    native,
-                                    foreign,
-                                    categoryTitle
-                                )
+                    val wordsSnapshot = categoriesSnapshot
+                        .child(categoryAddress)
+                        .child(WORDS_REFERENCE)
 
-                                wordsInCurrentCategoryList.add(word)
-                            }
+                    for(wordSnapshot in wordsSnapshot.children) {
+                        val foreign = wordSnapshot.child(CLASSROOM_FOREIGN_WORD_DATABASE_KEY).value
+                        val native = wordSnapshot.child(CLASSROOM_NATIVE_WORD_DATABASE_KEY).value
+                        if(foreign is String && native is String ) {
+                            val word = Word(
+                                native,
+                                foreign,
+                                categoryTitle
+                            )
+
+                            wordsInCurrentCategoryList.add(word)
                         }
                     }
 
@@ -156,6 +156,7 @@ class ReadClassroomThread(
                     categoriesTitlesList = categoriesTitleList.toList(),
                     wordsListsList = wordsList.toList()
                 )
+                Log.d(TAG, "$classroom")
 
                 readClassroomResultListener?.onSuccess(classroom)
             }

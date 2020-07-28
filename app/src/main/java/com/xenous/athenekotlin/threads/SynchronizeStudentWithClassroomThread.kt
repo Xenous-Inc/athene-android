@@ -16,8 +16,9 @@ class SynchronizeStudentWithClassroomThread(
     private val student: Student
 ) {
     private companion object {
-        const val TAG = ""
+        const val TAG = "SynchronizeStudent"
     }
+
     interface SynchronizeStudentWithClassroomListener {
         fun onSuccessAddedToClassroom() { }
 
@@ -56,6 +57,7 @@ class SynchronizeStudentWithClassroomThread(
 
         val studentKey = studentsReference.push().key
         if(studentKey == null) {
+            Log.d(TAG, "Student's key is null")
 
             return
         }
@@ -79,8 +81,6 @@ class SynchronizeStudentWithClassroomThread(
                 this.synchronizeStudentWithClassroomListener?.onCanceled()
             }
     }
-
-
 
     private fun addCategoriesFromClassroom() {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
@@ -163,7 +163,7 @@ class SynchronizeStudentWithClassroomThread(
                 word.uid = key
                 word.level = Word.LEVEL_ADDED.toLong()
 
-                wordsReference.setValue(word.toMap())
+                wordsReference.child(key).setValue(word.toMap())
                     .addOnSuccessListener {
                         Log.d(TAG, "Word has been added to database successfully")
 
