@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Athene</string>
 
-<!--    Universal   -->
+    <!--    Universal   -->
     <string name="add">Добавить</string>
     <string name="edit">Изменить</string>
     <string name="save">Сохранить</string>
@@ -18,20 +18,20 @@
     <string name="no_category">без категории</string>
     <string name="start_learning">Изучать</string>
 
-<!--    Main Activity   -->
+    <!--    Main Activity   -->
     <string name="main_ic_sign_out_content_description">Выйти из аккаунта</string>
     <string name="main_user_is_already_in_class_dialog_message">Вы уже состоите в этом классе</string>
     <string name="main_invite_student_name_input_hint">Имя(для учителя)</string>
     <string name="main_are_you_sure_to_add_shared_category_dialog_message">Хотите ли вы добавить новую категорию \"%1$s\"? Новых слов для добавления %2$d</string>
 
-<!--    SignIn Activity  -->
+    <!--    SignIn Activity  -->
     <string name="sign_in_title">Вход</string>
     <string name="sign_in_email_input_hint">E-mail</string>
     <string name="sign_in_password_input_hint">Пароль</string>
     <string name="sign_in_go_to_sign_up">Нет аккаунта?</string>
     <string name="sign_in_forgot_password"><u>Забыли пароль?</u></string>
 
-<!--    SignUp Activity   -->
+    <!--    SignUp Activity   -->
     <string name="sign_up_title">Регистрация</string>
     <string name="sign_up_confirm_password_input_hint">Подтвердите пароль</string>
     <string name="sign_up_go_to_sign_in">Назад</string>
@@ -39,22 +39,29 @@
     <string name="sign_up_email_is_invalid">Адрес электронной почты недействителен</string>
     <string name="sign_up_passwords_do_not_match">Пароли не совпадают</string>
 
-<!--    Loading Activity    -->
+    <!--    Loading Activity    -->
     <string name="loading_waiting_for_user">Загрузка…</string>
 
-<!--    Verification Activity   -->
+    <!--    Verification Activity   -->
     <string name="verification_waiting_for_confirm">Ожидание подтвержения электронной почты…</string>
     <string name="verification_send_again">Отправить заново</string>
 
     <string name="verification_successfully_sent_verification_letter">Письмо подтверждения было выслно на ваш электронный адрес</string>
     <string name="verification_failed_to_send_verification_letter">Не удалось отправить письмо подтверждения</string>
 
-<!--    EditWord Activity-->
+    <!--    Reset Password Activity   -->
+    <string name="reset_password_successfully_sent_reset_password_letter">Письмо с инструкцией о смене пароля было успешно отправлено на ваш электронный адрес</string>
+    <string name="reset_password_failed_sent_reset_password_letter">Не удалось отправить письмо с инструкцией о смене пароля</string>
+    <string name="reset_password_incorrect_email_format">Не верный формат электронного адреса</string>
+    <string name="reset_password_cancel_sent_reset_password_letter">У вас не прав на выполнение данной операции</string>
+
+
+    <!--    EditWord Activity-->
     <string name="edit_word_title">Изменить слово</string>
     <string name="edit_word_error_while_updating_message">Промзошла ошибка при обновлении слова. Проверьте подключение к сеи Интернет и повторите попытку</string>
     <string name="edit_word_update_word_error_message">Произошла ошибка при попытке сохранить изменения. Проверьте подлкючение к сети Интернет и повторите попытку</string>
 
-<!--    Add Word Fragment   -->
+    <!--    Add Word Fragment   -->
     <string name="add_word_title">Добавить слово</string>
     <string name="add_word_foreign_input_hint">На иностранном</string>
     <string name="add_word_native_input_hint">На родном</string>
@@ -72,7 +79,7 @@
     <string name="add_word_add_category_unknown_error_message">Произошла неизвестная ошибка при попытке добавить категорию. Проверьте подключение к сети Интернет и повторите попытку</string>
     <string name="add_word_add_category_error_while_sending_message">Произошла неизвестная ошибка при попытке добавить категорию. Проверьте подключение к сети Интернет и повторите попытку</string>
 
-<!--    Words Check Fragment    -->
+    <!--    Words Check Fragment    -->
     <string name="words_check_title">Проверить</string>
     <string name="words_check_no_words_title">На сегодняшний день слова для повторения закончились</string>
     <string name="words_check_foreign_input_hint">Перевод</string>
@@ -81,7 +88,7 @@
     <string name="words_check_do_you_want_to_delete_word_dialog_message">Вы точно хотите удалить данное слово?</string>
     <string name="words_check_blank_input_is_not_allowed_dialog_message">Нельзя отправлять незаполненное поле</string>
 
-<!--    Categories Fragment     -->
+    <!--    Categories Fragment     -->
     <string name="categories_you_are_already_learning_this_dialog_message">Вы уже изучаете все слова из данной категории</string>
     <string name="categories_do_you_want_to_learn_words_dialog_message">Добавить %1$d слов из категории \"%2$s\" к изучению?</string>
     <string name="categories_words_were_successfully_added_toast_message">%1$d слов из %2$d были успешны добавлены к изучению</string>
@@ -89,11 +96,11 @@
     <string name="categories_failed_to_disband_category_toast_message">Произошла ошибка при попытке удаления категории</string>
     <string name="categories_failed_to_generate_dynamic_link_toast_message">Не удалось создать ссылку на категорию</string>
 
-<!--    Archive Fragment    -->
+    <!--    Archive Fragment    -->
     <string name="archive_title">Архив слов</string>
     <string name="archive_no_words_title">На данный момент в архиве нет слов</string>
 
-<!--    Category Activity   -->
+    <!--    Category Activity   -->
     <string name="category_title_transition_name">categoryTitleTransitionName</string>
     <string name="category_no_words_title">На данный момент в категории нет слов</string>
     <string name="category_do_you_want_to_delete_word_dialog_message">Вы точно хотите удалить данное слово?</string>
@@ -102,18 +109,18 @@
     <string name="category_word_failed_to_add_word_to_learning_toast_message">Произошла ошибка при попытке добавить слово к изучению</string>
     <string name="category_word_you_are_already_learning_it_dialog_message">Вы уже изучаете данное слово</string>
 
-<!--    Multiple Athene Dialog  -->
+    <!--    Multiple Athene Dialog  -->
     <string name="multiple_athene_dialog_message">Выберите опцию:</string>
 
-<!--    Extras  -->
+    <!--    Extras  -->
     <string name="word_extra">WORD</string>
     <string name="words_extra">WORDS</string>
     <string name="category_extra">CATEGORY</string>
 
-<!--    Shared Prefs    -->
+    <!--    Shared Prefs    -->
     <string name="shared_pref_tutorial_key">SharedPreferencesTutorialKey</string>
 
-<!--    Exception Toast Messages    -->
+    <!--    Exception Toast Messages    -->
     <string name="api_exception_timeout_toast_message">Время ожидания результата вышло</string>
     <string name="api_exception_network_error_toast_message">Нет подключения к интернету</string>
     <string name="api_exception_invalid_account_toast_message">Неверно указано имя учетной записи</string>
@@ -130,7 +137,7 @@
 
     <!--    Notification    -->
     <string name="notification_content_text">Пора повторить слова!</string>
-    
+
     <!--    Share -->
     <string name="share_extra_text">Я хочу поделиться с тобой категорией \"%1$s\" в приложении Athene!\n</string>
 

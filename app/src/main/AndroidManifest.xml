@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xenous.athenekotlin">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,19 +12,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.ResetPasswordActivity"></activity>
         <activity
             android:name=".activities.MainActivity"
             android:fitsSystemWindows="true"
-            android:screenOrientation="sensorPortrait" >
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="athene.xenous.ru"
-                    android:scheme="https"/>
+                    android:scheme="https" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".activities.LoadingActivity"
@@ -59,9 +60,10 @@
             android:name=".services.NotificationService"
             android:enabled="true"
             android:exported="false" />
+
         <receiver
             android:name=".broadcasts.BootBroadcastReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
 
@@ -70,7 +72,6 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".broadcasts.NotificationBroadcastReceiver"
             android:enabled="true" />
@@ -78,6 +79,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
+
 </manifest>

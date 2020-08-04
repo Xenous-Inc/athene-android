@@ -78,6 +78,7 @@
             android:textSize="@dimen/primary_text_size" />
 
         <TextView
+            android:id="@+id/resetPasswordTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"

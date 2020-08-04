@@ -41,6 +41,11 @@ class SignInActivity : AppCompatActivity() {
         signInImageView.setOnClickListener(getSignInClickListener())
 
         signInWithGoogleImageView.setOnClickListener(getSignInWithGoogleClickListener())
+
+        // Set up reset password text view Click Listener
+        resetPasswordTextView.setOnClickListener {
+            startActivity(Intent(this, ResetPasswordActivity::class.java))
+        }
     }
 
     //    OnClick Listener
