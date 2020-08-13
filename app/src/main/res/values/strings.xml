@@ -119,6 +119,12 @@
 
     <!--    Shared Prefs    -->
     <string name="shared_pref_tutorial_key">SharedPreferencesTutorialKey</string>
+    <string name="shared_pref_first_dynamic_link_key">SharedPreferencesFirstDynamicLinkKey</string>
+    <string name="shared_pref_first_dynamic_link_type_key">SharedPreferencesFirstDynamicLinkTypeKey</string>
+    <string name="shared_pref_first_dynamic_link_category_key">SharedPreferencesFirstDynamicLinkCategoryKey</string>
+    <string name="shared_pref_first_dynamic_link_user_uid_key">SharedPreferencesFirstDynamicLinkUserUidKey</string>
+    <string name="shared_pref_first_dynamic_link_teacher_uid_key">SharedPreferencesFirstDynamicLinkTeacherUidKey</string>
+    <string name="shared_pref_first_dynamic_link_classroom_uid_key">SharedPreferencesFirstDynamicLinkClassroomUidKey</string>
 
     <!--    Exception Toast Messages    -->
     <string name="api_exception_timeout_toast_message">Время ожидания результата вышло</string>

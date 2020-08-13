@@ -1,6 +1,8 @@
 package com.xenous.athenekotlin.activities
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -186,7 +188,16 @@ class MainActivity : AppCompatActivity() {
 
                 spinKitView.visibility = View.INVISIBLE
 
-                parseDynamicLink(intent)
+                val sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_first_dynamic_link_key), Context.MODE_PRIVATE)
+                val edit = sharedPreferences.edit()
+                if(sharedPreferences.getBoolean(getString(R.string.shared_pref_first_dynamic_link_key), true)) {
+                    parseFirstDynamicLink()
+
+                    edit.putBoolean(getString(R.string.shared_pref_first_dynamic_link_key), false)
+                    edit.apply()
+                }
+                else
+                    parseDynamicLink(intent)
             }
 
             override fun onFailure(exception: Exception) {
@@ -289,6 +300,151 @@ class MainActivity : AppCompatActivity() {
         }
 
         return checkingWordsList.shuffled().toMutableList()
+    }
+
+    private fun parseFirstDynamicLink() {
+        val sharedPreferences = getSharedPreferences(getString(R.string.shared_pref_first_dynamic_link_key), Context.MODE_PRIVATE)
+        val edit = sharedPreferences.edit()
+
+        val dynamicLinkType = sharedPreferences.getInt( getString(R.string.shared_pref_first_dynamic_link_type_key), -1) // If 0 - sharing category, if 1 - sharing classroom
+        if(dynamicLinkType == -1)
+            return
+
+        if(dynamicLinkType == 0) {
+            val categoryTitle
+                    = sharedPreferences.getString(getString(R.string.shared_pref_first_dynamic_link_category_key), null)
+            val sharingUserUid
+                    = sharedPreferences.getString(getString(R.string.shared_pref_first_dynamic_link_user_uid_key), null)
+            if(categoryTitle == null || sharingUserUid == null)
+                return
+
+            val readSharingCategoryThread = ReadSharingCategoryThread(
+                sharingUserUid,
+                categoryTitle
+            )
+            readSharingCategoryThread.setReadSharingCategoryListener(
+                object : ReadSharingCategoryThread.ReadSharingCategoryListener {
+
+                    override fun onSuccess(sharingWordsList: List<Word>) {
+                        Log.d(
+                            DYNAMIC_LINK_TAG,
+                            "Sharing words size is ${sharingWordsList.size}"
+                        )
+
+                        createAddCategoryAtheneDialog(categoryTitle, sharingWordsList)
+                    }
+
+                    override fun onFailure(exception: Exception) {
+                        if(exception is FirebaseNetworkException) {
+                            val intent = Intent(this@MainActivity, LoadingActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+
+                            return
+                        }
+
+                        val toast = Toast(this@MainActivity)
+                        toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                        toast.duration = Toast.LENGTH_LONG
+                        toast.view.findViewById<TextView>(R.id.toastTextView).text = getString(R.string.database_error_unknown_error_toast_message)
+                        toast.show()
+                    }
+
+                    override fun onError(error: DatabaseError) {
+                        if(
+                            error.code == DatabaseError.DISCONNECTED ||
+                            error.code == DatabaseError.NETWORK_ERROR
+                        ) {
+                            val intent = Intent(this@MainActivity, LoadingActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+
+                            return
+                        }
+
+                        val toast = Toast(this@MainActivity)
+                        toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                        toast.duration = Toast.LENGTH_LONG
+                        toast.view.findViewById<TextView>(R.id.toastTextView).text = getString(R.string.database_error_unknown_error_toast_message)
+                        toast.show()
+                    }
+                }
+            )
+            readSharingCategoryThread.run()
+
+            edit.remove(getString(R.string.shared_pref_first_dynamic_link_category_key))
+            edit.remove(getString(R.string.shared_pref_first_dynamic_link_user_uid_key))
+        }
+        else if(dynamicLinkType == 1) {
+            val teacherUid
+                    = sharedPreferences.getString(getString(R.string.shared_pref_first_dynamic_link_teacher_uid_key), null)
+            val classroomUid
+                    = sharedPreferences.getString(getString(R.string.shared_pref_first_dynamic_link_classroom_uid_key), null)
+            if(teacherUid == null || classroomUid == null)
+                return
+
+            val readClassroomThread = ReadClassroomThread(
+                teacherUid,
+                classroomUid
+            )
+            readClassroomThread.setReadClassroomResultListener(
+                object : ReadClassroomThread.ReadClassroomResultListener {
+                    override fun onSuccess(classroom: Classroom) {
+                        Log.d(DYNAMIC_LINK_TAG, classroom.toString())
+
+                        createInviteToClassroomAtheneDialog(classroom)
+                    }
+
+                    override fun onFailure(exception: Exception) {
+                        when(exception) {
+                            is UserIsAlreadyInClassroomException ->
+                                createUserIsAlreadyInClassAtheneDialog()
+                            is FirebaseNetworkException -> {
+                                val loadingActivityIntent = Intent(this@MainActivity, LoadingActivity::class.java)
+                                loadingActivityIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(loadingActivityIntent)
+                            }
+                            else -> {
+                                val toast = Toast(this@MainActivity)
+                                toast.view =
+                                    layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                                toast.duration = Toast.LENGTH_LONG
+                                toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                                    getString(R.string.database_error_unknown_error_toast_message)
+                                toast.show()
+                            }
+                        }
+                    }
+
+                    override fun onError(databaseError: DatabaseError) {
+                        if(
+                            databaseError.code == DatabaseError.DISCONNECTED ||
+                            databaseError.code == DatabaseError.NETWORK_ERROR
+                        ) {
+                            val loadingActivityIntent = Intent(this@MainActivity, LoadingActivity::class.java)
+                            loadingActivityIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(loadingActivityIntent)
+
+                            return
+                        }
+
+                        val toast = Toast(this@MainActivity)
+                        toast.view =
+                            layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                        toast.duration = Toast.LENGTH_LONG
+                        toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                            getString(R.string.database_error_unknown_error_toast_message)
+                        toast.show()
+                    }
+                }
+            )
+            readClassroomThread.run()
+
+            edit.remove(getString(R.string.shared_pref_first_dynamic_link_teacher_uid_key))
+            edit.remove(getString(R.string.shared_pref_first_dynamic_link_classroom_uid_key))
+        }
+
+        edit.apply()
     }
 
     private fun parseDynamicLink(intent: Intent?) {
