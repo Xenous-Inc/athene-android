@@ -1,12 +1,15 @@
 package com.xenous.athenekotlin.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.google.firebase.auth.FirebaseAuth
 import com.xenous.athenekotlin.R
+import kotlinx.android.synthetic.main.activity_reset_password.*
 
 class ResetPasswordActivity : AppCompatActivity() {
     private companion object {
@@ -21,9 +24,34 @@ class ResetPasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password)
+
+        signInTextView.setOnClickListener { finish() }
+
+        resetPasswordImageView.setOnClickListener {
+            val email = resetPasswordEmailEditText.text.toString()
+
+            if(!isEmailValid(email)) {
+                val toast = Toast(this)
+                toast.duration = Toast.LENGTH_LONG
+                toast.view = layoutInflater.inflate(R.layout.layout_toast_custom, null, false)
+                toast.view.findViewById<TextView>(R.id.toastTextView).text =
+                    getString(R.string.sign_up_email_is_invalid)
+                toast.show()
+
+                return@setOnClickListener
+            }
+            resetPassword(email)
+        }
     }
 
     private fun resetPassword(email: String) {
+        run {
+            val threeBounce = ThreeBounce()
+            resetPasswordImageView.setImageDrawable(threeBounce)
+            threeBounce.start()
+            clickBlocker?.visibility = View.VISIBLE
+        }
+
         if(!email.contains('@')) {
             showOnCompleteStatusToast(CANCEL_STATUS)
         }
@@ -31,7 +59,8 @@ class ResetPasswordActivity : AppCompatActivity() {
         FirebaseAuth.getInstance()
             .sendPasswordResetEmail(email)
             .addOnCompleteListener {
-                //TODO: Enable click ability of view
+                resetPasswordImageView.setImageDrawable(getDrawable(R.drawable.ic_continue_white))
+                clickBlocker?.visibility = View.GONE
             }
             .addOnSuccessListener {
                 Log.d(TAG, "Letter with instruction to reset password has been successfully sent to introduced email")
@@ -66,4 +95,6 @@ class ResetPasswordActivity : AppCompatActivity() {
 
         toast.show()
     }
+
+    private fun isEmailValid(email: String): Boolean =  android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }
